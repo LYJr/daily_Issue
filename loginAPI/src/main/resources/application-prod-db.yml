@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: validate
+      show-sql: true
+    database: MYSQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/dailyIssue?serverTimezone=UTC
+    username: root
+    password: 1367
+    validation-query: SELECT 1

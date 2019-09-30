@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ims
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: local
+    #active: prod
+
+
+handlebars:
+  suffix: .html
+  cache: false
+  expose-session-attributes: true

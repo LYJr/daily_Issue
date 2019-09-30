@@ -1,0 +1,4 @@
+
+spring:
+  profiles:
+    active: ${env:${env.USERPROFILE:${env.ALLUSERSPROFILE:local}}}

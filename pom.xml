@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <developers>
+        <developer>
+            <id>LYJr</id>
+            <name>Yea-Ji, Lee</name>
+            <email>lyi91@naver.com</email>
+            <timezone>+9:00</timezone>
+            <roles>
+                <role>Head of the Team / Manager</role>
+                <role>Backend Developer</role>
+                <role>Architecture</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>sooragenius</id>
+            <name>Gill-Whan, Oh</name>
+            <email>soora_genius@naver.com</email>
+            <timezone>+9:00</timezone>
+            <roles>
+                <role>Team Member</role>
+                <role>Backend Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>blackychris24</id>
+            <name>Mun-gang, Cho</name>
+            <email>blackychris24@gmail.com</email>
+            <timezone>+9:00</timezone>
+            <roles>
+                <role>Team Member</role>
+                <role>Backend Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>Hmteresting Special Interest Group</name>
+        <url>https://github.com/hmteresting</url>
+    </organization>
+
+    <url>https://github.com/LYJr/daily_Issue</url>
+    <issueManagement>
+        <url>https://github.com/LYJr/daily_Issue/issues</url>
+        <system>Daily Issue</system>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:git@github.com:LYJr/daily_Issue.git</connection>
+        <developerConnection>scm:git@github.com:LYJr/daily_Issue.git</developerConnection>
+        <url>https://github.com/LYJr/daily_Issue</url>
+        <tag>${groupId}-${artifactId}-${version}</tag>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+
+    <groupId>com.example</groupId>
+    <artifactId>daily_Issue</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Daily Issue - Root Module</name>
+    <description>Resian Portfolio Project - Root Module</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>calendarAPI</module>
+        <module>loginAPI</module>
+        <module>checkListAPI</module>
+    </modules>
+
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.8.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <!--<webappRootPath>${basedir}/src/main/java/webapp</webappRootPath>-->
+        <!--<failOnMissingWebXml>false</failOnMissingWebXml>-->
+
+        <!-- default profile -->
+        <env>openjdk11</env>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- OpenJDK 11 -->
+    <profiles>
+        <profile>
+            <id>openjdk11</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>${java.version}</jdk>
+            </activation>
+
+            <dependencies>
+                <!-- OpenJDK -->
+                <dependency>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jaxb-api</artifactId>
+                    <version>2.4.0-b180830.0359</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-core</artifactId>
+                    <version>2.3.0.1</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-impl</artifactId>
+                    <version>2.4.0-b180830.0438</version>
+                </dependency>
+                <dependency>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>activation</artifactId>
+                    <version>1.1.1</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                    <version>3.23.2-GA</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,28 @@
+spring:
+  ### Database ###
+  datasource:
+    url: jdbc:mysql://localhost:3306/dailyIssue?serverTimezone=UTC
+    username: root
+    password: 1367
+    validation-query: SELECT 1
+  ### JPA ###
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
+
+### logging - hibernate ###
+logging:
+  level:
+    org:
+      hibernate:
+        sql: info
+      type:
+        descriptor:
+          sql: info

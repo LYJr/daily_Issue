@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<developers>
+		<developer>
+			<id>blackychris24</id>
+			<name>Blacky Chris</name>
+			<email>blackychris24@gmail.com</email>
+			<timezone>+9:00</timezone>
+			<roles>
+				<role>Team Member</role>
+				<role>Backend Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+
+	<groupId>com.example.daily_issue</groupId>
+	<artifactId>calendarAPI</artifactId>
+	<!-- follow parent project version -->
+	<!--<version>0.0.1-SNAPSHOT</version>-->
+	<name>CalendarAPI Module</name>
+	<description>Resian Portfolio Project - CalendarAPI Module</description>
+
+	<parent>
+		<groupId>com.example</groupId>
+		<artifactId>daily_Issue</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+</project>
