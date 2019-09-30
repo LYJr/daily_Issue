@@ -65,3 +65,17 @@ subprojects {
         options.encoding = 'UTF-8'
     }
 }
+
+project(':calendarAPI')
+{
+    dependencies {
+        compile project(':loginAPI')
+    }
+}
+
+project(':checkListAPI')
+{
+    dependencies {
+        compile project(':loginAPI')
+    }
+}
