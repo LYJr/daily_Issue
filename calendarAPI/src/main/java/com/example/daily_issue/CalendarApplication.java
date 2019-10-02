@@ -1,4 +1,4 @@
-package com.example.daily_issue.calendar;
+package com.example.daily_issue;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

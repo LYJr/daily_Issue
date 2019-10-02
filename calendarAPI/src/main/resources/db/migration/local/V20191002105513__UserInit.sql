@@ -1,0 +1,1 @@
+insert into user(id, password, user_id, birthday, name, phone_number, status) VALUES (1, 'password', 'user_id', 'birthday', 'name', 'phone', 'status');
