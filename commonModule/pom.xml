@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>daily_Issue</artifactId>
+        <groupId>com.example</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example.daily_issue</groupId>
+    <artifactId>commonModule</artifactId>
+    <name>Common Module</name>
+    <description>Resian Portfolio Project - Common Module</description>
+
+    <!--
+    해당 모듈은 타 모듈에 공통부문을 관리하는 모듈
+    ex) Login User Domain 객체 등..
+    -->
+
+
+</project>

@@ -16,9 +16,21 @@
 			</roles>
 		</developer>
 	</developers>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
-	<groupId>com.example.daily_issue</groupId>
+    <groupId>com.example.daily_issue</groupId>
 	<artifactId>calendarAPI</artifactId>
 	<!-- follow parent project version -->
 	<!--<version>0.0.1-SNAPSHOT</version>-->
@@ -34,8 +46,28 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.192</version>
+		</dependency>
+		<!--<dependency>
+			<groupId>org.flywaydb.flyway-test-extensions</groupId>
+			<artifactId>flyway-spring5-test</artifactId>
+			<version>5.2.4</version>
+		</dependency>-->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.example.daily_issue</groupId>
-			<artifactId>loginAPI</artifactId>
+			<artifactId>commonModule</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
