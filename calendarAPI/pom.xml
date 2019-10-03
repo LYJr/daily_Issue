@@ -55,11 +55,10 @@
 			<artifactId>h2</artifactId>
 			<version>1.4.192</version>
 		</dependency>
-		<!--<dependency>
-			<groupId>org.flywaydb.flyway-test-extensions</groupId>
-			<artifactId>flyway-spring5-test</artifactId>
-			<version>5.2.4</version>
-		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-envers</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>

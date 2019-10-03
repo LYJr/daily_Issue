@@ -1,12 +1,14 @@
 package com.example.daily_issue.calendar.controller;
 
 import com.example.daily_issue.calendar.domain.Task;
+import com.example.daily_issue.calendar.mapper.TaskMapper;
 import com.example.daily_issue.calendar.ro.TaskRO;
 import com.example.daily_issue.calendar.service.CalendarService;
 import com.example.daily_issue.calendar.service.UserService;
 import com.example.daily_issue.login.domain.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -21,8 +23,10 @@ public class CalendarController {
     CalendarService calendarService;
     @Autowired
     UserService userService;
+    /*@Autowired
+    ModelMapper modelMapper;*/
     @Autowired
-    ModelMapper modelMapper;
+    TaskMapper taskMapper;
 
     @Autowired
     HttpSession session;
@@ -35,14 +39,16 @@ public class CalendarController {
     @GetMapping("init")
     public void init()
     {
-        Optional<User> user = userService.findUser("user_id");
-        session.setAttribute("UserSess", user);
+        User user = userService.findUser("user_id");
+        session.setAttribute("UserSess", Optional.of(user));
     }
 
-    @PostMapping("save")
+    @GetMapping("save")
     public Task save(TaskRO taskRO)
     {
-        Task task = modelMapper.map(taskRO, Task.class);
+        taskRO.setTaskPerformerId("user_id");
+        Task task = taskMapper.convertTaskROtoTask(taskRO, new Task());
+
         calendarService.save(task);
 
         return task;
@@ -58,16 +64,26 @@ public class CalendarController {
             return null;
         }
 
-        originTask.setPlace("place test");
+        Task task = taskMapper.convertTaskROtoTask(taskRO, originTask);
 
-        /*Task fixedTask = modelMapper.map(taskRO, Task.class);
-        fixedTask.
-
-        Task task = new Task(id);
-        task.setTitle("title 3333");*/
-
-        return calendarService.save(originTask);
+        return calendarService.save(task);
     }
+
+    @DeleteMapping("delete")
+    public Task delete(@RequestParam Long taskId)
+    {
+        Task originTask = calendarService.findByTaskId(taskId);
+        if(originTask == null)
+        {
+            //throw new Exception();
+            return null;
+        }
+
+        calendarService.delete(taskId);
+
+        return originTask;
+    }
+
 
 
     @GetMapping("list")

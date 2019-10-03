@@ -15,10 +15,10 @@ public class UserService {
     UserRepository userRepository;
 
 
-    public Optional<User> findUser(String userid)
+    public User findUser(String userid)
     {
         User user = userRepository.findByUserId(userid);
 
-        return Optional.of(user);
+        return user;
     }
 }

@@ -1,0 +1,36 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+
+### 최초 로그인된 사용자 값 설정
+GET http://localhost:8080/calendar/init
+
+### 일정 등록 (반복 여러번 가능)
+GET http://localhost:8080/calendar/save
+Content-Type: application/x-www-form-urlencoded
+Cookie: JSESSIONID={{JSESSIONID}}
+
+### 일정 수정 (현재 첫번째 일정 (taskId=1)에 대해서만 수정 / 일정을 여러번 생성했다면 설정 일정 수정 가능)
+POST http://localhost:8080/calendar/update?taskId=1
+Content-Type: application/x-www-form-urlencoded
+Cookie: JSESSIONID={{JSESSIONID}}
+
+title=test+title+5&isAllDay=false&place=test+place+4&comment=test+comment+4
+
+### 일정 목록 출력
+GET localhost:8080/calendar/list
+Content-Type: application/x-www-form-urlencoded
+Cookie: JSESSIONID={{JSESSIONID}}
+
+### 일정 삭제 (현재 첫번째 일정 (taskId=1)에 대해서만 삭제 / 일정을 여러번 생성했다면 설정 일정 삭제 가능)
+DELETE localhost:8080/calendar/delete?taskId=1
+Content-Type: application/x-www-form-urlencoded
+Cookie: JSESSIONID={{JSESSIONID}}
+
+###
+
