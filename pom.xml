@@ -72,8 +72,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>calendarAPI</module>
+        <module>commonModule</module>
         <module>loginAPI</module>
+        <module>calendarAPI</module>
         <module>checkListAPI</module>
     </modules>
 
@@ -89,14 +90,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
+        <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <!--<webappRootPath>${basedir}/src/main/java/webapp</webappRootPath>-->
         <!--<failOnMissingWebXml>false</failOnMissingWebXml>-->
 
         <!-- default profile -->
-        <env>openjdk11</env>
+        <env>openjdk</env>
     </properties>
 
     <dependencies>
@@ -140,12 +141,19 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
 
     <!-- OpenJDK 11 -->
     <profiles>
         <profile>
-            <id>openjdk11</id>
+            <id>openjdk</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <jdk>${java.version}</jdk>
@@ -188,6 +196,20 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!--<plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <release>${java.version}</release>
+                    &lt;!&ndash;<forceJavacCompilerUse>true</forceJavacCompilerUse>&ndash;&gt;
+                    <compilerArgs>
+                        <arg>-Werror</arg>
+                        <arg>-verbose</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>-->
         </plugins>
     </build>
 </project>
