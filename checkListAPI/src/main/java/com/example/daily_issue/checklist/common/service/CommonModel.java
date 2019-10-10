@@ -11,17 +11,11 @@ import java.util.Date;
 @Embeddable
 @MappedSuperclass
 public class CommonModel {
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column
+    @CreatedDate @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;               // 생성일
-    @Column
     private String creatorUserId;           // 생성자 아이디
-    @LastModifiedDate
-    @Column
+    @LastModifiedDate @Temporal(TemporalType.TIMESTAMP)
     private Date lastModifiedDate;          // 마지막 수정일
-    @Column
     private String lastModifierUserId;      // 마지막 수정자 아이디
-    @Column
     private Character deleteAt = 'N';       // 삭제여부
 }
