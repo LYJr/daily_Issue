@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="loginAPI" />
+        <module name="calendarAPI" />
+        <module name="commonModule" />
+        <module name="checkListAPI" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="calendarAPI" target="11" />
+      <module name="checkListAPI" target="1.8" />
+      <module name="commonModule" target="1.8" />
+      <module name="daily_Issue" target="1.8" />
+      <module name="loginAPI" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="calendarAPI" options="-parameters" />
+      <module name="checkListAPI" options="-parameters" />
+      <module name="commonModule" options="-parameters" />
+      <module name="loginAPI" options="-parameters" />
+    </option>
+  </component>
+</project>

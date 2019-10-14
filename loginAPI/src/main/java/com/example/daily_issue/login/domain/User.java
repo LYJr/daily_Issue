@@ -1,5 +1,6 @@
 package com.example.daily_issue.login.domain;
 
+import com.example.daily_issue.login.dto.UserDto;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -29,6 +30,18 @@ public class User extends BaseUser {
         this.status = status;
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
+    }
+
+    public boolean idConfirm(String userId) {
+        return super.getUserId().equals(userId);
+    }
+
+    public boolean passwordConfirm (String password) {
+        return super.getPassword().equals(password);
+    }
+
+    public boolean overlapConfirm (UserDto userDto) {
+        return super.getUserId().equals(userDto.getUserId()) && this.phoneNumber.equals(userDto.getPhoneNumber());
     }
 
     @Override

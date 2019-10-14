@@ -17,18 +17,12 @@ public class LoginService {
 
     public boolean login(String userId, String password) {
         User originUser = findById(userId);
-        if (confirm(originUser.getUserId(), userId)) {
+        if (originUser.idConfirm(userId)) {
 
-//            if (confirm(originUser.getPassword(), password)) {
-//                return true;
-//            }
-
+            if(originUser.passwordConfirm(password)){
+                return true;
+            }
         }
         return false;
     }
-
-    private boolean confirm(String origin, String input) {
-        return origin.equals(input);
-    }
-
 }
