@@ -14,23 +14,17 @@ public class JoinService {
     @Autowired
     private UserRepository userRepository;
 
-    public User save(User user){
+    public User add(User user){
         return userRepository.save(user);
     }
 
     /**
-     * 아이디, 핸드폰 번호 확인 메서드<작업중>
+     * 아이디, 핸드폰 번호 확인 메서드
      * @param userDto
      * @return
      * @throws IllegalArgumentException
      */
-    public User userConfirm (UserDto userDto) throws IllegalArgumentException{
-        User user = userRepository.findByUserId(userDto.getUserId());
-
-//        try {
-//
-//        } catch ()
-
+    public User userConfirm (UserDto userDto) {
         return userDto.toUser();
     }
 

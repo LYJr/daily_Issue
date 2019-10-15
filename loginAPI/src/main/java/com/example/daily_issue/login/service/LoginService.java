@@ -18,10 +18,12 @@ public class LoginService {
         return userRepository.findByUserId(userId);
     }
 
-    public boolean login(User originUser, UserDto userDto) {
-        if (originUser.idConfirm(userDto.getUserId())) {
+    public boolean login(UserDto userDto) {
+        Optional<User> originUser = findByUserId(userDto.getUserId());
 
-            if(originUser.passwordConfirm(userDto.getPassword())){
+        if (originUser.isPresent()) {
+            User user = originUser.get();
+            if(user.passwordConfirm(userDto.getPassword())){
                 return true;
             }
         }
