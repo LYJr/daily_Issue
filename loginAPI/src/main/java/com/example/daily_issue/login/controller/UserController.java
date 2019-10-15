@@ -1,22 +1,37 @@
 package com.example.daily_issue.login.controller;
 
-import com.example.daily_issue.login.domain.repository.UserRepository;
 import com.example.daily_issue.login.dto.UserDto;
+import com.example.daily_issue.login.service.JoinService;
+import com.example.daily_issue.login.service.LoginService;
+import com.example.daily_issue.login.util.HttpSessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-@RequestMapping("/")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private LoginService loginService;
 
-    @PostMapping ("join")
-    public String join (UserDto userDto) {
+    @Autowired
+    private JoinService joinService;
 
-        return null;
+    @PostMapping("/login")
+    public String login(UserDto userDto, HttpSession httpSession) {
+
+        if (loginService.login(userDto)) {
+            httpSession.setAttribute(HttpSessionUtil.USER_SESSION_KEY, userDto.toUser());
+        }
+        return "redirect:/index";
     }
+
+    @PostMapping("/join")
+    public String join(UserDto userDto) {
+        joinService.add(userDto.toUser());
+        return "redirect:/";
+    }
+
 }
