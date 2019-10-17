@@ -15,6 +15,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/loginAPI/daily_Issue.loginAPI.iml" filepath="$PROJECT_DIR$/.idea/modules/loginAPI/daily_Issue.loginAPI.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/loginAPI/daily_Issue.loginAPI.main.iml" filepath="$PROJECT_DIR$/.idea/modules/loginAPI/daily_Issue.loginAPI.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/loginAPI/daily_Issue.loginAPI.test.iml" filepath="$PROJECT_DIR$/.idea/modules/loginAPI/daily_Issue.loginAPI.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wwwModule/www.iml" filepath="$PROJECT_DIR$/wwwModule/www.iml" />
     </modules>
   </component>
 </project>

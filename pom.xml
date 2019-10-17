@@ -73,6 +73,7 @@
 
     <modules>
         <module>commonModule</module>
+        <module>wwwModule</module>
         <module>loginAPI</module>
         <module>calendarAPI</module>
         <module>checkListAPI</module>
