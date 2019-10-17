@@ -10,6 +10,7 @@
         <module name="calendarAPI" />
         <module name="commonModule" />
         <module name="checkListAPI" />
+        <module name="www" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -18,6 +19,7 @@
       <module name="commonModule" target="1.8" />
       <module name="daily_Issue" target="1.8" />
       <module name="loginAPI" target="1.8" />
+      <module name="www" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -26,6 +28,7 @@
       <module name="checkListAPI" options="-parameters" />
       <module name="commonModule" options="-parameters" />
       <module name="loginAPI" options="-parameters" />
+      <module name="www" options="-parameters" />
     </option>
   </component>
 </project>
