@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Group extends CommonModel{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer groupId;
-    private String title;
-    private String contents;
+    private Integer groupId;        // group의 PK
+    private String title;           // 제목
+    private String contents;        // 내용
 }
