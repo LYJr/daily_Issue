@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
+    <bytecodeTargetLevel target="11">
+      <module name="daily_Issue.calendarAPI.main" target="11" />
+      <module name="daily_Issue.calendarAPI.test" target="11" />
+      <module name="daily_Issue.checkListAPI.main" target="11" />
+      <module name="daily_Issue.checkListAPI.test" target="11" />
+      <module name="daily_Issue.commonModule.main" target="11" />
+      <module name="daily_Issue.commonModule.test" target="11" />
+      <module name="daily_Issue.loginAPI.main" target="11" />
+      <module name="daily_Issue.loginAPI.test" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
