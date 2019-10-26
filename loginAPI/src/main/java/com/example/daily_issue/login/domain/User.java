@@ -1,7 +1,9 @@
 package com.example.daily_issue.login.domain;
 
 import com.example.daily_issue.login.dto.UserDto;
+import com.example.daily_issue.login.security.Encryption;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
