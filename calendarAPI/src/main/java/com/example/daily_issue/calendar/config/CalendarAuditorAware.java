@@ -1,6 +1,5 @@
 package com.example.daily_issue.calendar.config;
 
-import com.example.daily_issue.calendar.service.UserService;
 import com.example.daily_issue.login.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
@@ -12,8 +11,6 @@ import java.util.Optional;
 @Component
 public class CalendarAuditorAware implements AuditorAware<User> {
 
-    @Autowired
-    UserService userService;
     @Autowired
     HttpSession session;
 

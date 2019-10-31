@@ -1,17 +1,12 @@
 package com.example.daily_issue.calendar;
 
 import com.example.daily_issue.calendar.dao.CalendarRepository;
-import com.example.daily_issue.calendar.dao.UserRepository;
 import com.example.daily_issue.calendar.domain.Task;
-import com.example.daily_issue.login.domain.User;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Rollback;
@@ -19,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -37,11 +31,9 @@ public class JPATests {
     @Autowired
     CalendarRepository calendarRepository;
 
-    @Autowired
-    UserRepository userRepository;
 
 
-    @Test
+    /*@Test
     public void AllUsers()
     {
         List<User> users = userRepository.findAll();
@@ -65,7 +57,7 @@ public class JPATests {
         // then
         assertThat(findUser.getPassword()).isEqualTo("user_password3333");
 
-    }
+    }*/
 
 
 
