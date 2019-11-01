@@ -1,23 +1,19 @@
 package com.example.daily_issue.checklist.group;
 
 import com.example.daily_issue.checklist.CheckListApplication;
-import com.example.daily_issue.checklist.user.service.User;
 import com.example.daily_issue.checklist.group.service.Group;
 import com.example.daily_issue.checklist.group.service.GroupService;
+import com.example.daily_issue.checklist.user.service.User;
 import com.example.daily_issue.checklist.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = CheckListApplication.class)
 @Slf4j
 public class GroupServiceImplTests {
