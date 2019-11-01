@@ -21,33 +21,29 @@ public class CalendarService {
 
 
 
-    public Task save(@NonNull Task task)
+    public Optional<Task> save(@NonNull Task task)
     {
         Task result = calendarRepository.save(task);
-        // 원래는.. entity 그대로가 아니라, DTO 변환 후 반환이 맞다.
-        return result;
+        return Optional.ofNullable(result);
     }
 
-    public Task update(@NonNull Task task)
+    public Optional<Task> update(@NonNull Task task)
     {
-        Optional<Task> optionalTask = Optional.ofNullable(task);
+        Optional<Task> originTask = Optional.ofNullable(task);
 
-        return optionalTask
+        return originTask
                 .filter(t -> t.getCreatedBy().isPresent())
                 .filter(t -> isTaskOwner(Optional.of(t)))
-                .map(calendarRepository::save)
-                .orElse(null);
+                .map(calendarRepository::save);
     }
 
-    public Task delete(@NonNull Long id)
+    public Optional<Task> delete(@NonNull Long id)
     {
-        if(findByTaskId(id).isEmpty())
-        {
-            return null;
-        }
         Optional<Task> originTask = findByTaskId(id);
-        calendarRepository.deleteById(id);
-        return originTask.get();
+
+        originTask.ifPresent(a -> calendarRepository.deleteById(a.getId()));
+
+        return originTask.isPresent() ? originTask : Optional.empty();
     }
 
     public Optional<Task> findByTaskId(@NonNull Long id)

@@ -1,5 +1,6 @@
 package com.example.daily_issue.calendar.domain;
 
+import com.example.daily_issue.login.domain.Account;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

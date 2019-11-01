@@ -1,6 +1,7 @@
 package com.example.daily_issue.calendar.domain;
 
 import com.example.daily_issue.login.domain.Account;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -78,6 +79,5 @@ public class Task extends RootTask<Account, Long> {
     * hex : #000000
      * */
     private String color = "rgb(0, 0, 0)";
-
 
 }

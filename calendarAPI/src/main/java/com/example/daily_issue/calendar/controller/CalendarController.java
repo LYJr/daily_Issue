@@ -3,6 +3,7 @@ package com.example.daily_issue.calendar.controller;
 import com.example.daily_issue.calendar.domain.Task;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
 import com.example.daily_issue.calendar.ro.TaskReq;
+import com.example.daily_issue.calendar.ro.TaskResp;
 import com.example.daily_issue.calendar.service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,45 +23,33 @@ public class CalendarController {
     TaskMapper taskMapper;
 
 
-
-    @GetMapping("testget")
-    public String saveGet()
-    {
-        return "testget";
-    }
-
-
-    @PostMapping("testpost")
-    public String savePost()
-    {
-        return "testpost";
-    }
-
-
     @PostMapping("save")
-    public Task save(TaskReq taskReq)
+    public TaskResp save(TaskReq taskReq)
     {
-        Task task = taskMapper.convertTaskReqToTask(taskReq, new Task());
+        Task task = taskMapper.convertTaskReqToTask(taskReq);
 
-        calendarService.save(task);
+        Optional<Task> savedTask = calendarService.save(task);
 
-        return task;
+        return taskMapper.convertTaskToTaskResp(savedTask);
     }
 
     @PutMapping("update")
-    public Task update(@RequestParam Long taskId, TaskReq taskReq)
+    public TaskResp update(@RequestParam Long taskId, TaskReq taskReq)
     {
         Optional<Task> originTask = calendarService.findByTaskId(taskId);
         Task task = taskMapper.convertTaskReqToTask(taskReq, originTask);
 
-        return calendarService.update(task);
+        Optional<Task> updatedTask = calendarService.update(task);
+
+        return taskMapper.convertTaskToTaskResp(updatedTask);
     }
 
     @DeleteMapping("delete")
-    public Task delete(@RequestParam Long taskId)
+    public TaskResp delete(@RequestParam Long taskId)
     {
+        Optional<Task> deletedTask = calendarService.delete(taskId);
 
-        return calendarService.delete(taskId);
+        return taskMapper.convertTaskToTaskResp(deletedTask);
     }
 
 
