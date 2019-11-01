@@ -2,14 +2,11 @@ package com.example.daily_issue.calendar.controller;
 
 import com.example.daily_issue.calendar.domain.Task;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
-import com.example.daily_issue.calendar.ro.TaskRO;
+import com.example.daily_issue.calendar.ro.TaskReq;
 import com.example.daily_issue.calendar.service.CalendarService;
-import com.example.daily_issue.login.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,15 +21,26 @@ public class CalendarController {
     @Autowired
     TaskMapper taskMapper;
 
-    @Autowired
-    HttpSession session;
+
+
+    @GetMapping("testget")
+    public String saveGet()
+    {
+        return "testget";
+    }
+
+
+    @PostMapping("testpost")
+    public String savePost()
+    {
+        return "testpost";
+    }
 
 
     @PostMapping("save")
-    public Task save(TaskRO taskRO)
+    public Task save(TaskReq taskReq)
     {
-        taskRO.setTaskPerformerId("user_id");
-        Task task = taskMapper.convertTaskROtoTask(taskRO, new Task());
+        Task task = taskMapper.convertTaskReqToTask(taskReq, new Task());
 
         calendarService.save(task);
 
@@ -40,33 +48,19 @@ public class CalendarController {
     }
 
     @PutMapping("update")
-    public Task update(@RequestParam Long taskId, TaskRO taskRO)
+    public Task update(@RequestParam Long taskId, TaskReq taskReq)
     {
-        Task originTask = calendarService.findByTaskId(taskId);
-        if(originTask == null)
-        {
-            //throw new Exception();
-            return null;
-        }
+        Optional<Task> originTask = calendarService.findByTaskId(taskId);
+        Task task = taskMapper.convertTaskReqToTask(taskReq, originTask);
 
-        Task task = taskMapper.convertTaskROtoTask(taskRO, originTask);
-
-        return calendarService.save(task);
+        return calendarService.update(task);
     }
 
     @DeleteMapping("delete")
     public Task delete(@RequestParam Long taskId)
     {
-        Task originTask = calendarService.findByTaskId(taskId);
-        if(originTask == null)
-        {
-            //throw new Exception();
-            return null;
-        }
 
-        calendarService.delete(taskId);
-
-        return originTask;
+        return calendarService.delete(taskId);
     }
 
 
@@ -74,7 +68,7 @@ public class CalendarController {
     /*@GetMapping("list")
     public List<Task> list()
     {
-        Optional<User> user = (Optional<User>) session.getAttribute("UserSess");
+        Optional<User> user = (Optional<User>)
         if(user.isEmpty())
         {
             // throw exception..
@@ -86,16 +80,5 @@ public class CalendarController {
         return tasks;
     }*/
 
-    @GetMapping("user")
-    public User user()
-    {
-        Optional<User> user = (Optional<User>) session.getAttribute("UserSess");
-        if(user.isEmpty())
-        {
-            // throw exception..
-            return null;
-        }
 
-        return user.get();
-    }
 }

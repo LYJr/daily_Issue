@@ -1,9 +1,6 @@
 package com.example.daily_issue.calendar.domain;
 
-import com.example.daily_issue.login.domain.User;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.example.daily_issue.login.domain.Account;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +10,6 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,7 +18,7 @@ import java.time.LocalDateTime;
 @Setter
 @Slf4j
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-public class Task extends RootTask<User, Long> {
+public class Task extends RootTask<Account, Long> {
 
     public Task(Long id)
     {
@@ -42,12 +37,13 @@ public class Task extends RootTask<User, Long> {
     * */
 
 
-    /* 일정 수행자 : 생성자와 일정 담당자가 다를 수 있으므로.. */
-    @ManyToOne
+    /* 일정 수행자 : 생성자와 일정 담당자가 다를 수 있으므로..
+    * 일단은 사용하지 않는다. */
+    /*@ManyToOne
     @JoinColumn(nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
-    private User taskPerformer;
+    private Account taskPerformer;*/
 
 
     /* 일정 종일여부

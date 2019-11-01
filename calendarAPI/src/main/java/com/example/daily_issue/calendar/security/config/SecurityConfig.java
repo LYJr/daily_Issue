@@ -1,4 +1,4 @@
-package com.example.daily_issue.calendar.config;
+package com.example.daily_issue.calendar.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +18,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        http.csrf().disable();
+        http.cors().disable();
+
+        http.formLogin()
+                .and().httpBasic();
+
         http.authorizeRequests()
                 .mvcMatchers("/calendar").permitAll()
-                .anyRequest().authenticated()
-                .and().formLogin()
-                .and().httpBasic();
+                .mvcMatchers("/calendar/**").authenticated();
+
+        http.mvcMatcher("/**").authorizeRequests()
+                .anyRequest().permitAll();
     }
 
 

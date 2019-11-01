@@ -5,9 +5,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class TaskRO {
+public class TaskReq {
 
-    private String taskPerformerId;
+    // 지금은 사용하지 않는다.
+    /*private String taskPerformerId;*/
 
     /* 일정 종일여부
     = 일 단위로 일정관리 여부

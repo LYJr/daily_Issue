@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.domain.Auditable;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -21,19 +22,20 @@ public class RootTask<U, PK extends Serializable> extends AbstractPersistable<PK
         implements Auditable<U, PK, LocalDateTime>  {
 
     @ManyToOne //
-    @JoinColumn(updatable = false)
+    @JoinColumn(updatable = false, nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
-    private @Nullable U createdBy;
+    private @NonNull U createdBy;
 
     @Temporal(TemporalType.TIMESTAMP) //
     @Column(updatable = false)
     private @Nullable Date createdDate;
 
     @ManyToOne //
+    @JoinColumn(nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
-    private @Nullable U lastModifiedBy;
+    private @NonNull U lastModifiedBy;
 
     @Temporal(TemporalType.TIMESTAMP) //
     private @Nullable Date lastModifiedDate;
