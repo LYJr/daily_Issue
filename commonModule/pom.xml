@@ -14,10 +14,16 @@
     <name>Common Module</name>
     <description>Resian Portfolio Project - Common Module</description>
 
-    <!--
-    해당 모듈은 타 모듈에 공통부문을 관리하는 모듈
-    ex) Login User Domain 객체 등..
-    -->
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

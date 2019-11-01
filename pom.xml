@@ -53,7 +53,7 @@
         <connection>scm:git@github.com:LYJr/daily_Issue.git</connection>
         <developerConnection>scm:git@github.com:LYJr/daily_Issue.git</developerConnection>
         <url>https://github.com/LYJr/daily_Issue</url>
-        <tag>${groupId}-${artifactId}-${version}</tag>
+        <tag>${project.groupId}-${project.artifactId}-${project.version}</tag>
     </scm>
 
     <licenses>
