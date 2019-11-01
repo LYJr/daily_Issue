@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -15,11 +16,11 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="calendarAPI" target="11" />
-      <module name="checkListAPI" target="1.8" />
-      <module name="commonModule" target="1.8" />
-      <module name="daily_Issue" target="1.8" />
-      <module name="loginAPI" target="1.8" />
-      <module name="www" target="1.8" />
+      <module name="checkListAPI" target="11" />
+      <module name="commonModule" target="11" />
+      <module name="daily_Issue" target="11" />
+      <module name="loginAPI" target="11" />
+      <module name="www" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

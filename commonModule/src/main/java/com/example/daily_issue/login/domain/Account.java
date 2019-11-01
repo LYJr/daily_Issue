@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table
 @Getter
 @NoArgsConstructor
-public class User extends BaseUser {
+public class Account extends BaseAccount {
 
     @Column
     private String name;
@@ -25,9 +25,9 @@ public class User extends BaseUser {
     @Column
     private String phoneNumber;
 
-    public User(String id, String pw, String s, String status, String birthday, String phoneNumber) {
+    public Account(String id, String pw, String name, String status, String birthday, String phoneNumber) {
         super(id, pw);
-        this.name = s;
+        this.name = name;
         this.status = status;
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;

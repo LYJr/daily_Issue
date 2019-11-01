@@ -2,19 +2,16 @@ package com.example.daily_issue.login.service;
 
 import com.example.daily_issue.login.domain.repository.UserRepository;
 import com.example.daily_issue.login.dto.UserDto;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class JoinServiceTest {
 
@@ -23,7 +20,7 @@ public class JoinServiceTest {
 
     private UserDto userDto = new UserDto("id", "pw", "n", "ok", "910203", "01022443513");
 
-    @Before
+    @BeforeEach
     public void insert(){
         when(userRepository.findById(userDto.toUser().getId())).thenReturn(Optional.of(userDto.toUser()));
     }
