@@ -31,12 +31,4 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.example.daily_issue</groupId>
-            <artifactId>loginAPI</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-
 </project>

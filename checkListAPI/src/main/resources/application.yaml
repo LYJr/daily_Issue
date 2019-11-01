@@ -1,4 +1,5 @@
-
 spring:
+  main:
+    allow-bean-definition-overriding: true
   profiles:
     active: ${env:${env.USERPROFILE:${env.ALLUSERSPROFILE:local}}}

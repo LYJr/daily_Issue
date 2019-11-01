@@ -1,44 +1,79 @@
 package com.example.daily_issue.calendar.service;
 
 import com.example.daily_issue.calendar.dao.CalendarRepository;
-import com.example.daily_issue.calendar.dao.UserRepository;
 import com.example.daily_issue.calendar.domain.Task;
-import com.example.daily_issue.login.domain.User;
+import com.example.daily_issue.calendar.security.service.SecurityService;
+import com.example.daily_issue.login.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CalendarService {
 
     @Autowired
-    CalendarRepository calendarRepository;
+    SecurityService securityService;
+
     @Autowired
-    UserRepository userRepository;
+    CalendarRepository calendarRepository;
 
-    public Task save(Task task)
+
+
+    public Task save(@NonNull Task task)
     {
-        return calendarRepository.save(task);
+        Task result = calendarRepository.save(task);
+        // 원래는.. entity 그대로가 아니라, DTO 변환 후 반환이 맞다.
+        return result;
     }
 
-    public void delete(Long id)
+    public Task update(@NonNull Task task)
     {
-        calendarRepository.deleteById(id);
+        Optional<Task> optionalTask = Optional.ofNullable(task);
+
+        return optionalTask
+                .filter(t -> t.getCreatedBy().isPresent())
+                .filter(t -> isTaskOwner(Optional.of(t)))
+                .map(calendarRepository::save)
+                .orElse(null);
     }
 
-    public Task findByTaskId(Long id)
+    public Task delete(@NonNull Long id)
     {
-        Optional<Task> task = calendarRepository.findById(id);
-        if(task.isEmpty())
+        if(findByTaskId(id).isEmpty())
         {
             return null;
         }
-        return task.get();
+        Optional<Task> originTask = findByTaskId(id);
+        calendarRepository.deleteById(id);
+        return originTask.get();
     }
 
-    public List<Task> findByCreatedBy(Long id)
+    public Optional<Task> findByTaskId(@NonNull Long id)
+    {
+        Optional<Task> task = calendarRepository.findById(id);
+
+        // 특정 일정 생성자와 현재 로그인한 사용자가 동일하지 않을 경우 null 반환
+        return isTaskOwner(task) ? task : Optional.empty();
+    }
+
+
+    // 특정 일정 생성자가 현재 로그인한 사용자인지 확인.
+    public boolean isTaskOwner(@NonNull Optional<Task> task)
+    {
+        return task.isPresent() ? isTaskOwner(task.get()) : false;
+    }
+    public boolean isTaskOwner(@NonNull Task task)
+    {
+        Optional<String> userId = task.getCreatedBy()
+                .map(Account::getUserId)
+                .filter(id -> id.equals(securityService.getAccount().getUserId()));
+
+        return userId.isPresent();
+    }
+
+    /*public List<Task> findByCreatedBy(Long id)
     {
         Optional<User> user = userRepository.findById(id);
         if(user.isEmpty())
@@ -48,5 +83,5 @@ public class CalendarService {
         List<Task> tasks = calendarRepository.findByCreatedBy(user.get());
 
         return tasks;
-    }
+    }*/
 }

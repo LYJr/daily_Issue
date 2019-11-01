@@ -5,12 +5,12 @@ import com.example.daily_issue.login.service.JoinService;
 import com.example.daily_issue.login.service.LoginService;
 import com.example.daily_issue.login.util.HttpSessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-@RequestMapping("/user")
+@Controller
 public class UserController {
 
     @Autowired
