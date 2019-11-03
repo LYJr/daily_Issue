@@ -44,11 +44,8 @@ public class CalendarController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<TaskResp> update(@RequestParam Long taskId, TaskReq taskReq)
     {
-        // get existing task
-        Optional<RecordedTask> originTask = calendarService.findByTaskId(taskId);
-        RecordedTask task = taskMapper.convertTaskReqToTask(taskReq, originTask);
         // task update
-        Optional<RecordedTask> updatedTask = calendarService.update(task);
+        Optional<RecordedTask> updatedTask = calendarService.update(taskId, taskReq);
 
         // for response
         TaskResp resp = taskMapper.convertTaskToTaskResp(updatedTask);

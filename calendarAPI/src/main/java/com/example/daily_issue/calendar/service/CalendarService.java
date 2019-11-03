@@ -1,9 +1,11 @@
 package com.example.daily_issue.calendar.service;
 
+import com.example.daily_issue.calendar.aop.EnableOwnerCheck;
 import com.example.daily_issue.calendar.dao.RecordedTaskRepository;
 import com.example.daily_issue.calendar.domain.RecordedTask;
+import com.example.daily_issue.calendar.mapper.TaskMapper;
+import com.example.daily_issue.calendar.ro.TaskReq;
 import com.example.daily_issue.calendar.security.service.SecurityService;
-import com.example.daily_issue.login.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,9 @@ import java.util.Optional;
 
 @Service
 public class CalendarService {
+
+    @Autowired
+    TaskMapper taskMapper;
 
     @Autowired
     SecurityService securityService;
@@ -23,51 +28,59 @@ public class CalendarService {
 
     public Optional<RecordedTask> save(@NonNull RecordedTask task)
     {
-        RecordedTask result = recordedTaskRepository.save(task);
+        // save
+        RecordedTask result = task != null ? recordedTaskRepository.save(task) : task;
         return Optional.ofNullable(result);
     }
 
-    public Optional<RecordedTask> update(@NonNull RecordedTask task)
+    @EnableOwnerCheck
+    public Optional<RecordedTask> update(@NonNull Long taskId, TaskReq taskReq)
     {
-        Optional<RecordedTask> originTask = Optional.ofNullable(task);
+        // get existing task
+        Optional<RecordedTask> originTask = findByTaskId(taskId);
+        RecordedTask task = taskMapper.convertTaskReqToTask(taskReq, originTask);
 
-        return originTask
-                .filter(t -> t.getCreatedBy().isPresent())
-                .filter(t -> isTaskOwner(Optional.of(t)))
-                .map(recordedTaskRepository::save);
+        // update
+        return task != null ? update(task) : Optional.empty();
     }
 
+    @EnableOwnerCheck
+    public Optional<RecordedTask> update(@NonNull RecordedTask task)
+    {
+        // update
+        RecordedTask result = task != null ? recordedTaskRepository.save(task) : task;
+        return Optional.ofNullable(result);
+    }
+
+    @EnableOwnerCheck
     public Optional<RecordedTask> delete(@NonNull Long id)
     {
+        // get existing task
         Optional<RecordedTask> originTask = findByTaskId(id);
 
+        // delete
         originTask.ifPresent(a -> recordedTaskRepository.deleteById(a.getId()));
 
         return originTask.isPresent() ? originTask : Optional.empty();
     }
 
+    @EnableOwnerCheck
+    public Optional<RecordedTask> delete(@NonNull RecordedTask task)
+    {
+        Optional<RecordedTask> originTask = Optional.ofNullable(task);
+        originTask.ifPresent(t -> recordedTaskRepository.delete(t));
+
+        return originTask.isPresent() ? originTask : Optional.empty();
+    }
+
+
     public Optional<RecordedTask> findByTaskId(@NonNull Long id)
     {
-        Optional<RecordedTask> task = recordedTaskRepository.findById(id);
-
-        // 특정 일정 생성자와 현재 로그인한 사용자가 동일하지 않을 경우 null 반환
-        return isTaskOwner(task) ? task : Optional.empty();
+        return recordedTaskRepository.findById(id);
     }
 
 
-    // 특정 일정 생성자가 현재 로그인한 사용자인지 확인.
-    public boolean isTaskOwner(@NonNull Optional<RecordedTask> task)
-    {
-        return task.isPresent() ? isTaskOwner(task.get()) : false;
-    }
-    public boolean isTaskOwner(@NonNull RecordedTask task)
-    {
-        Optional<String> userId = task.getCreatedBy()
-                .map(Account::getUserId)
-                .filter(id -> id.equals(securityService.getAccount().getUserId()));
 
-        return userId.isPresent();
-    }
 
     /*public List<Task> findByCreatedBy(Long id)
     {
