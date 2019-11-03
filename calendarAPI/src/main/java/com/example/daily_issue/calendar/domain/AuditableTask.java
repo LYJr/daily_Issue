@@ -1,6 +1,5 @@
 package com.example.daily_issue.calendar.domain;
 
-import com.example.daily_issue.login.domain.Account;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -19,10 +18,10 @@ import java.util.Optional;
 
 @EntityListeners(value = { AuditingEntityListener.class })
 @MappedSuperclass
-public class RootTask<U, PK extends Serializable> extends AbstractPersistable<PK>
+public class AuditableTask<U, PK extends Serializable> extends AbstractPersistable<PK>
         implements Auditable<U, PK, LocalDateTime>  {
 
-    @ManyToOne //
+    @ManyToOne (fetch = FetchType.LAZY) //
     @JoinColumn(updatable = false, nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
@@ -32,7 +31,7 @@ public class RootTask<U, PK extends Serializable> extends AbstractPersistable<PK
     @Column(updatable = false)
     private @Nullable Date createdDate;
 
-    @ManyToOne //
+    @ManyToOne (fetch = FetchType.LAZY) //
     @JoinColumn(nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)

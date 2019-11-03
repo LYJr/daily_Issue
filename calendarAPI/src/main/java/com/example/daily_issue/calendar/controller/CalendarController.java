@@ -1,11 +1,13 @@
 package com.example.daily_issue.calendar.controller;
 
-import com.example.daily_issue.calendar.domain.Task;
+import com.example.daily_issue.calendar.domain.RecordedTask;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
 import com.example.daily_issue.calendar.ro.TaskReq;
 import com.example.daily_issue.calendar.ro.TaskResp;
 import com.example.daily_issue.calendar.service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -17,57 +19,60 @@ public class CalendarController {
     @Autowired
     CalendarService calendarService;
 
-    /*@Autowired
-    ModelMapper modelMapper;*/
     @Autowired
     TaskMapper taskMapper;
 
 
     @PostMapping("save")
-    public TaskResp save(TaskReq taskReq)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<TaskResp> save(TaskReq taskReq)
     {
-        Task task = taskMapper.convertTaskReqToTask(taskReq);
+        // task save
+        RecordedTask task = taskMapper.convertTaskReqToTask(taskReq);
+        Optional<RecordedTask> savedTask = calendarService.save(task);
 
-        Optional<Task> savedTask = calendarService.save(task);
+        // for response
+        TaskResp resp = taskMapper.convertTaskToTaskResp(savedTask);
 
-        return taskMapper.convertTaskToTaskResp(savedTask);
+        HttpStatus responseCode;
+        responseCode = savedTask.isPresent() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return new ResponseEntity<>(resp, responseCode);
     }
 
     @PutMapping("update")
-    public TaskResp update(@RequestParam Long taskId, TaskReq taskReq)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<TaskResp> update(@RequestParam Long taskId, TaskReq taskReq)
     {
-        Optional<Task> originTask = calendarService.findByTaskId(taskId);
-        Task task = taskMapper.convertTaskReqToTask(taskReq, originTask);
+        // get existing task
+        Optional<RecordedTask> originTask = calendarService.findByTaskId(taskId);
+        RecordedTask task = taskMapper.convertTaskReqToTask(taskReq, originTask);
+        // task update
+        Optional<RecordedTask> updatedTask = calendarService.update(task);
 
-        Optional<Task> updatedTask = calendarService.update(task);
+        // for response
+        TaskResp resp = taskMapper.convertTaskToTaskResp(updatedTask);
 
-        return taskMapper.convertTaskToTaskResp(updatedTask);
+        HttpStatus responseCode;
+        responseCode = updatedTask.isPresent() ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+
+        return new ResponseEntity<>(resp, responseCode);
     }
 
     @DeleteMapping("delete")
-    public TaskResp delete(@RequestParam Long taskId)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<TaskResp> delete(@RequestParam Long taskId)
     {
-        Optional<Task> deletedTask = calendarService.delete(taskId);
+        // task delete
+        Optional<RecordedTask> deletedTask = calendarService.delete(taskId);
 
-        return taskMapper.convertTaskToTaskResp(deletedTask);
+        // for response
+        TaskResp resp = taskMapper.convertTaskToTaskResp(deletedTask);
+
+        HttpStatus responseCode;
+        responseCode = deletedTask.isPresent() ? HttpStatus.OK : HttpStatus.NO_CONTENT;
+
+        return new ResponseEntity<>(resp, responseCode);
     }
-
-
-
-    /*@GetMapping("list")
-    public List<Task> list()
-    {
-        Optional<User> user = (Optional<User>)
-        if(user.isEmpty())
-        {
-            // throw exception..
-            return List.of();
-        }
-
-        List<Task> tasks = calendarService.findByCreatedBy(user.get().getId());
-
-        return tasks;
-    }*/
-
 
 }

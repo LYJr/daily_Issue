@@ -1,7 +1,6 @@
 package com.example.daily_issue.calendar.domain;
 
 import com.example.daily_issue.login.domain.Account;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +10,8 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,9 +20,9 @@ import java.time.LocalDateTime;
 @Setter
 @Slf4j
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-public class Task extends RootTask<Account, Long> {
+public class RecordedTask extends AuditableTask<Account, Long> {
 
-    public Task(Long id)
+    public RecordedTask(Long id)
     {
         this.setId(id);
     }
@@ -46,6 +47,10 @@ public class Task extends RootTask<Account, Long> {
     @JsonIdentityReference(alwaysAsId = true)
     private Account taskPerformer;*/
 
+
+    // 예약 내용
+    @OneToOne (fetch = FetchType.LAZY)
+    private ReservedTask reservedTask;
 
     /* 일정 종일여부
     = 일 단위로 일정관리 여부

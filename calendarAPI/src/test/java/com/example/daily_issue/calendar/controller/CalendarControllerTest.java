@@ -108,7 +108,7 @@ class CalendarControllerTest {
                         .content(req)
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         TaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResp.class);
@@ -190,7 +190,7 @@ class CalendarControllerTest {
                         .content(req)
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect((r) -> r.getResponse().getContentAsString().isEmpty())
                 .andReturn();
     }
@@ -210,7 +210,7 @@ class CalendarControllerTest {
                         .content(req)
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect((r) -> r.getResponse().getContentAsString().isEmpty())
                 .andReturn();
     }
@@ -291,7 +291,7 @@ class CalendarControllerTest {
                         .with(httpBasic("user1", "password"))
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect((r) -> r.getResponse().getContentAsString().isEmpty())
                 .andReturn();
     }
@@ -306,7 +306,7 @@ class CalendarControllerTest {
                         .with(httpBasic("user2", "password"))
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect((r) -> r.getResponse().getContentAsString().isEmpty())
                 .andReturn();
     }
