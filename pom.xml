@@ -36,6 +36,16 @@
                 <role>Backend Developer</role>
             </roles>
         </developer>
+        <developer>
+            <id>jinhwan0515</id>
+            <name>Jin-Hwan, choi</name>
+            <email>jinhwan0515@gmail.com</email>
+            <timezone>+9:00</timezone>
+            <roles>
+                <role>Team Member</role>
+                <role>Backend Developer</role>
+            </roles>
+        </developer>
     </developers>
 
     <organization>
@@ -77,6 +87,7 @@
         <module>loginAPI</module>
         <module>calendarAPI</module>
         <module>checkListAPI</module>
+        <module>accountingAPI</module>
     </modules>
 
 
