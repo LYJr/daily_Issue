@@ -32,8 +32,10 @@ public class TaskMapper {
         propertyMapper.from(source::getIsAllDay).to(target::setIsAllDay);
         propertyMapper.from(source::getColor).to(target::setColor);
         propertyMapper.from(source::getComment).to(target::setComment);
-        propertyMapper.from(source::getEndDateTime).to(target::setEndDateTime);
-        propertyMapper.from(source::getStartDateTime).to(target::setStartDateTime);
+        propertyMapper.from(source::getTaskStartDate).to(target::setTaskStartDate);
+        propertyMapper.from(source::getTaskStartTime).to(target::setTaskStartTime);
+        propertyMapper.from(source::getTaskEndDate).to(target::setTaskEndDate);
+        propertyMapper.from(source::getTaskEndTime).to(target::setTaskEndTime);
         propertyMapper.from(source::getPlace).to(target::setPlace);
         propertyMapper.from(source::getTitle).to(target::setTitle);
 
@@ -65,8 +67,10 @@ public class TaskMapper {
         propertyMapper.from(source::getIsAllDay).to(target::setIsAllDay);
         propertyMapper.from(source::getColor).to(target::setColor);
         propertyMapper.from(source::getComment).to(target::setComment);
-        propertyMapper.from(source::getEndDateTime).to(target::setEndDateTime);
-        propertyMapper.from(source::getStartDateTime).to(target::setStartDateTime);
+        propertyMapper.from(source::getTaskStartDate).to(target::setTaskStartDate);
+        propertyMapper.from(source::getTaskStartTime).to(target::setTaskStartTime);
+        propertyMapper.from(source::getTaskEndDate).to(target::setTaskEndDate);
+        propertyMapper.from(source::getTaskEndTime).to(target::setTaskEndTime);
         propertyMapper.from(source::getPlace).to(target::setPlace);
         propertyMapper.from(source::getTitle).to(target::setTitle);
 

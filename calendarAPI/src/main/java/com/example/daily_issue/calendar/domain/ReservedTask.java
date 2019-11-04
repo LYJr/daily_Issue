@@ -9,8 +9,8 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+import java.time.LocalDateTime;
 import java.time.Period;
 
 @Entity
@@ -19,19 +19,26 @@ import java.time.Period;
 @Setter
 @Slf4j
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-public class ReservedTask extends AuditableTask<Account, Long> {
+public class ReservedTask extends AuditableRootTask<Account, Long> {
 
     public ReservedTask(Long id)
     {
         this.setId(id);
     }
 
-    // 예약 대상 일정
-    @OneToOne(mappedBy = "reservedTask", fetch = FetchType.LAZY)
-    private RecordedTask recordedTask;
-
     // 예약 발생 주기 (기본 : 한달단위)
     private Period period = Period.ofMonths(1);
 
-    //
+    // 예약 시작일
+    private LocalDateTime reserveStartDate;
+    // 예약 종료일
+    private LocalDateTime reserveEndDate;
+
+
+    @Transient
+    private boolean isEternalTask = false;
+
+//    @Transient
+//    private boolean isEnable = true;
+
 }

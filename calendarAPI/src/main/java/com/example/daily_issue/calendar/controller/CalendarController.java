@@ -2,6 +2,7 @@ package com.example.daily_issue.calendar.controller;
 
 import com.example.daily_issue.calendar.domain.RecordedTask;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
+import com.example.daily_issue.calendar.ro.ReserveReq;
 import com.example.daily_issue.calendar.ro.TaskReq;
 import com.example.daily_issue.calendar.ro.TaskResp;
 import com.example.daily_issue.calendar.service.CalendarService;
@@ -25,7 +26,7 @@ public class CalendarController {
 
     @PostMapping("save")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<TaskResp> save(TaskReq taskReq)
+    public ResponseEntity<TaskResp> save(@RequestBody TaskReq taskReq, @RequestBody(required = false) ReserveReq reserveReq)
     {
         // task save
         RecordedTask task = taskMapper.convertTaskReqToTask(taskReq);
@@ -42,7 +43,7 @@ public class CalendarController {
 
     @PutMapping("update")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<TaskResp> update(@RequestParam Long taskId, TaskReq taskReq)
+    public ResponseEntity<TaskResp> update(@RequestParam Long taskId, @RequestBody TaskReq taskReq)
     {
         // task update
         Optional<RecordedTask> updatedTask = calendarService.update(taskId, taskReq);
