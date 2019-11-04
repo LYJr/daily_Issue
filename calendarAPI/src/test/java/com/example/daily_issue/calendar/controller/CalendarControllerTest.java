@@ -3,6 +3,7 @@ package com.example.daily_issue.calendar.controller;
 import com.example.daily_issue.calendar.attr.ServiceURLAttributes;
 import com.example.daily_issue.calendar.ro.TaskReq;
 import com.example.daily_issue.calendar.ro.TaskResp;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ class CalendarControllerTest {
         // then
         mockMvc.perform(
                     post(ServiceURLAttributes.TASK_CREATE.getUrl())
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
                             .content(req)
                 )
                 .andDo(print())
@@ -68,7 +69,7 @@ class CalendarControllerTest {
         MvcResult mvcResult = mockMvc.perform(
                 post(ServiceURLAttributes.TASK_CREATE.getUrl())
                         .with(httpBasic("wrong user", "password"))
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(req)
         )
                 .andDo(print())
@@ -86,7 +87,7 @@ class CalendarControllerTest {
         MvcResult mvcResult = mockMvc.perform(
                 post(ServiceURLAttributes.TASK_CREATE.getUrl())
                         .with(httpBasic("user1", "wrong password"))
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(req)
         )
                 .andDo(print())
@@ -104,11 +105,11 @@ class CalendarControllerTest {
         MvcResult mvcResult = mockMvc.perform(
                 post(ServiceURLAttributes.TASK_CREATE.getUrl())
                         .with(httpBasic("user1", "password"))
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(req)
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         TaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResp.class);
@@ -132,7 +133,7 @@ class CalendarControllerTest {
         // then
         mockMvc.perform(
                 put(ServiceURLAttributes.TASK_MODIFY.getUrl() + "?taskId=" + tasks.get(0).getId())
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(req)
         )
                 .andDo(print())
@@ -149,7 +150,7 @@ class CalendarControllerTest {
         MvcResult mvcResult = mockMvc.perform(
                 put(ServiceURLAttributes.TASK_MODIFY.getUrl() + "?taskId=" + tasks.get(0).getId())
                         .with(httpBasic("wrong user", "password"))
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(req)
         )
                 .andDo(print())
@@ -167,7 +168,7 @@ class CalendarControllerTest {
         MvcResult mvcResult = mockMvc.perform(
                 put(ServiceURLAttributes.TASK_MODIFY.getUrl() + "?taskId=" + tasks.get(0).getId())
                         .with(httpBasic("user1", "wrong password"))
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(req)
         )
                 .andDo(print())
@@ -186,11 +187,11 @@ class CalendarControllerTest {
         MvcResult mvcResult = mockMvc.perform(
                 put(ServiceURLAttributes.TASK_MODIFY.getUrl() + "?taskId=" + tasks.size()+1)
                         .with(httpBasic("user1", "password"))
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(req)
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect((r) -> r.getResponse().getContentAsString().isEmpty())
                 .andReturn();
     }
@@ -206,11 +207,11 @@ class CalendarControllerTest {
         MvcResult mvcResult = mockMvc.perform(
                 put(ServiceURLAttributes.TASK_MODIFY.getUrl() + "?taskId=" + tasks.get(0).getId())
                         .with(httpBasic("user2", "password"))
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(req)
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect((r) -> r.getResponse().getContentAsString().isEmpty())
                 .andReturn();
     }
@@ -227,7 +228,7 @@ class CalendarControllerTest {
         MvcResult mvcResult = mockMvc.perform(
                 put(ServiceURLAttributes.TASK_MODIFY.getUrl() + "?taskId=" + tasks.get(0).getId())
                         .with(httpBasic("user1", "password"))
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(req)
         )
                 .andDo(print())
@@ -291,7 +292,7 @@ class CalendarControllerTest {
                         .with(httpBasic("user1", "password"))
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect((r) -> r.getResponse().getContentAsString().isEmpty())
                 .andReturn();
     }
@@ -306,7 +307,7 @@ class CalendarControllerTest {
                         .with(httpBasic("user2", "password"))
         )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect((r) -> r.getResponse().getContentAsString().isEmpty())
                 .andReturn();
     }
@@ -341,7 +342,7 @@ class CalendarControllerTest {
 
 
 
-    private String getTaskReq(int seq) {
+    private String getTaskReq(int seq) throws JsonProcessingException {
         
 
         if(seq == 0)
@@ -357,11 +358,14 @@ class CalendarControllerTest {
         req.setPlace("test place - " + seq);
         req.setComment("test comment - " + seq);
 
+        // for form data
         String result = 
                 "isAllDay="+req.getIsAllDay()+"&" +
                 "place="+req.getPlace()+"&" +
                 "comment="+req.getComment();
-        
+
+        // for json
+        result = objectMapper.writeValueAsString(req);
 
         return result;
     }

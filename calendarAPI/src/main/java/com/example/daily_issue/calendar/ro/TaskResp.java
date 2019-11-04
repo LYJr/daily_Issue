@@ -1,10 +1,11 @@
 package com.example.daily_issue.calendar.ro;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 public class TaskResp {
@@ -33,11 +34,19 @@ public class TaskResp {
     ( true : 시간정보 제외됨) */
     private Boolean isAllDay;
 
-    /* 일정 시작일시 */
-    private LocalDateTime startDateTime;
+    /* 일정 시작일 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate taskStartDate;
+    /* 일정 시작시 */
+    @DateTimeFormat(pattern = "kk:mm:ss")
+    private LocalTime taskStartTime;
 
-    /* 일정 종료일시 */
-    private LocalDateTime endDateTime;
+    /* 일정 종료일 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate taskEndDate;
+    /* 일정 종료시 */
+    @DateTimeFormat(pattern = "kk:mm:ss")
+    private LocalTime taskEndTime;
 
     /* 일정 제목 */
     private String title;
