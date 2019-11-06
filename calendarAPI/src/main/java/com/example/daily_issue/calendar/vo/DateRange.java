@@ -1,7 +1,6 @@
 package com.example.daily_issue.calendar.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -19,7 +18,10 @@ import java.time.temporal.TemporalAdjusters;
  * 시작일과 종료일을 담는 VO 객체
  */
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
+@ToString
+@EqualsAndHashCode
 public class DateRange {
 
     /*
@@ -38,7 +40,9 @@ public class DateRange {
 
     baseDate는 11월임을 알아야 하기 때문에 존재한다.
      */
+    @NonNull
     private LocalDate startDate;
+    @NonNull
     private LocalDate endDate;
     private LocalDate baseDate;
 
