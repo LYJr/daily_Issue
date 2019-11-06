@@ -1,8 +1,8 @@
 package com.example.daily_issue.calendar.security.service;
 
 import com.example.daily_issue.calendar.config.ApplicationConsts;
-import com.example.daily_issue.calendar.dao.AccountRepository;
-import com.example.daily_issue.login.domain.Account;
+import com.example.daily_issue.calendar.dao.MemberRepository;
+import com.example.daily_issue.login.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -25,20 +25,20 @@ public class SecurityService implements UserDetailsService {
     HttpSession session;
 
     @Autowired
-    AccountRepository accountRepository;
+    MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Account account = accountRepository.findByUserId(username);
-        if(account == null)
+        Member member = memberRepository.findByUserId(username);
+        if(member == null)
         {
             throw new UsernameNotFoundException(username);
         }
 
         return User.builder()
-                .username(account.getUserId())
-                .password(passwordEncoder.encode(account.getPassword()))
+                .username(member.getUserId())
+                .password(passwordEncoder.encode(member.getPassword()))
                 .roles("USER")
                 .build();
     }
@@ -55,21 +55,21 @@ public class SecurityService implements UserDetailsService {
     }
 
 
-    public Account getAccount()
+    public Member getMember()
     {
-        return (Account) session.getAttribute(ApplicationConsts.ACCOUNT_SESS_NAME);
+        return (Member) session.getAttribute(ApplicationConsts.MEMBER_SESS_NAME);
     }
 
 
-    public Account setAccount(String userid)
+    public Member setMember(String userid)
     {
-        Account account = getAccount();
+        Member member = getMember();
 
         // TODO: 2019-11-01 차후에 orElseGet은 빠져야한다... 인증 후 session에 넣고, repo 건드리고는.. loginAPI에서 해야한다.
-        return Optional.ofNullable(account).orElseGet(() -> {
+        return Optional.ofNullable(member).orElseGet(() -> {
                     String tempUserid = Optional.ofNullable(userid).orElseGet(() -> getPrincipal().get().getUsername());
-                    Account tempAcc = accountRepository.findByUserId(tempUserid);
-                    session.setAttribute(ApplicationConsts.ACCOUNT_SESS_NAME, tempAcc);
+                    Member tempAcc = memberRepository.findByUserId(tempUserid);
+                    session.setAttribute(ApplicationConsts.MEMBER_SESS_NAME, tempAcc);
                     return tempAcc;
                 }
             );

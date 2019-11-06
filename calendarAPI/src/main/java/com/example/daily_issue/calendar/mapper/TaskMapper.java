@@ -1,8 +1,8 @@
 package com.example.daily_issue.calendar.mapper;
 
-import com.example.daily_issue.calendar.domain.RecordedTask;
-import com.example.daily_issue.calendar.ro.TaskReq;
-import com.example.daily_issue.calendar.ro.TaskResp;
+import com.example.daily_issue.calendar.domain.BasicTask;
+import com.example.daily_issue.calendar.ro.BasicTaskReq;
+import com.example.daily_issue.calendar.ro.BasicTaskResp;
 import com.example.daily_issue.calendar.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.PropertyMapper;
@@ -18,15 +18,15 @@ public class TaskMapper {
 
 
     // Task Request VO --> Task DTO
-    public RecordedTask convertTaskReqToTask(TaskReq source)
+    public BasicTask convertTaskReqToTask(BasicTaskReq source)
     {
-        return convertTaskReqToTask(source, new RecordedTask());
+        return convertTaskReqToTask(source, new BasicTask());
     }
-    public RecordedTask convertTaskReqToTask(TaskReq source, Optional<RecordedTask> target)
+    public BasicTask convertTaskReqToTask(BasicTaskReq source, Optional<BasicTask> target)
     {
         return target.isPresent() ? convertTaskReqToTask(source, target.get()) : null;
     }
-    public RecordedTask convertTaskReqToTask(TaskReq source, RecordedTask target)
+    public BasicTask convertTaskReqToTask(BasicTaskReq source, BasicTask target)
     {
         PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
         propertyMapper.from(source::getIsAllDay).to(target::setIsAllDay);
@@ -44,19 +44,19 @@ public class TaskMapper {
 
 
     // Task DTO --> Task Response VO
-    public TaskResp convertTaskToTaskResp(Optional<RecordedTask> source)
+    public BasicTaskResp convertTaskToTaskResp(Optional<BasicTask> source)
     {
         return source.isPresent() ? convertTaskToTaskResp(source.get()) : null;
     }
-    public TaskResp convertTaskToTaskResp(RecordedTask source)
+    public BasicTaskResp convertTaskToTaskResp(BasicTask source)
     {
-        return convertTaskToTaskResp(source, new TaskResp());
+        return convertTaskToTaskResp(source, new BasicTaskResp());
     }
-    public TaskResp convertTaskToTaskResp(Optional<RecordedTask> source, TaskResp target)
+    public BasicTaskResp convertTaskToTaskResp(Optional<BasicTask> source, BasicTaskResp target)
     {
         return source.isPresent() ? convertTaskToTaskResp(source.get(), target) : null;
     }
-    public TaskResp convertTaskToTaskResp(RecordedTask source, TaskResp target)
+    public BasicTaskResp convertTaskToTaskResp(BasicTask source, BasicTaskResp target)
     {
         PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
         propertyMapper.from(source::getId).to(target::setId);

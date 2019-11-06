@@ -1,2 +1,2 @@
-insert into Account (id, password, user_id, birthday, name, phone_number, status) VALUES (1, 'password', 'user1', 'birthday', 'name', 'phone', 'status');
-insert into Account (id, password, user_id, birthday, name, phone_number, status) VALUES (2, 'password', 'user2', 'birthday', 'name', 'phone', 'status');
+insert into Member (id, password, user_id, birthday, name, phone_number, status) VALUES (1, 'password', 'user1', 'birthday', 'name', 'phone', 'status');
+insert into Member (id, password, user_id, birthday, name, phone_number, status) VALUES (2, 'password', 'user2', 'birthday', 'name', 'phone', 'status');

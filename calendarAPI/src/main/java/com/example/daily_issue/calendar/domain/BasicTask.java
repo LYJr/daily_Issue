@@ -1,6 +1,6 @@
 package com.example.daily_issue.calendar.domain;
 
-import com.example.daily_issue.login.domain.Account;
+import com.example.daily_issue.login.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,9 +16,9 @@ import javax.persistence.Entity;
 @Setter
 @Slf4j
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-public class RecordedTask extends AuditableRootTask<Account, Long> {
+public class BasicTask extends AuditableRootTask<Member, Long> {
 
-    public RecordedTask(Long id)
+    public BasicTask(Long id)
     {
         this.setId(id);
     }

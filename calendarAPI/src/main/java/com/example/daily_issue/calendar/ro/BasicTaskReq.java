@@ -4,27 +4,10 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Data
-public class TaskResp {
-
-    /* task pk */
-    private Long id;
-
-    /* task creator */
-    private Long createdBy;
-
-    /* task created date */
-    private LocalDateTime createdDate;
-
-    /* task modifier */
-    private Long lastModifiedBy;
-
-    /* task last modified date */
-    private LocalDateTime lastModifiedDate;
-
+public class BasicTaskReq {
 
     // 지금은 사용하지 않는다.
     /*private String taskPerformerId;*/

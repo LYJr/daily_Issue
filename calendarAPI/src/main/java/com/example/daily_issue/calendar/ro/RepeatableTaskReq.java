@@ -7,16 +7,16 @@ import java.time.LocalDate;
 import java.time.Period;
 
 @Data
-public class ReserveReq {
+public class RepeatableTaskReq {
 
-    // 예약 발생 주기 (기본 : 한달단위)
+    // 반복 발생 주기
     private Period period;
 
-    // 예약 시작일
+    // 반복 시작일
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate reserveStartDate;
-    // 예약 종료일
+    private LocalDate repeatStartDate;
+    // 반복 종료일
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate reserveEndDate;
+    private LocalDate repeatEndDate;
 
 }

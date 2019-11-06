@@ -1,10 +1,10 @@
 package com.example.daily_issue.calendar.service;
 
 import com.example.daily_issue.calendar.aop.EnableOwnerCheck;
-import com.example.daily_issue.calendar.dao.RecordedTaskRepository;
-import com.example.daily_issue.calendar.domain.RecordedTask;
+import com.example.daily_issue.calendar.dao.BasicTaskRepository;
+import com.example.daily_issue.calendar.domain.BasicTask;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
-import com.example.daily_issue.calendar.ro.TaskReq;
+import com.example.daily_issue.calendar.ro.BasicTaskReq;
 import com.example.daily_issue.calendar.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -22,61 +22,61 @@ public class CalendarService {
     SecurityService securityService;
 
     @Autowired
-    RecordedTaskRepository recordedTaskRepository;
+    BasicTaskRepository basicTaskRepository;
 
 
 
-    public Optional<RecordedTask> save(@NonNull RecordedTask task)
+    public Optional<BasicTask> save(@NonNull BasicTask task)
     {
         // save
-        RecordedTask result = task != null ? recordedTaskRepository.save(task) : task;
+        BasicTask result = task != null ? basicTaskRepository.save(task) : task;
         return Optional.ofNullable(result);
     }
 
     @EnableOwnerCheck
-    public Optional<RecordedTask> update(@NonNull Long taskId, TaskReq taskReq)
+    public Optional<BasicTask> update(@NonNull Long taskId, BasicTaskReq taskReq)
     {
         // get existing task
-        Optional<RecordedTask> originTask = findByTaskId(taskId);
-        RecordedTask task = taskMapper.convertTaskReqToTask(taskReq, originTask);
+        Optional<BasicTask> originTask = findByTaskId(taskId);
+        BasicTask task = taskMapper.convertTaskReqToTask(taskReq, originTask);
 
         // update
         return task != null ? update(task) : Optional.empty();
     }
 
     @EnableOwnerCheck
-    public Optional<RecordedTask> update(@NonNull RecordedTask task)
+    public Optional<BasicTask> update(@NonNull BasicTask task)
     {
         // update
-        RecordedTask result = task != null ? recordedTaskRepository.save(task) : task;
+        BasicTask result = task != null ? basicTaskRepository.save(task) : task;
         return Optional.ofNullable(result);
     }
 
     @EnableOwnerCheck
-    public Optional<RecordedTask> delete(@NonNull Long id)
+    public Optional<BasicTask> delete(@NonNull Long id)
     {
         // get existing task
-        Optional<RecordedTask> originTask = findByTaskId(id);
+        Optional<BasicTask> originTask = findByTaskId(id);
 
         // delete
-        originTask.ifPresent(a -> recordedTaskRepository.deleteById(a.getId()));
+        originTask.ifPresent(a -> basicTaskRepository.deleteById(a.getId()));
 
         return originTask.isPresent() ? originTask : Optional.empty();
     }
 
     @EnableOwnerCheck
-    public Optional<RecordedTask> delete(@NonNull RecordedTask task)
+    public Optional<BasicTask> delete(@NonNull BasicTask task)
     {
-        Optional<RecordedTask> originTask = Optional.ofNullable(task);
-        originTask.ifPresent(t -> recordedTaskRepository.delete(t));
+        Optional<BasicTask> originTask = Optional.ofNullable(task);
+        originTask.ifPresent(t -> basicTaskRepository.delete(t));
 
         return originTask.isPresent() ? originTask : Optional.empty();
     }
 
 
-    public Optional<RecordedTask> findByTaskId(@NonNull Long id)
+    public Optional<BasicTask> findByTaskId(@NonNull Long id)
     {
-        return recordedTaskRepository.findById(id);
+        return basicTaskRepository.findById(id);
     }
 
 

@@ -1,6 +1,6 @@
 package com.example.daily_issue.calendar.domain;
 
-import com.example.daily_issue.login.domain.Account;
+import com.example.daily_issue.login.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Period;
 
 @Entity
@@ -19,20 +19,21 @@ import java.time.Period;
 @Setter
 @Slf4j
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-public class ReservedTask extends AuditableRootTask<Account, Long> {
+public class RepeatableTask extends AuditableRootTask<Member, Long> {
 
-    public ReservedTask(Long id)
+    public RepeatableTask(Long id)
     {
         this.setId(id);
     }
 
-    // 예약 발생 주기 (기본 : 한달단위)
-    private Period period = Period.ofMonths(1);
+    // 반복 발생 주기
+    private Period repeatPeriod;
 
-    // 예약 시작일
-    private LocalDateTime reserveStartDate;
-    // 예약 종료일
-    private LocalDateTime reserveEndDate;
+    // 반복 시작일
+    private LocalDate repeatStartDate;
+
+    // 반복 종료일
+    private LocalDate repeatEndDate;
 
 
     @Transient

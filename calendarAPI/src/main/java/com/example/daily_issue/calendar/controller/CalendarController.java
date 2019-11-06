@@ -1,10 +1,10 @@
 package com.example.daily_issue.calendar.controller;
 
-import com.example.daily_issue.calendar.domain.RecordedTask;
+import com.example.daily_issue.calendar.domain.BasicTask;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
-import com.example.daily_issue.calendar.ro.ReserveReq;
-import com.example.daily_issue.calendar.ro.TaskReq;
-import com.example.daily_issue.calendar.ro.TaskResp;
+import com.example.daily_issue.calendar.ro.BasicTaskReq;
+import com.example.daily_issue.calendar.ro.BasicTaskResp;
+import com.example.daily_issue.calendar.ro.RepeatableTaskReq;
 import com.example.daily_issue.calendar.service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,14 +26,14 @@ public class CalendarController {
 
     @PostMapping("save")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<TaskResp> save(@RequestBody TaskReq taskReq, @RequestBody(required = false) ReserveReq reserveReq)
+    public ResponseEntity<BasicTaskResp> save(@RequestBody BasicTaskReq taskReq, @RequestBody(required = false) RepeatableTaskReq repeatableTaskReq)
     {
         // task save
-        RecordedTask task = taskMapper.convertTaskReqToTask(taskReq);
-        Optional<RecordedTask> savedTask = calendarService.save(task);
+        BasicTask task = taskMapper.convertTaskReqToTask(taskReq);
+        Optional<BasicTask> savedTask = calendarService.save(task);
 
         // for response
-        TaskResp resp = taskMapper.convertTaskToTaskResp(savedTask);
+        BasicTaskResp resp = taskMapper.convertTaskToTaskResp(savedTask);
 
         HttpStatus responseCode;
         responseCode = savedTask.isPresent() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR;
@@ -43,13 +43,13 @@ public class CalendarController {
 
     @PutMapping("update")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<TaskResp> update(@RequestParam Long taskId, @RequestBody TaskReq taskReq)
+    public ResponseEntity<BasicTaskResp> update(@RequestParam Long taskId, @RequestBody BasicTaskReq taskReq)
     {
         // task update
-        Optional<RecordedTask> updatedTask = calendarService.update(taskId, taskReq);
+        Optional<BasicTask> updatedTask = calendarService.update(taskId, taskReq);
 
         // for response
-        TaskResp resp = taskMapper.convertTaskToTaskResp(updatedTask);
+        BasicTaskResp resp = taskMapper.convertTaskToTaskResp(updatedTask);
 
         HttpStatus responseCode;
         responseCode = updatedTask.isPresent() ? HttpStatus.OK : HttpStatus.NO_CONTENT;
@@ -59,13 +59,13 @@ public class CalendarController {
 
     @DeleteMapping("delete")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<TaskResp> delete(@RequestParam Long taskId)
+    public ResponseEntity<BasicTaskResp> delete(@RequestParam Long taskId)
     {
         // task delete
-        Optional<RecordedTask> deletedTask = calendarService.delete(taskId);
+        Optional<BasicTask> deletedTask = calendarService.delete(taskId);
 
         // for response
-        TaskResp resp = taskMapper.convertTaskToTaskResp(deletedTask);
+        BasicTaskResp resp = taskMapper.convertTaskToTaskResp(deletedTask);
 
         HttpStatus responseCode;
         responseCode = deletedTask.isPresent() ? HttpStatus.OK : HttpStatus.NO_CONTENT;

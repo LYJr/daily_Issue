@@ -1,8 +1,8 @@
 package com.example.daily_issue.calendar.controller;
 
 import com.example.daily_issue.calendar.attr.ServiceURLAttributes;
-import com.example.daily_issue.calendar.ro.TaskReq;
-import com.example.daily_issue.calendar.ro.TaskResp;
+import com.example.daily_issue.calendar.ro.BasicTaskReq;
+import com.example.daily_issue.calendar.ro.BasicTaskResp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -35,7 +35,7 @@ class CalendarControllerTest {
     MockMvc mockMvc;
 
 
-    private static List<TaskResp> tasks = new ArrayList<>();
+    private static List<BasicTaskResp> tasks = new ArrayList<>();
 
 
 
@@ -112,7 +112,7 @@ class CalendarControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        TaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResp.class);
+        BasicTaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BasicTaskResp.class);
         tasks.add(taskResp);
 
         System.out.println(tasks.size());
@@ -235,7 +235,7 @@ class CalendarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        TaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResp.class);
+        BasicTaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BasicTaskResp.class);
         assertThat(taskResp.getLastModifiedDate()).isNotEqualTo(taskResp.getCreatedDate());
         assertThat(tasks.get(0).getLastModifiedDate()).isNotEqualTo(taskResp.getLastModifiedDate());
     }
@@ -326,7 +326,7 @@ class CalendarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        TaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResp.class);
+        BasicTaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BasicTaskResp.class);
         assertThat(taskResp.getLastModifiedDate()).isNotEqualTo(taskResp.getCreatedDate());
         assertThat(tasks.get(0).getLastModifiedDate()).isNotEqualTo(taskResp.getLastModifiedDate());
     }
@@ -353,7 +353,7 @@ class CalendarControllerTest {
             seq = random.nextInt(10-1)+1;
         }
 
-        TaskReq req = new TaskReq();
+        BasicTaskReq req = new BasicTaskReq();
         req.setIsAllDay(seq/2 == 0);
         req.setPlace("test place - " + seq);
         req.setComment("test comment - " + seq);

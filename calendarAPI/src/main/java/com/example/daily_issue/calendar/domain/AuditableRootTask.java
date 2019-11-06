@@ -13,10 +13,7 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Date;
 import java.util.Optional;
 
@@ -150,7 +147,7 @@ public class AuditableRootTask<U, PK extends Serializable> extends AbstractPersi
     @JoinColumn(nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
-    private Account taskPerformer;*/
+    private Member taskPerformer;*/
 
 
 
@@ -188,7 +185,6 @@ public class AuditableRootTask<U, PK extends Serializable> extends AbstractPersi
     /* 일정 위치 / 장소 */
     private String place = "";
 
-
     /* 일정 표기 색 (default : black) */
     /*
      * rgb : rgb(0, 0, 0)
@@ -197,4 +193,12 @@ public class AuditableRootTask<U, PK extends Serializable> extends AbstractPersi
      * hex : #000000
      * */
     private String color = "rgb(0, 0, 0)";
+
+
+    @Transient
+    /* 일정 시작 / 종료일 기간 */
+    public Period getTaskPeriod()
+    {
+        return Period.between(taskStartDate, taskEndDate);
+    }
 }

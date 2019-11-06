@@ -1,9 +1,9 @@
 package com.example.daily_issue.calendar.aop;
 
-import com.example.daily_issue.calendar.domain.RecordedTask;
+import com.example.daily_issue.calendar.domain.BasicTask;
 import com.example.daily_issue.calendar.security.service.SecurityService;
 import com.example.daily_issue.calendar.service.CalendarService;
-import com.example.daily_issue.login.domain.Account;
+import com.example.daily_issue.login.domain.Member;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -27,23 +27,23 @@ public class OwnerChecker {
 
     @Around("@annotation(EnableOwnerCheck) && args(taskId, ..)")
     public Object checkTaskOwner(ProceedingJoinPoint pjp, Long taskId) throws Throwable {
-        Optional<RecordedTask> originTask = calendarService.findByTaskId(taskId);
+        Optional<BasicTask> originTask = calendarService.findByTaskId(taskId);
         return originTask.isPresent() ? checkTaskOwner(pjp, originTask.get()) : returnRequestTypeEmptyValue(pjp);
     }
 
-    @Around("@annotation(EnableOwnerCheck) && args(recordedTask)")
-    public Object checkTaskOwner(ProceedingJoinPoint pjp, Optional<RecordedTask> recordedTask) throws Throwable {
-        return recordedTask.isPresent() ? checkTaskOwner(pjp, recordedTask.get()) : returnRequestTypeEmptyValue(pjp);
+    @Around("@annotation(EnableOwnerCheck) && args(basicTask)")
+    public Object checkTaskOwner(ProceedingJoinPoint pjp, Optional<BasicTask> basicTask) throws Throwable {
+        return basicTask.isPresent() ? checkTaskOwner(pjp, basicTask.get()) : returnRequestTypeEmptyValue(pjp);
     }
 
 
-    @Around("@annotation(EnableOwnerCheck) && args(recordedTask)")
-    public Object checkTaskOwner(ProceedingJoinPoint pjp, RecordedTask recordedTask) throws Throwable {
+    @Around("@annotation(EnableOwnerCheck) && args(basicTask)")
+    public Object checkTaskOwner(ProceedingJoinPoint pjp, BasicTask basicTask) throws Throwable {
 
         // check isOwner (Task owner equals Logged User)
-        Optional<String> userId = recordedTask.getCreatedBy()
-                .map(Account::getUserId)
-                .filter(id -> id.equals(securityService.getAccount().getUserId()));
+        Optional<String> userId = basicTask.getCreatedBy()
+                .map(Member::getUserId)
+                .filter(id -> id.equals(securityService.getMember().getUserId()));
 
 
         // is owner? / then process

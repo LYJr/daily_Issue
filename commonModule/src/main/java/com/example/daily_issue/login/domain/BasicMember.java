@@ -12,7 +12,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 @Getter
 @NoArgsConstructor
-public class BaseAccount {
+public class BasicMember {
 
     @Id
     @GeneratedValue
@@ -26,7 +26,7 @@ public class BaseAccount {
     @Column
     private String password;
 
-    public BaseAccount(String userId, String password) {
+    public BasicMember(String userId, String password) {
         this.userId = userId;
         this.password = password;
     }
