@@ -1,14 +1,16 @@
 package com.example.daily_issue.checklist.config.aduit;
 
-import com.example.daily_issue.checklist.user.service.User;
+import com.example.daily_issue.login.domain.Account;
 import org.springframework.data.domain.AuditorAware;
 
 import java.util.Optional;
 
-public class CommonModelAuditAware implements AuditorAware<User> {
+public class CommonModelAuditAware implements AuditorAware<Account> {
 
     @Override
-    public Optional<User> getCurrentAuditor() {
-        return Optional.of(User.builder().id("kyoing").build());
+    public Optional<Account> getCurrentAuditor() {
+        Account account = new Account();
+        account.setUserId("kyoing");
+        return Optional.of(account);
     }
 }
