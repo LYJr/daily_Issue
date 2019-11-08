@@ -1,155 +1,142 @@
 package com.example.daily_issue.calendar.service;
 
+import com.example.daily_issue.calendar.domain.RepeatableTask;
+import com.example.daily_issue.calendar.service.util.CalendarCalculator;
 import com.example.daily_issue.calendar.vo.DateRange;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Month;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import java.util.HashSet;
+import java.util.Set;
 
+// TODO: 2019-11-08 반복일정에 대한 CRUD만 존재해야 한다. (display관련은 calendar에서)
 
 /**
- * The type Repeatable task service.
+ * - "portfolio" Project -
+ * Created by blackychris24@gmail.com on 2019-11-07
+ * Github : https://github.com/blackychris24
+ *
+ * @author : BlackyChris
+ * @since : 0.0.1-SNAPSHOT (2019-11-07)
+ */
+/**
+ *
  */
 @Service
 public class RepeatableTaskService {
 
-
-
-    // 일자별 (ex : 2일 간격으로 / 매달 10일)
-
-
-    // 요일별 (ex : 매주 화요일 / 매주 화요일 2주마다 / 매달 첫번째 화요일)
-    private void getTaskListByDayOfWeek(LocalDate baseDate, DayOfWeek dayOfWeek, boolean isIncludeBaseDay)
-    {
-
-        // 기준일 포함 가장 최근 설정요일 일자
-        LocalDate nearestConditionDate = baseDate.with(TemporalAdjusters.nextOrSame(dayOfWeek));
-
-        // 기준일을 출력에 포함할 것인지. (설정 요일이 아니더라도)
-        if(isIncludeBaseDay)
-        {
-            //if(!nearestConditionDate.isEqual(baseDate))
-        }
-
-
-    }
-/*
-    private List<LocalDate> getTaskListOfDateRange(int repeatUnit, LocalDate baseDate, DateRange dateRange, boolean includeBaseDate)
-    {
-        List<LocalDate> tasks = new ArrayList<>();
-
-        //ChronoUnit type = ChronoUnit.MONTHS;
-
-        // get date range
-
-
-
-        // include data
-
-        //
-        List<LocalDate> dates = new ArrayList<>();
-        LocalDate tempBasicStartDate = dateRange.getStartDate();
-        while(tempBasicStartDate.isBefore(dateRange.getEndDate())
-                || tempBasicStartDate.isEqual(dateRange.getEndDate()))
-        {
-            dates.add(tempBasicStartDate);
-            tempBasicStartDate.plus();
-        }
-
-
-
-    }*/
-
-
-    ////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////// 기간 체크 /////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-    private boolean isNestedDayInDateRange(ChronoUnit chronoUnit, DateRange displayedDateRange, LocalDate targetDate)
-    {
-        boolean isNested = false;
-
-        switch (chronoUnit)
-        {
-            default:
-            case MONTHS:
-                // display 되는 달
-                Month displayMonth = Month.from(displayedDateRange.getBaseDate());
-                isNested = displayMonth.equals(targetDate.getMonth());
-                break;
-            case WEEKS:
-                isNested = !targetDate.isBefore(displayedDateRange.getStartDate())
-                        && !targetDate.isAfter(displayedDateRange.getEndDate());
-                break;
-            case DAYS:
-                isNested = targetDate.isEqual(displayedDateRange.getBaseDate());
-                break;
-        }
-
-        return isNested;
-    }
-
-
-
-    ////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////// 기간 산정 /////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-
-    private DateRange getDisplayDateRange(ChronoUnit type, LocalDate displayDate)
-    {
-        // 기준일의 조회기준 시작일/종료일
-        DateRange dateRange;
-        switch (type)
-        {
-            default:
-            case DAYS:
-                dateRange = getDayDateRange(displayDate);
-                break;
-            case WEEKS:
-                dateRange = getWeekDateRange(displayDate);
-                break;
-            case MONTHS:
-                dateRange = getMonthDateRange(displayDate);
-                break;
-        }
-
-        return dateRange;
-    }
-
     /**
-     * baseDate에 해당하는 month의 첫번째/마지막일 LocalDate 반환
+     * The Calculator.
+     * 계산을 위한 Utility class
      *
-     * @param displayDate 기준일
-     * @return 기준일이 포함된 주의 월요일/일요일 LocalDate
+     * @see CalendarCalculator
+     * {@link CalendarCalculator}
      */
-    private DateRange getMonthDateRange(LocalDate displayDate)
+    @Autowired
+    CalendarCalculator calculator;
+
+
+    /**
+     * List repeated task by day of weeks set.
+     * 설정된 요일마다 반복
+     *
+     * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
+     * @param task              {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
+     *
+     * @return {@link RepeatableTask} 결과 일정 목록
+     */
+    public Set<RepeatableTask> listRepeatedTaskByDayOfWeeks(DateRange taskableDateRange, RepeatableTask task)
     {
-        LocalDate startDate = displayDate.with(TemporalAdjusters.firstDayOfMonth());
-        startDate = startDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        Set<LocalDate> dates = new HashSet<>();
+        Period taskPeriod = Period.between(task.getTaskStartDate(), task.getTaskEndDate());
 
-        LocalDate endDate = displayDate.with(TemporalAdjusters.lastDayOfMonth());
-        endDate = endDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        // 설정된 요일마다
+        task.getRepeatDayOfWeeks().forEach(week -> {
+            // 표기 범위 중에서 가장 가까운 설정요일 검색 (first index)
+            LocalDate nearestDayOfWeek = taskableDateRange.getStartDate()
+                    .with(TemporalAdjusters.nextOrSame(week));
 
-        return new DateRange(startDate, endDate, displayDate);
+            // 표기범위내에 존재한다면, add + amount만큼 증가
+            while (calculator.isNestedDayInDateRange(taskableDateRange, nearestDayOfWeek))
+            {
+                dates.add(nearestDayOfWeek);
+                nearestDayOfWeek = nearestDayOfWeek.plus(task.getRepeatAmount(), ChronoUnit.WEEKS);
+            }
+        });
+
+        Set<RepeatableTask> result = new HashSet<>();
+        dates.forEach(startDate -> {
+            RepeatableTask temp = new RepeatableTask();
+            BeanUtils.copyProperties(task, temp);
+            temp.setTaskStartDate(startDate);
+            temp.setTaskEndDate(startDate.plus(taskPeriod));
+            result.add(temp);
+        });
+
+        return result;
     }
 
     /**
-     * baseDate에 해당하는 week의 Mon/Sun LocalDate 반환
-     * @param displayDate 기준일
-     * @return 기준일이 포함된 주의 월요일/일요일 LocalDate
+     * List repeated task by specified days set.
+     *
+     * @param taskableDateRange the taskable date range
+     * @param task              the task
+     *
+     * @return the set
      */
-    private DateRange getWeekDateRange(LocalDate displayDate)
+    public Set<LocalDate> listRepeatedTaskBySpecifiedDays(DateRange taskableDateRange, RepeatableTask task)
     {
-        LocalDate startDate = displayDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate endDate = displayDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        Set<LocalDate> dates = new HashSet<>();
 
-        return new DateRange(startDate, endDate, displayDate);
+        task.getRepeatDays().forEach(day -> {
+            LocalDate targetDate = taskableDateRange.getBaseDate().withDayOfMonth(day);
+            if(calculator.isNestedDayInDateRange(taskableDateRange, targetDate))
+            {
+                dates.add(targetDate);
+            }
+        });
+
+        return dates;
     }
 
-    private DateRange getDayDateRange(LocalDate displayDate)
+    /**
+     * List repeated task by distance set.
+     *
+     * @param taskableDateRange the taskable date range
+     * @param task              the task
+     *
+     * @return the set
+     */
+    public Set<LocalDate> listRepeatedTaskByDistance(DateRange taskableDateRange, RepeatableTask task)
     {
-        return new DateRange(displayDate, displayDate, displayDate);
+        Set<LocalDate> dates = new HashSet<>();
+
+        // temporary index date ( 반복 시작일 )
+        LocalDate tempIndexDate = taskableDateRange.getStartDate();
+
+        // 일정 시작일과의 차이를 구하고
+        // (반복시작일부터 일정이 기록되어야 하므로, 최초 일정일 시작일과 차이를 구하는 것)
+        Period period = Period.between(tempIndexDate, task.getTaskStartDate());
+
+
+
+        // 일정 대상일로 index를 옮기기 위함 ( index 조정 )
+        int indexDistance = Math.abs(period.getDays()%task.getRepeatAmount());
+        indexDistance = (indexDistance != 0 && period.isNegative()) ? Math.abs(indexDistance-task.getRepeatAmount()) : indexDistance;
+        tempIndexDate = tempIndexDate.plusDays(indexDistance);
+
+        while (calculator.isNestedDayInDateRange(taskableDateRange, tempIndexDate))
+        {
+            dates.add(tempIndexDate);
+            tempIndexDate = tempIndexDate.plus(task.getRepeatAmount(), task.getRepeatChronoUnit());
+        }
+
+        return dates;
     }
+
 }

@@ -11,7 +11,10 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * - "portfolio" Project -
@@ -31,8 +34,8 @@ public class RepeatableTaskTest {
     private DayOfWeek startDayOfWeek = DayOfWeek.MONDAY;
     private DayOfWeek endDayOfWeek = DayOfWeek.SUNDAY;
 
-    // 월별 캘린더에서 한번에 표시될 week 갯수 (6주차)
-    private int weekCountWithMonth = 6;
+    // 월별 캘린더에서 한번에 표시될 week 갯수 (6주 표시)
+    private int weekCountWithMonth = 0;
 
 
     //////////////////////////////////////////////////////////////////////
@@ -58,8 +61,8 @@ public class RepeatableTaskTest {
     //////////////////////////////////////////////////////////////////////
     // task
     // 일정 등록일
-    private LocalDate targetDate = LocalDate.of(2019, 11, 8);
-    // 일정 범위 (예시 : 2일 단위)
+    private LocalDate targetDate = LocalDate.of(2019, 11, 5);
+    // 일정 기간 (예시 : 2일동안의 일정)
     private Period taskPeriod = Period.ofDays(2);
     // 일정 종일여부
     private boolean isAllday = false;
@@ -72,9 +75,9 @@ public class RepeatableTaskTest {
     // repeat
     // 시작일은 필수이며, 종료일은 null 혹은 Optional.empty()일 경우 무한임
     // 반복 시작일
-    private LocalDate repeatStartDate = LocalDate.of(2019, 10, 5);
+    private LocalDate repeatStartDate = LocalDate.of(2019, 11, 5);
     // 반복 종료일
-    private LocalDate repeatEndDate = LocalDate.of(2019, 12, 25);
+    private LocalDate repeatEndDate = LocalDate.of(2019, 11, 28);
 
 
     // 반복 요일 설정 (요일별 반복일 때만 의미가 있다. / 매주 화요일, 목요일마다 발생)
@@ -104,10 +107,10 @@ public class RepeatableTaskTest {
         // 매주 화요일 반복
         repeatAmount = 1;
         repeatChronoUnit = ChronoUnit.WEEKS;
-        repeatDayOfWeeks.add(DayOfWeek.TUESDAY);
-        repeatDayOfWeeks.add(DayOfWeek.SATURDAY);
-        repeatDays.add(10);
-        repeatDays.add(24);
+//        repeatDayOfWeeks.add(DayOfWeek.TUESDAY);
+//        repeatDayOfWeeks.add(DayOfWeek.SATURDAY);
+//        repeatDays.add(10);
+//        repeatDays.add(24);
     }
 
 
@@ -116,7 +119,7 @@ public class RepeatableTaskTest {
     public void repeatDayOfWeek()
     {
         // return 객체
-        List<LocalDate> dates = new ArrayList<>();
+        Set<LocalDate> dates = new HashSet<>();
 
         //////////////////////////////////////////////////////////////////////
         ////// GIVEN
@@ -132,22 +135,6 @@ public class RepeatableTaskTest {
         ///////// WHEN
         //////////////////////////////////////////////////////////////////////
         // 2. 로직
-
-        /*repeatDayOfWeeks.forEach(week -> {
-            // 표기 범위 중에서 가장 가까운 설정요일 검색
-            LocalDate nearestDayOfWeek = taskableDateRange.getStartDate()
-                    .with(TemporalAdjusters.nextOrSame(week));
-
-            // 표기범위내 반복주기만큼 list에 담아낸다
-            while(nearestDayOfWeek.isBefore(taskableDateRange.getEndDate())
-                    || nearestDayOfWeek.isEqual(taskableDateRange.getEndDate()))
-            {
-                dates.add(nearestDayOfWeek);
-                nearestDayOfWeek = nearestDayOfWeek.plus(repeatAmount, repeatChronoUnit);
-            }
-        });*/
-
-
         // 요일마다
         repeatDayOfWeeks.forEach(week -> {
             // 표기 범위 중에서 가장 가까운 설정요일 검색
@@ -155,14 +142,14 @@ public class RepeatableTaskTest {
                     .with(TemporalAdjusters.nextOrSame(week));
 
             // 표기범위내 반복주기만큼 list에 담아낸다
-            while(nearestDayOfWeek.isBefore(taskableDateRange.getEndDate())
-                    || nearestDayOfWeek.isEqual(taskableDateRange.getEndDate()))
+            while (isNestedDayInDateRange(taskableDateRange, nearestDayOfWeek))
             {
                 dates.add(nearestDayOfWeek);
-                nearestDayOfWeek = nearestDayOfWeek.plus(repeatAmount, repeatChronoUnit);
+                nearestDayOfWeek = nearestDayOfWeek.plus(repeatAmount, ChronoUnit.WEEKS);
             }
         });
-        // 지정일 마다
+
+        // 지정일 마다 // 지정된 요일
         repeatDays.forEach(day -> {
             LocalDate targetDate = taskableDateRange.getBaseDate().withDayOfMonth(day);
             if(isNestedDayInDateRange(taskableDateRange, targetDate))
@@ -170,18 +157,19 @@ public class RepeatableTaskTest {
                 dates.add(targetDate);
             }
         });
+
         // 지정일 간격 마다
         // 표기 범위 중에서 가장 가까운 설정요일 검색
         LocalDate tempIndexDate = targetDate;
 
         // 표기범위내 반복주기만큼 list에 담아낸다
         // 이건... baseDate랑 createDate랑 between한 것을 주기만큼 나눈 것으로 뭔가 계산할 수 있을것 같은데..
-        while(tempIndexDate.isBefore(taskableDateRange.getEndDate())
+        /*while(tempIndexDate.isBefore(taskableDateRange.getEndDate())
                 || tempIndexDate.isEqual(taskableDateRange.getEndDate()))
         {
             dates.add(tempIndexDate);
             tempIndexDate = tempIndexDate.plus(repeatAmount, repeatChronoUnit);
-        }
+        }*/
 
 
 
@@ -195,11 +183,65 @@ public class RepeatableTaskTest {
               dates.add(targetDate);
             }
         }
-        Collections.sort(dates);
 
-        dates.forEach(System.out::println);
+        ArrayList<LocalDate> result = new ArrayList<>(dates);
+        Collections.sort(result);
+
+        result.forEach(System.out::println);
     }
 
+
+
+    @Test
+    public void DayTest()
+    {
+        // return 객체
+        Set<LocalDate> dates = new HashSet<>();
+
+
+        LocalDate startedDate = LocalDate.of(2015, 10, 5);
+        LocalDate tempIndexDate = taskableDateRange.getStartDate();
+
+        // 일정 시작일과의 차이를 구하고
+        Period period = Period.between(tempIndexDate, startedDate);
+
+
+
+        // 일정 대상일로 index를 옮기기 위함 (first index)
+        int indexDistance = Math.abs(period.getDays()%3);
+        indexDistance = (indexDistance != 0 && period.isNegative()) ? Math.abs(indexDistance-3) : indexDistance;
+        tempIndexDate = tempIndexDate.plusDays(indexDistance);
+
+        while (isNestedDayInDateRange(taskableDateRange, tempIndexDate))
+        {
+            dates.add(tempIndexDate);
+            tempIndexDate = tempIndexDate.plus(3, ChronoUnit.DAYS);
+        }
+
+        ArrayList<LocalDate> result = new ArrayList<>(dates);
+        Collections.sort(result);
+
+        result.forEach(System.out::println);
+    }
+
+
+    @Test
+    public void dayOfWeekTest()
+    {
+        System.out.println(DayOfWeek.MONDAY);;
+        DayOfWeek dw = DayOfWeek.of(1);
+        DayOfWeek dw2 = DayOfWeek.valueOf("MONDAY");
+        System.out.println(dw);
+        System.out.println(dw2);
+
+        System.out.println("=----------------");
+
+        System.out.println(DayOfWeek.TUESDAY.getValue());
+        System.out.println(DayOfWeek.SATURDAY.getValue());
+        System.out.println(DayOfWeek.THURSDAY.getValue());
+        System.out.println(DayOfWeek.SATURDAY.getValue());
+        System.out.println(DayOfWeek.SUNDAY.getValue());
+    }
 
 
     ////////////////////////////////////////////////////////////////////////////////

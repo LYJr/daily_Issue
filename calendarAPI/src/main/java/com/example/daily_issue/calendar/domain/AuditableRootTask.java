@@ -122,44 +122,10 @@ public class AuditableRootTask<U, PK extends Serializable> extends AbstractPersi
 
 
 
-
-
-
-
-
-
-
-    // TODO: 2019-10-02 Calendar 추가기능 모색
-    /*
-     * 1. google calendar를 기준으로 작성
-     * 2. 추가 기능은 아래와 같다.
-     *   1. 일정반복 / 참석자 / 참석자별 권한
-     *   2. 일정 공개여부 / 공개 URL
-     *   3. 일정초대 / 초대 URL
-     *   4. 일정 알림 (email / mobile / etc..)
-     * 3. 추가기능은 현재 목적과 벗어나므로, 필요 시 구현
-     * */
-
-
-    /* 일정 수행자 : 생성자와 일정 담당자가 다를 수 있으므로..
-     * 일단은 사용하지 않는다. */
-    /*@ManyToOne
-    @JoinColumn(nullable = false)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
-    private Member taskPerformer;*/
-
-
-
     /* 일정 종일여부
     = 일 단위로 일정관리 여부
     ( true : 시간정보 제외됨) */
     private Boolean isAllDay = false;
-
-
-
-
-
 
     /* 일정 시작일 */
     @Column(nullable = false)

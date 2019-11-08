@@ -1,0 +1,2 @@
+com.example.daily_issue.calendar.autoconfigure.AutoConfigureCalendar=\
+  com.example.daily_issue.calendar.autoconfigure.CalendarAutoConfiguration

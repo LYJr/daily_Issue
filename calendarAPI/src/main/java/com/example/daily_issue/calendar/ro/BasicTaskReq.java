@@ -9,9 +9,6 @@ import java.time.LocalTime;
 @Data
 public class BasicTaskReq {
 
-    // 지금은 사용하지 않는다.
-    /*private String taskPerformerId;*/
-
     /* 일정 종일여부
     = 일 단위로 일정관리 여부
     ( true : 시간정보 제외됨) */
