@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 @Data
-public class RepeatableTaskReq extends BasicTaskReq {
+public class RepeatableTaskResp extends BasicTaskResp {
 
     // 반복 단위
     private ChronoUnit repeatChronoUnit = ChronoUnit.MONTHS;

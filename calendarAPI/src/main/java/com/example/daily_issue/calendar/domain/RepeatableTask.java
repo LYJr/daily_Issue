@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
@@ -22,7 +23,7 @@ import java.util.Set;
 @Setter
 @Slf4j
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-public class RepeatableTask extends AuditableRootTask<Member, Long> implements Cloneable{
+public class RepeatableTask extends AuditableRootTask<Member, Long>{
 
     public RepeatableTask(Long id)
     {
@@ -73,7 +74,13 @@ public class RepeatableTask extends AuditableRootTask<Member, Long> implements C
 
 
     public Set<Integer> getRepeatDays() {
+        if(StringUtils.isEmpty(repeatDays))
+        {
+            return null;
+        }
+
         Set<Integer> days = new HashSet<>();
+
         for(String day : repeatDays.split(","))
         {
             days.add(Integer.valueOf(day.trim()));
@@ -82,6 +89,10 @@ public class RepeatableTask extends AuditableRootTask<Member, Long> implements C
     }
 
     public void setRepeatDays(Set<Integer> repeatDays) {
+        if(repeatDays == null || repeatDays.isEmpty())
+        {
+            return;
+        }
         String days = repeatDays.toString();
         days = days.substring(1, days.length() - 1).trim();
         this.repeatDays = days;
@@ -91,10 +102,4 @@ public class RepeatableTask extends AuditableRootTask<Member, Long> implements C
 
     @Transient
     private boolean isEternalTask = false;
-
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

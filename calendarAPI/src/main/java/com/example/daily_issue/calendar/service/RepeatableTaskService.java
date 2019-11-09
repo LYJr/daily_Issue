@@ -3,7 +3,6 @@ package com.example.daily_issue.calendar.service;
 import com.example.daily_issue.calendar.domain.RepeatableTask;
 import com.example.daily_issue.calendar.service.util.CalendarCalculator;
 import com.example.daily_issue.calendar.vo.DateRange;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,17 +24,16 @@ import java.util.Set;
  * @since : 0.0.1-SNAPSHOT (2019-11-07)
  */
 /**
- *
+ * 반복일정을 위한 CRUD Service
  */
 @Service
-public class RepeatableTaskService {
+class RepeatableTaskService {
 
     /**
      * The Calculator.
      * 계산을 위한 Utility class
      *
-     * @see CalendarCalculator
-     * {@link CalendarCalculator}
+     * {@link CalendarCalculator} 일정 계산을 위한 Utility class
      */
     @Autowired
     CalendarCalculator calculator;
@@ -48,9 +46,9 @@ public class RepeatableTaskService {
      * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
      * @param task              {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
      *
-     * @return {@link RepeatableTask} 결과 일정 목록
+     * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<RepeatableTask> listRepeatedTaskByDayOfWeeks(DateRange taskableDateRange, RepeatableTask task)
+    public Set<LocalDate> listRepeatedTaskByDayOfWeeks(DateRange taskableDateRange, RepeatableTask task)
     {
         Set<LocalDate> dates = new HashSet<>();
         Period taskPeriod = Period.between(task.getTaskStartDate(), task.getTaskEndDate());
@@ -69,25 +67,27 @@ public class RepeatableTaskService {
             }
         });
 
-        Set<RepeatableTask> result = new HashSet<>();
+        // TODO: 2019-11-09 시작일을 기점으로 task list를 반환하는 것은, calendar service에서 할 일.
+        /*Set<RepeatableTask> result = new HashSet<>();
         dates.forEach(startDate -> {
             RepeatableTask temp = new RepeatableTask();
             BeanUtils.copyProperties(task, temp);
             temp.setTaskStartDate(startDate);
             temp.setTaskEndDate(startDate.plus(taskPeriod));
             result.add(temp);
-        });
+        });*/
 
-        return result;
+        return dates;
     }
 
     /**
      * List repeated task by specified days set.
+     * 설정된 특정일 마다 반복
      *
-     * @param taskableDateRange the taskable date range
-     * @param task              the task
+     * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
+     * @param task              {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
      *
-     * @return the set
+     * @return {@link LocalDate} 결과 일정 목록
      */
     public Set<LocalDate> listRepeatedTaskBySpecifiedDays(DateRange taskableDateRange, RepeatableTask task)
     {
@@ -106,11 +106,12 @@ public class RepeatableTaskService {
 
     /**
      * List repeated task by distance set.
+     * 설정된 기간 범위만큼 반복
      *
-     * @param taskableDateRange the taskable date range
-     * @param task              the task
+     * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
+     * @param task              {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
      *
-     * @return the set
+     * @return {@link LocalDate} 결과 일정 목록
      */
     public Set<LocalDate> listRepeatedTaskByDistance(DateRange taskableDateRange, RepeatableTask task)
     {

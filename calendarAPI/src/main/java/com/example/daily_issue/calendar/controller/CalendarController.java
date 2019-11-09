@@ -28,12 +28,7 @@ public class CalendarController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BasicTaskResp> save(@RequestBody BasicTaskReq taskReq, @RequestBody(required = false) RepeatableTaskReq repeatableTaskReq)
     {
-        // task save
-        BasicTask task = taskMapper.convertTaskReqToTask(taskReq);
         Optional<BasicTask> savedTask = calendarService.save(task);
-
-        // for response
-        BasicTaskResp resp = taskMapper.convertTaskToTaskResp(savedTask);
 
         HttpStatus responseCode;
         responseCode = savedTask.isPresent() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR;
