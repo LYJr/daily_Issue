@@ -8,7 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -23,8 +27,7 @@ public class BasicTask extends AuditableRootTask<Member, Long> {
         this.setId(id);
     }
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(nullable = true, insertable = true, updatable = true)
-    private RepeatableTask repeatableTask;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "basicTask")
+    private List<RepeatableTask> repeatableTasks;
 
 }

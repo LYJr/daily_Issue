@@ -53,9 +53,9 @@ class BasicTaskService {
      * Save optional.
      * basic task 저장
      *
-     * @param task {@link BasicTask} 저장 대상 domain
+     * @param taskReq {@link BasicTaskReq} 저장 대상 RO
      *
-     * @return {@link BasicTask} basic task domain entity
+     * @return {@link BasicTaskResp} basic task response RO
      */
     public Optional<BasicTaskResp> save(@NonNull BasicTaskReq taskReq)
     {
@@ -77,10 +77,9 @@ class BasicTaskService {
      * @param taskId  수정하려는 task의 pk
      * @param taskReq {@link BasicTaskReq} 수정하려는 task의 RO 객체
      *
-     * @return {@link BasicTask} 수정 적용된 basic task domain entity
+     * @return {@link BasicTaskResp} 수정 적용된 basic task RO
      */
-    @EnableOwnerCheck
-    public Optional<BasicTask> update(@NonNull Long taskId, BasicTaskReq taskReq)
+    public Optional<BasicTaskResp> update(@NonNull Long taskId, BasicTaskReq taskReq)
     {
         // get existing task
         Optional<BasicTask> originTask = findByTaskId(taskId);
@@ -98,13 +97,14 @@ class BasicTaskService {
      *
      * @param task {@link BasicTask} 수정 대상 domain
      *
-     * @return {@link BasicTask} 수정 적용된 basic task domain entity
+     * @return {@link BasicTaskResp} 수정 적용된 basic task RO
      */
-    @EnableOwnerCheck
-    public Optional<BasicTask> update(@NonNull BasicTask task)
+    private Optional<BasicTaskResp> update(@NonNull BasicTask task)
     {
         // update
-        BasicTask result = task != null ? basicTaskRepository.save(task) : task;
+        BasicTask updatedTask = task != null ? basicTaskRepository.save(task) : null;
+        BasicTaskResp result = taskMapper.convertTaskToTaskResp(updatedTask);
+
         return Optional.ofNullable(result);
     }
 
@@ -114,20 +114,16 @@ class BasicTaskService {
      * task pk를 받아서 삭제한다.
      * {@link EnableOwnerCheck} 는 AOP에서 수정하려는 task의 creater와 로그인한 사용자가 올바른지 확인한다.
      *
-     * @param id 수정하려는 task의 pk
+     * @param taskId 수정하려는 task의 pk
      *
-     * @return {@link BasicTask} 삭제 적용된 basic task domain entity
+     * @return {@link BasicTaskResp} 삭제 적용된 basic task RO
      */
-    @EnableOwnerCheck
-    public Optional<BasicTask> delete(@NonNull Long id)
+    public Optional<BasicTaskResp> delete(@NonNull Long taskId)
     {
         // get existing task
-        Optional<BasicTask> originTask = findByTaskId(id);
+        Optional<BasicTask> originTask = findByTaskId(taskId);
 
-        // delete
-        originTask.ifPresent(a -> basicTaskRepository.deleteById(a.getId()));
-
-        return originTask.isPresent() ? originTask : Optional.empty();
+        return originTask.isPresent() ? delete(originTask.get()) : Optional.empty();
     }
 
     /**
@@ -137,15 +133,16 @@ class BasicTaskService {
      *
      * @param task {@link BasicTask} 삭제 대상 domain
      *
-     * @return {@link BasicTask} 삭제 적용된 basic task domain entity
+     * @return {@link BasicTaskResp} 삭제 적용된 basic task RO
      */
-    @EnableOwnerCheck
-    public Optional<BasicTask> delete(@NonNull BasicTask task)
+    private Optional<BasicTaskResp> delete(@NonNull BasicTask task)
     {
         Optional<BasicTask> originTask = Optional.ofNullable(task);
         originTask.ifPresent(t -> basicTaskRepository.delete(t));
 
-        return originTask.isPresent() ? originTask : Optional.empty();
+        BasicTaskResp result = taskMapper.convertTaskToTaskResp(originTask);
+
+        return originTask.isPresent() ? Optional.ofNullable(result) : Optional.empty();
     }
 
 
@@ -157,7 +154,7 @@ class BasicTaskService {
      *
      * @return {@link BasicTask} 검색된 basic task domain entity
      */
-    public Optional<BasicTask> findByTaskId(@NonNull Long id)
+    protected Optional<BasicTask> findByTaskId(@NonNull Long id)
     {
         return basicTaskRepository.findById(id);
     }

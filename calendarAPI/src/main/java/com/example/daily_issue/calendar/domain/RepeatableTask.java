@@ -1,16 +1,18 @@
 package com.example.daily_issue.calendar.domain;
 
-import com.example.daily_issue.login.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -23,12 +25,16 @@ import java.util.Set;
 @Setter
 @Slf4j
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-public class RepeatableTask extends AuditableRootTask<Member, Long>{
+public class RepeatableTask extends AbstractPersistable<Long> {
 
     public RepeatableTask(Long id)
     {
         this.setId(id);
     }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, insertable = true, updatable = true)
+    private BasicTask basicTask;
 
     // 반복 단위
     private ChronoUnit repeatChronoUnit;
@@ -53,6 +59,11 @@ public class RepeatableTask extends AuditableRootTask<Member, Long>{
 
 
     public Set<DayOfWeek> getRepeatDayOfWeeks() {
+        if(StringUtils.isEmpty(repeatDayOfWeeks))
+        {
+            return null;
+        }
+
         Set<DayOfWeek> weeks = new HashSet<>();
         for(String dayOfWeek : repeatDayOfWeeks.split(","))
         {
@@ -62,11 +73,20 @@ public class RepeatableTask extends AuditableRootTask<Member, Long>{
     }
 
     public void setRepeatDayOfWeeks(DayOfWeek repeatDayOfWeek) {
+        if(repeatDayOfWeek == null)
+        {
+            return;
+        }
+
         String week = repeatDayOfWeek.toString().trim();
         this.repeatDayOfWeeks = week;
     }
 
     public void setRepeatDayOfWeeks(Set<DayOfWeek> repeatDayOfWeeks) {
+        if(repeatDayOfWeeks == null || repeatDayOfWeeks.isEmpty())
+        {
+            return;
+        }
         String weeks = repeatDayOfWeeks.toString();
         weeks = weeks.substring(1, weeks.length() - 1).trim();
         this.repeatDayOfWeeks = weeks;
@@ -88,6 +108,16 @@ public class RepeatableTask extends AuditableRootTask<Member, Long>{
         return days;
     }
 
+    public void setRepeatDays(Integer repeatDay) {
+        if(repeatDay == null)
+        {
+            return;
+        }
+
+        String day = String.valueOf(repeatDay).trim();
+        this.repeatDays = day;
+    }
+
     public void setRepeatDays(Set<Integer> repeatDays) {
         if(repeatDays == null || repeatDays.isEmpty())
         {
@@ -97,9 +127,4 @@ public class RepeatableTask extends AuditableRootTask<Member, Long>{
         days = days.substring(1, days.length() - 1).trim();
         this.repeatDays = days;
     }
-
-
-
-    @Transient
-    private boolean isEternalTask = false;
 }

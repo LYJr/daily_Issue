@@ -106,15 +106,6 @@ public class TaskMapper {
     public RepeatableTask convertRepeatableTaskReqToRepeatableTask(RepeatableTaskReq source, RepeatableTask target)
     {
         PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
-        propertyMapper.from(source::getIsAllDay).to(target::setIsAllDay);
-        propertyMapper.from(source::getColor).to(target::setColor);
-        propertyMapper.from(source::getComment).to(target::setComment);
-        propertyMapper.from(source::getTaskStartDate).to(target::setTaskStartDate);
-        propertyMapper.from(source::getTaskStartTime).to(target::setTaskStartTime);
-        propertyMapper.from(source::getTaskEndDate).to(target::setTaskEndDate);
-        propertyMapper.from(source::getTaskEndTime).to(target::setTaskEndTime);
-        propertyMapper.from(source::getPlace).to(target::setPlace);
-        propertyMapper.from(source::getTitle).to(target::setTitle);
 
         propertyMapper.from(source::getRepeatChronoUnit).to(target::setRepeatChronoUnit);
         propertyMapper.from(source::getRepeatAmount).to(target::setRepeatAmount);
@@ -143,19 +134,6 @@ public class TaskMapper {
     {
         PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
         propertyMapper.from(source::getId).to(target::setId);
-        propertyMapper.from(source::getCreatedBy).as(a -> a.orElseGet(null).getId()).to(target::setCreatedBy);
-        propertyMapper.from(source::getCreatedDate).as(a -> a.orElseGet(null)).to(target::setCreatedDate);
-        propertyMapper.from(source::getLastModifiedBy).as(a -> a.orElseGet(null).getId()).to(target::setLastModifiedBy);
-        propertyMapper.from(source::getLastModifiedDate).as(a -> a.orElseGet(null)).to(target::setLastModifiedDate);
-        propertyMapper.from(source::getIsAllDay).to(target::setIsAllDay);
-        propertyMapper.from(source::getColor).to(target::setColor);
-        propertyMapper.from(source::getComment).to(target::setComment);
-        propertyMapper.from(source::getTaskStartDate).to(target::setTaskStartDate);
-        propertyMapper.from(source::getTaskStartTime).to(target::setTaskStartTime);
-        propertyMapper.from(source::getTaskEndDate).to(target::setTaskEndDate);
-        propertyMapper.from(source::getTaskEndTime).to(target::setTaskEndTime);
-        propertyMapper.from(source::getPlace).to(target::setPlace);
-        propertyMapper.from(source::getTitle).to(target::setTitle);
 
         propertyMapper.from(source::getRepeatChronoUnit).to(target::setRepeatChronoUnit);
         propertyMapper.from(source::getRepeatAmount).to(target::setRepeatAmount);

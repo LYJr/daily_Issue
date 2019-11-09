@@ -26,8 +26,9 @@ import java.util.Set;
 /**
  * 반복일정을 위한 CRUD Service
  */
+// TODO: 2019-11-10 public 말고... package protected 한정자로 변경해야 한다... 지금은 test class 때문에;;;
 @Service
-class RepeatableTaskService {
+public class RepeatableTaskService {
 
     /**
      * The Calculator.

@@ -1,8 +1,9 @@
 package com.example.daily_issue.calendar.aop;
 
+import com.example.daily_issue.calendar.dao.BasicTaskRepository;
 import com.example.daily_issue.calendar.domain.BasicTask;
+import com.example.daily_issue.calendar.mapper.TaskMapper;
 import com.example.daily_issue.calendar.security.service.SecurityService;
-import com.example.daily_issue.calendar.service.CalendarService;
 import com.example.daily_issue.login.domain.Member;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,20 +23,23 @@ public class OwnerChecker {
     @Autowired
     SecurityService securityService;
     @Autowired
-    CalendarService calendarService;
+    BasicTaskRepository basicTaskRepository;
+
+    @Autowired
+    TaskMapper taskMapper;
+
 
 
     @Around("@annotation(EnableOwnerCheck) && args(taskId, ..)")
     public Object checkTaskOwner(ProceedingJoinPoint pjp, Long taskId) throws Throwable {
-        Optional<BasicTask> originTask = calendarService.findByTaskId(taskId);
-        return originTask.isPresent() ? checkTaskOwner(pjp, originTask.get()) : returnRequestTypeEmptyValue(pjp);
+        Optional<BasicTask> taskResp = basicTaskRepository.findById(taskId);
+        return taskResp.isPresent() ? checkTaskOwner(pjp, taskResp.get()) : returnRequestTypeEmptyValue(pjp);
     }
 
     @Around("@annotation(EnableOwnerCheck) && args(basicTask)")
     public Object checkTaskOwner(ProceedingJoinPoint pjp, Optional<BasicTask> basicTask) throws Throwable {
         return basicTask.isPresent() ? checkTaskOwner(pjp, basicTask.get()) : returnRequestTypeEmptyValue(pjp);
     }
-
 
     @Around("@annotation(EnableOwnerCheck) && args(basicTask)")
     public Object checkTaskOwner(ProceedingJoinPoint pjp, BasicTask basicTask) throws Throwable {
@@ -45,11 +49,9 @@ public class OwnerChecker {
                 .map(Member::getUserId)
                 .filter(id -> id.equals(securityService.getMember().getUserId()));
 
-
         // is owner? / then process
         // is not owner? / then return null or empty value
         return userId.isPresent() ? pjp.proceed() : returnRequestTypeEmptyValue(pjp);
-
     }
 
 

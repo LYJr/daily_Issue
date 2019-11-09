@@ -1,6 +1,5 @@
 package com.example.daily_issue.calendar.controller;
 
-import com.example.daily_issue.calendar.domain.BasicTask;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
 import com.example.daily_issue.calendar.ro.BasicTaskReq;
 import com.example.daily_issue.calendar.ro.BasicTaskResp;
@@ -28,12 +27,12 @@ public class CalendarController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BasicTaskResp> save(@RequestBody BasicTaskReq taskReq, @RequestBody(required = false) RepeatableTaskReq repeatableTaskReq)
     {
-        Optional<BasicTask> savedTask = calendarService.save(task);
+        Optional<BasicTaskResp> savedTask = calendarService.save(taskReq);
 
         HttpStatus responseCode;
         responseCode = savedTask.isPresent() ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        return new ResponseEntity<>(resp, responseCode);
+        return new ResponseEntity<>(savedTask.isPresent() ? savedTask.get() : null, responseCode);
     }
 
     @PutMapping("update")
@@ -41,15 +40,12 @@ public class CalendarController {
     public ResponseEntity<BasicTaskResp> update(@RequestParam Long taskId, @RequestBody BasicTaskReq taskReq)
     {
         // task update
-        Optional<BasicTask> updatedTask = calendarService.update(taskId, taskReq);
-
-        // for response
-        BasicTaskResp resp = taskMapper.convertTaskToTaskResp(updatedTask);
+        Optional<BasicTaskResp> updatedTask = calendarService.update(taskId, taskReq);
 
         HttpStatus responseCode;
         responseCode = updatedTask.isPresent() ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 
-        return new ResponseEntity<>(resp, responseCode);
+        return new ResponseEntity<>(updatedTask.isPresent() ? updatedTask.get() : null, responseCode);
     }
 
     @DeleteMapping("delete")
@@ -57,15 +53,12 @@ public class CalendarController {
     public ResponseEntity<BasicTaskResp> delete(@RequestParam Long taskId)
     {
         // task delete
-        Optional<BasicTask> deletedTask = calendarService.delete(taskId);
-
-        // for response
-        BasicTaskResp resp = taskMapper.convertTaskToTaskResp(deletedTask);
+        Optional<BasicTaskResp> deletedTask = calendarService.delete(taskId);
 
         HttpStatus responseCode;
         responseCode = deletedTask.isPresent() ? HttpStatus.OK : HttpStatus.NO_CONTENT;
 
-        return new ResponseEntity<>(resp, responseCode);
+        return new ResponseEntity<>(deletedTask.isPresent() ? deletedTask.get() : null, responseCode);
     }
 
 }

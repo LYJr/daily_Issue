@@ -46,7 +46,7 @@ public class PeriodTest {
         DateRange taskableDateRange = calculator.getTaskableDateRange(displayDateRange, task);
 
 
-        Set<RepeatableTask> result = repeatableTaskService.listRepeatedTaskByDayOfWeeks(taskableDateRange, task);
+        Set<LocalDate> result = repeatableTaskService.listRepeatedTaskByDayOfWeeks(taskableDateRange, task);
 
         result.forEach(System.out::println);
     }
