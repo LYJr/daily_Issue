@@ -2,7 +2,10 @@ spring:
   profiles: local
   #datasource-configuration
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:tcp://localhost:9092/mem:testdb;MVCC=true
+    hikari:
+      jdbc-url: jdbc:h2:tcp://localhost:9092/mem:testdb;MVCC=true
+    initial
     driver-class-name: org.h2.Driver
     username: root
     password: 1367
@@ -17,12 +20,10 @@ spring:
       hibernate:
         format_sql: true
         show-sql: true
-#h2-configuration
   h2:
     console:
       enabled: true
-      path: /admin/h2
-
+      path: /h2-console
 #logging-configuration
 logging:
   level:
