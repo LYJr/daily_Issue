@@ -13,7 +13,6 @@ import org.springframework.test.annotation.Rollback;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 /**
  * - "portfolio" Project -
@@ -57,19 +56,19 @@ class RepeatableTaskTest {
         dw.add(DayOfWeek.MONDAY);
         dw.add(DayOfWeek.WEDNESDAY);
 
-        task.setCreatedBy(member);
-        task.setCreatedDate(LocalDateTime.now());
-        task.setLastModifiedBy(member);
-        task.setLastModifiedDate(LocalDateTime.now());
+        task.getBasicTask().setCreatedBy(member);
+        task.getBasicTask().setCreatedDate(LocalDateTime.now());
+        task.getBasicTask().setLastModifiedBy(member);
+        task.getBasicTask().setLastModifiedDate(LocalDateTime.now());
         task.setRepeatDayOfWeeks(dw);
         repeatableTaskRepository.save(task);
 
 
-        List<RepeatableTask> repeatableTasks = repeatableTaskRepository.findByCreatedBy(member);
+        /*List<RepeatableTask> repeatableTasks = repeatableTaskRepository.findByCreatedBy(member);
 
         for (RepeatableTask temp : repeatableTasks) {
             temp.getRepeatDayOfWeeks().forEach(System.out::println);
-        }
+        }*/
     }
 
 }

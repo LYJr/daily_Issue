@@ -12,7 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -28,6 +28,6 @@ public class BasicTask extends AuditableRootTask<Member, Long> {
     }
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "basicTask")
-    private List<RepeatableTask> repeatableTasks;
+    private Set<RepeatableTask> repeatableTasks;
 
 }

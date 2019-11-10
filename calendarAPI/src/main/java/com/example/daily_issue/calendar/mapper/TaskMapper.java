@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 public class TaskMapper {
@@ -32,6 +34,18 @@ public class TaskMapper {
     public BasicTask convertTaskReqToTask(BasicTaskReq source, BasicTask target)
     {
         PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+        propertyMapper.from(source::getRepeatableTaskReqs).as(reqList -> {
+            Set<RepeatableTask> tempRepeatableTasks = new HashSet<>();
+            reqList.forEach(req -> {
+                if(req != null)
+                {
+                    RepeatableTask repeatableTask = convertRepeatableTaskReqToRepeatableTask(req);
+                    repeatableTask.setBasicTask(target);
+                    tempRepeatableTasks.add(repeatableTask);
+                }
+            });
+            return tempRepeatableTasks;
+        }).to(target::setRepeatableTasks);
         propertyMapper.from(source::getIsAllDay).to(target::setIsAllDay);
         propertyMapper.from(source::getColor).to(target::setColor);
         propertyMapper.from(source::getComment).to(target::setComment);
@@ -62,6 +76,18 @@ public class TaskMapper {
     public BasicTaskResp convertTaskToTaskResp(BasicTask source, BasicTaskResp target)
     {
         PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
+        propertyMapper.from(source::getRepeatableTasks).as(taskList -> {
+            Set<RepeatableTaskResp> tempRepeatableTaskResps = new HashSet<>();
+            taskList.forEach(task -> {
+                if(task != null)
+                {
+                    RepeatableTaskResp taskResp = convertRepeatableTaskToRepeatableTaskResp(task);
+                    tempRepeatableTaskResps.add(taskResp);
+                }
+            });
+            return tempRepeatableTaskResps;
+        }).to(target::setRepeatableTaskResps);
+
         propertyMapper.from(source::getId).to(target::setId);
         propertyMapper.from(source::getCreatedBy).as(a -> a.orElseGet(null).getId()).to(target::setCreatedBy);
         propertyMapper.from(source::getCreatedDate).as(a -> a.orElseGet(null)).to(target::setCreatedDate);
@@ -112,6 +138,9 @@ public class TaskMapper {
         propertyMapper.from(source::isIncludeBaseDate).to(target::setIncludeBaseDate);
         propertyMapper.from(source::getRepeatStartDate).to(target::setRepeatStartDate);
         propertyMapper.from(source::getRepeatEndDate).to(target::setRepeatEndDate);
+        propertyMapper.from(source::getRepeatDayOfWeeks).to(target::setRepeatDayOfWeeks);
+        propertyMapper.from(source::getRepeatDays).to(target::setRepeatDays);
+
 
         return target;
     }
@@ -140,6 +169,8 @@ public class TaskMapper {
         propertyMapper.from(source::isIncludeBaseDate).to(target::setIncludeBaseDate);
         propertyMapper.from(source::getRepeatStartDate).to(target::setRepeatStartDate);
         propertyMapper.from(source::getRepeatEndDate).to(target::setRepeatEndDate);
+        propertyMapper.from(source::getRepeatDayOfWeeks).to(target::setRepeatDayOfWeeks);
+        propertyMapper.from(source::getRepeatDays).to(target::setRepeatDays);
 
         return target;
     }

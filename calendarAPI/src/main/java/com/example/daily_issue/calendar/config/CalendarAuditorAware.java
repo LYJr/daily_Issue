@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-@ConditionalOnMissingBean(AuditorAware.class)
+@ConditionalOnMissingBean(name = "commonModelAuditAware")
 public class CalendarAuditorAware implements AuditorAware<Member> {
 
     @Autowired

@@ -30,8 +30,8 @@ public class PeriodTest {
         task.setRepeatEndDate(LocalDate.of(2019, 11, 28));
 
         // 최초 일정 설정 시 2019. 10. 22 ~ 2019. 10. 23 2일동안 발생으로 설정함
-        task.setTaskStartDate(LocalDate.of(2019, 10, 22));
-        task.setTaskEndDate(LocalDate.of(2019,10,23));
+        task.getBasicTask().setTaskStartDate(LocalDate.of(2019, 10, 22));
+        task.getBasicTask().setTaskEndDate(LocalDate.of(2019,10,23));
 
         // 반복 주기는 2일마다
 //        task.setRepeatChronoUnit(ChronoUnit.DAYS);

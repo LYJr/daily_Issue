@@ -1,14 +1,17 @@
 package com.example.daily_issue.calendar.ro;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Set;
 
 @Data
-public class RepeatableTaskReq extends BasicTaskReq {
+public class RepeatableTaskReq {
 
     // 반복 단위
     private ChronoUnit repeatChronoUnit = ChronoUnit.MONTHS;
@@ -22,9 +25,16 @@ public class RepeatableTaskReq extends BasicTaskReq {
 
     // 반복 시작일
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate repeatStartDate;
     // 반복 종료일
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate repeatEndDate;
 
+    // 반복 요일 목록
+    private Set<DayOfWeek> repeatDayOfWeeks;
+
+    // 반복 일 목록
+    private Set<Integer> repeatDays;
 }

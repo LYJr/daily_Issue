@@ -45,17 +45,17 @@ public class RepeatableTaskService {
      * 설정된 요일마다 반복
      *
      * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
-     * @param task              {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
+     * @param repeatableTask    {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
      *
      * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<LocalDate> listRepeatedTaskByDayOfWeeks(DateRange taskableDateRange, RepeatableTask task)
+    public Set<LocalDate> listRepeatedTaskByDayOfWeeks(DateRange taskableDateRange, RepeatableTask repeatableTask)
     {
         Set<LocalDate> dates = new HashSet<>();
-        Period taskPeriod = Period.between(task.getTaskStartDate(), task.getTaskEndDate());
+        //Period taskPeriod = Period.between(repeatableTask.getBasicTask().getTaskStartDate(), repeatableTask.getBasicTask().getTaskEndDate());
 
         // 설정된 요일마다
-        task.getRepeatDayOfWeeks().forEach(week -> {
+        repeatableTask.getRepeatDayOfWeeks().forEach(week -> {
             // 표기 범위 중에서 가장 가까운 설정요일 검색 (first index)
             LocalDate nearestDayOfWeek = taskableDateRange.getStartDate()
                     .with(TemporalAdjusters.nextOrSame(week));
@@ -64,7 +64,7 @@ public class RepeatableTaskService {
             while (calculator.isNestedDayInDateRange(taskableDateRange, nearestDayOfWeek))
             {
                 dates.add(nearestDayOfWeek);
-                nearestDayOfWeek = nearestDayOfWeek.plus(task.getRepeatAmount(), ChronoUnit.WEEKS);
+                nearestDayOfWeek = nearestDayOfWeek.plus(repeatableTask.getRepeatAmount(), ChronoUnit.WEEKS);
             }
         });
 
@@ -86,15 +86,15 @@ public class RepeatableTaskService {
      * 설정된 특정일 마다 반복
      *
      * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
-     * @param task              {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
+     * @param repeatableTask    {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
      *
      * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<LocalDate> listRepeatedTaskBySpecifiedDays(DateRange taskableDateRange, RepeatableTask task)
+    public Set<LocalDate> listRepeatedTaskBySpecifiedDays(DateRange taskableDateRange, RepeatableTask repeatableTask)
     {
         Set<LocalDate> dates = new HashSet<>();
 
-        task.getRepeatDays().forEach(day -> {
+        repeatableTask.getRepeatDays().forEach(day -> {
             LocalDate targetDate = taskableDateRange.getBaseDate().withDayOfMonth(day);
             if(calculator.isNestedDayInDateRange(taskableDateRange, targetDate))
             {
@@ -110,11 +110,11 @@ public class RepeatableTaskService {
      * 설정된 기간 범위만큼 반복
      *
      * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
-     * @param task              {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
+     * @param repeatableTask    {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
      *
      * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<LocalDate> listRepeatedTaskByDistance(DateRange taskableDateRange, RepeatableTask task)
+    public Set<LocalDate> listRepeatedTaskByDistance(DateRange taskableDateRange, RepeatableTask repeatableTask)
     {
         Set<LocalDate> dates = new HashSet<>();
 
@@ -123,19 +123,19 @@ public class RepeatableTaskService {
 
         // 일정 시작일과의 차이를 구하고
         // (반복시작일부터 일정이 기록되어야 하므로, 최초 일정일 시작일과 차이를 구하는 것)
-        Period period = Period.between(tempIndexDate, task.getTaskStartDate());
+        Period period = Period.between(tempIndexDate, repeatableTask.getBasicTask().getTaskStartDate());
 
 
 
         // 일정 대상일로 index를 옮기기 위함 ( index 조정 )
-        int indexDistance = Math.abs(period.getDays()%task.getRepeatAmount());
-        indexDistance = (indexDistance != 0 && period.isNegative()) ? Math.abs(indexDistance-task.getRepeatAmount()) : indexDistance;
+        int indexDistance = Math.abs(period.getDays()%repeatableTask.getRepeatAmount());
+        indexDistance = (indexDistance != 0 && period.isNegative()) ? Math.abs(indexDistance-repeatableTask.getRepeatAmount()) : indexDistance;
         tempIndexDate = tempIndexDate.plusDays(indexDistance);
 
         while (calculator.isNestedDayInDateRange(taskableDateRange, tempIndexDate))
         {
             dates.add(tempIndexDate);
-            tempIndexDate = tempIndexDate.plus(task.getRepeatAmount(), task.getRepeatChronoUnit());
+            tempIndexDate = tempIndexDate.plus(repeatableTask.getRepeatAmount(), repeatableTask.getRepeatChronoUnit());
         }
 
         return dates;
