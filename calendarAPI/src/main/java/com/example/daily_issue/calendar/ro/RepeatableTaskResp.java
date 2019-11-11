@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Min;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -17,7 +17,6 @@ public class RepeatableTaskResp extends BasicTaskResp {
     private ChronoUnit repeatChronoUnit = ChronoUnit.MONTHS;
 
     // 반복 주기
-    @Min(1)
     private int repeatAmount = 1;
 
     // 설정일 포함여부
@@ -33,8 +32,8 @@ public class RepeatableTaskResp extends BasicTaskResp {
     private LocalDate repeatEndDate;
 
     // 반복 요일 목록
-    private Set<DayOfWeek> repeatDayOfWeeks;
+    private Set<DayOfWeek> repeatDayOfWeeks = new HashSet<>();
 
     // 반복 일 목록
-    private Set<Integer> repeatDays;
+    private Set<Integer> repeatDays = new HashSet<>();
 }

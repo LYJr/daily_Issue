@@ -30,4 +30,8 @@ public class BasicTask extends AuditableRootTask<Member, Long> {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "basicTask")
     private Set<RepeatableTask> repeatableTasks;
 
+    public void setRepeatableTasks(Set<RepeatableTask> repeatableTasks) {
+        repeatableTasks.forEach(task -> task.setBasicTask(this));
+        this.repeatableTasks = repeatableTasks;
+    }
 }

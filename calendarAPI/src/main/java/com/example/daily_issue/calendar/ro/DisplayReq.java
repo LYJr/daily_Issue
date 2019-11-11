@@ -9,6 +9,7 @@ package com.example.daily_issue.calendar.ro;/**
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -20,7 +21,11 @@ import java.time.temporal.ChronoUnit;
 public class DisplayReq {
 
     // 화면 표시되는 단위 (일단위 / 주단위 / 월단위)
+    @NotNull
     private ChronoUnit displayChronoUnit;
+
+
     // 화면에 표시되는 기준 일자 (일단위,주단위 : 해당일 / 월단위 : 월의 첫번째날)
+    @NotNull
     private LocalDate displayDate;
 }

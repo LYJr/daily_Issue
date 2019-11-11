@@ -127,6 +127,9 @@ public class AuditableRootTask<U, PK extends Serializable> extends AbstractPersi
     ( true : 시간정보 제외됨) */
     private Boolean isAllDay = false;
 
+    /* 반복여부 */
+    private boolean isRepeatable = false;
+
     /* 일정 시작일 */
     @Column(nullable = false)
     private LocalDate taskStartDate = LocalDate.now();

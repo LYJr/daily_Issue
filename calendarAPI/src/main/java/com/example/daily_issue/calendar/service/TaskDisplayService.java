@@ -1,6 +1,7 @@
 package com.example.daily_issue.calendar.service;
 
 import com.example.daily_issue.calendar.domain.RepeatableTask;
+import com.example.daily_issue.calendar.ro.DisplayReq;
 import com.example.daily_issue.calendar.service.util.CalendarCalculator;
 import com.example.daily_issue.calendar.vo.DateRange;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import java.util.Set;
  */
 // TODO: 2019-11-10 public 말고... package protected 한정자로 변경해야 한다... 지금은 test class 때문에;;;
 @Service
-public class RepeatableTaskService {
+public class TaskDisplayService {
 
     /**
      * The Calculator.
@@ -38,6 +39,43 @@ public class RepeatableTaskService {
      */
     @Autowired
     CalendarCalculator calculator;
+
+
+    public DateRange getDisplayDateRange(DisplayReq displayReq)
+    {
+        return getDisplayDateRange(displayReq.getDisplayChronoUnit(), displayReq.getDisplayDate());
+    }
+
+    public DateRange getDisplayDateRange(ChronoUnit typeChronoUnit, LocalDate baseDate)
+    {
+        return calculator.getDisplayDateRange(typeChronoUnit, baseDate);
+    }
+
+    public DateRange getTaskableDateRange(DisplayReq displayReq, RepeatableTask repeatableTask)
+    {
+        return getTaskableDateRange(displayReq.getDisplayChronoUnit(), displayReq.getDisplayDate(), repeatableTask);
+    }
+
+    public DateRange getTaskableDateRange(ChronoUnit typeChronoUnit, LocalDate baseDate, RepeatableTask repeatableTask)
+    {
+        DateRange displayDateRange = getDisplayDateRange(typeChronoUnit, baseDate);
+        return getTaskableDateRange(displayDateRange, repeatableTask);
+    }
+
+    public DateRange getTaskableDateRange(DateRange displayDateRange, RepeatableTask repeatableTask)
+    {
+        return calculator.getTaskableDateRange(displayDateRange, repeatableTask);
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     /**

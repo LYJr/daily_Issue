@@ -3,7 +3,6 @@ package com.example.daily_issue.calendar.controller;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
 import com.example.daily_issue.calendar.ro.BasicTaskReq;
 import com.example.daily_issue.calendar.ro.BasicTaskResp;
-import com.example.daily_issue.calendar.ro.RepeatableTaskReq;
 import com.example.daily_issue.calendar.service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ public class CalendarController {
 
     @PostMapping("save")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BasicTaskResp> save(@RequestBody BasicTaskReq taskReq, @RequestBody(required = false) RepeatableTaskReq repeatableTaskReq)
+    public ResponseEntity<BasicTaskResp> save(@RequestBody BasicTaskReq taskReq)
     {
         Optional<BasicTaskResp> savedTask = calendarService.save(taskReq);
 
@@ -60,5 +59,9 @@ public class CalendarController {
 
         return new ResponseEntity<>(deletedTask.isPresent() ? deletedTask.get() : null, responseCode);
     }
+
+
+
+
 
 }

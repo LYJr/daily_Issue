@@ -35,6 +35,9 @@ public class BasicTaskResp {
     ( true : 시간정보 제외됨) */
     private Boolean isAllDay;
 
+    /* 반복여부 */
+    private boolean isRepeatable = false;
+
     /* 일정 시작일 */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")

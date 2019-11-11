@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
@@ -18,7 +19,11 @@ public class BasicTaskReq {
     ( true : 시간정보 제외됨) */
     private Boolean isAllDay;
 
+    /* 반복여부 */
+    private boolean isRepeatable = false;
+
     /* 일정 시작일 */
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate taskStartDate;
@@ -28,6 +33,7 @@ public class BasicTaskReq {
     private LocalTime taskStartTime;
 
     /* 일정 종료일 */
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate taskEndDate;
@@ -37,6 +43,7 @@ public class BasicTaskReq {
     private LocalTime taskEndTime;
 
     /* 일정 제목 */
+    @NotNull
     private String title;
 
     /* 일정 상세설명 */

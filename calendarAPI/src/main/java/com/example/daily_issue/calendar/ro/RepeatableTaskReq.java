@@ -5,15 +5,18 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
 public class RepeatableTaskReq {
 
     // 반복 단위
+    @NotNull
     private ChronoUnit repeatChronoUnit = ChronoUnit.MONTHS;
 
     // 반복 주기
@@ -24,6 +27,7 @@ public class RepeatableTaskReq {
     private boolean isIncludeBaseDate = false;
 
     // 반복 시작일
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate repeatStartDate;
@@ -33,8 +37,8 @@ public class RepeatableTaskReq {
     private LocalDate repeatEndDate;
 
     // 반복 요일 목록
-    private Set<DayOfWeek> repeatDayOfWeeks;
+    private Set<DayOfWeek> repeatDayOfWeeks = new HashSet<>();
 
     // 반복 일 목록
-    private Set<Integer> repeatDays;
+    private Set<Integer> repeatDays = new HashSet<>();
 }

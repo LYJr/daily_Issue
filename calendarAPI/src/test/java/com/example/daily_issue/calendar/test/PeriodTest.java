@@ -1,7 +1,7 @@
 package com.example.daily_issue.calendar.test;
 
 import com.example.daily_issue.calendar.domain.RepeatableTask;
-import com.example.daily_issue.calendar.service.RepeatableTaskService;
+import com.example.daily_issue.calendar.service.TaskDisplayService;
 import com.example.daily_issue.calendar.service.util.CalendarCalculator;
 import com.example.daily_issue.calendar.vo.DateRange;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class PeriodTest {
     CalendarCalculator calculator;
 
     @Autowired
-    RepeatableTaskService repeatableTaskService;
+    TaskDisplayService taskDisplayService;
 
     @Test
     public void repeatWeekTest()
@@ -46,7 +46,7 @@ public class PeriodTest {
         DateRange taskableDateRange = calculator.getTaskableDateRange(displayDateRange, task);
 
 
-        Set<LocalDate> result = repeatableTaskService.listRepeatedTaskByDayOfWeeks(taskableDateRange, task);
+        Set<LocalDate> result = taskDisplayService.listRepeatedTaskByDayOfWeeks(taskableDateRange, task);
 
         result.forEach(System.out::println);
     }
