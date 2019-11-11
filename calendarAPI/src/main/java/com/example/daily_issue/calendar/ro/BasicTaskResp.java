@@ -1,34 +1,62 @@
 package com.example.daily_issue.calendar.ro;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Set;
 
 @Data
-public class TaskReq {
+public class BasicTaskResp {
 
-    // 지금은 사용하지 않는다.
-    /*private String taskPerformerId;*/
+    private Set<RepeatableTaskResp> repeatableTaskResps;
+
+    /* task pk */
+    private Long id;
+
+    /* task owner */
+    private Long taskOwner;
+
+    /* task creator */
+    private Long createdBy;
+
+    /* task created date */
+    private LocalDateTime createdDate;
+
+    /* task modifier */
+    private Long lastModifiedBy;
+
+    /* task last modified date */
+    private LocalDateTime lastModifiedDate;
+
 
     /* 일정 종일여부
     = 일 단위로 일정관리 여부
     ( true : 시간정보 제외됨) */
     private Boolean isAllDay;
 
+    /* 반복여부 */
+    private boolean isRepeatable = false;
+
     /* 일정 시작일 */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate taskStartDate;
     /* 일정 시작시 */
     @DateTimeFormat(pattern = "kk:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "kk:mm:ss", timezone = "Asia/Seoul")
     private LocalTime taskStartTime;
 
     /* 일정 종료일 */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate taskEndDate;
     /* 일정 종료시 */
     @DateTimeFormat(pattern = "kk:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "kk:mm:ss", timezone = "Asia/Seoul")
     private LocalTime taskEndTime;
 
     /* 일정 제목 */

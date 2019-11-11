@@ -1,9 +1,10 @@
 package com.example.daily_issue.calendar.aop;
 
-import com.example.daily_issue.calendar.domain.RecordedTask;
+import com.example.daily_issue.calendar.dao.impl.basic.BasicTaskRepository;
+import com.example.daily_issue.calendar.domain.BasicTask;
+import com.example.daily_issue.calendar.mapper.TaskMapper;
 import com.example.daily_issue.calendar.security.service.SecurityService;
-import com.example.daily_issue.calendar.service.CalendarService;
-import com.example.daily_issue.login.domain.Account;
+import com.example.daily_issue.login.domain.Member;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -22,34 +23,43 @@ public class OwnerChecker {
     @Autowired
     SecurityService securityService;
     @Autowired
-    CalendarService calendarService;
+    BasicTaskRepository basicTaskRepository;
+
+    @Autowired
+    TaskMapper taskMapper;
+
 
 
     @Around("@annotation(EnableOwnerCheck) && args(taskId, ..)")
     public Object checkTaskOwner(ProceedingJoinPoint pjp, Long taskId) throws Throwable {
-        Optional<RecordedTask> originTask = calendarService.findByTaskId(taskId);
-        return originTask.isPresent() ? checkTaskOwner(pjp, originTask.get()) : returnRequestTypeEmptyValue(pjp);
+        Optional<BasicTask> taskResp = basicTaskRepository.findById(taskId);
+        return taskResp.isPresent() ? checkTaskOwner(pjp, taskResp.get()) : returnRequestTypeEmptyValue(pjp);
     }
 
-    @Around("@annotation(EnableOwnerCheck) && args(recordedTask)")
-    public Object checkTaskOwner(ProceedingJoinPoint pjp, Optional<RecordedTask> recordedTask) throws Throwable {
-        return recordedTask.isPresent() ? checkTaskOwner(pjp, recordedTask.get()) : returnRequestTypeEmptyValue(pjp);
+    @Around("@annotation(EnableOwnerCheck) && args(basicTask)")
+    public Object checkTaskOwner(ProceedingJoinPoint pjp, Optional<BasicTask> basicTask) throws Throwable {
+        return basicTask.isPresent() ? checkTaskOwner(pjp, basicTask.get()) : returnRequestTypeEmptyValue(pjp);
     }
 
-
-    @Around("@annotation(EnableOwnerCheck) && args(recordedTask)")
-    public Object checkTaskOwner(ProceedingJoinPoint pjp, RecordedTask recordedTask) throws Throwable {
+    @Around("@annotation(EnableOwnerCheck) && args(basicTask)")
+    public Object checkTaskOwner(ProceedingJoinPoint pjp, BasicTask basicTask) throws Throwable {
 
         // check isOwner (Task owner equals Logged User)
-        Optional<String> userId = recordedTask.getCreatedBy()
-                .map(Account::getUserId)
-                .filter(id -> id.equals(securityService.getAccount().getUserId()));
+        /*Optional<String> userId = basicTask.getCreatedBy()
+                .map(Member::getUserId)
+                .filter(id -> id.equals(securityService.getMember().getUserId()));*/
+
+        Member taskOwner = basicTask.getTaskOwner();
+        if(taskOwner != null && taskOwner.getId().equals(securityService.getMember().getUserId()))
+        {
+            return pjp.proceed();
+        }
+        return returnRequestTypeEmptyValue(pjp);
 
 
         // is owner? / then process
         // is not owner? / then return null or empty value
-        return userId.isPresent() ? pjp.proceed() : returnRequestTypeEmptyValue(pjp);
-
+        //return userId.isPresent() ? pjp.proceed() : returnRequestTypeEmptyValue(pjp);
     }
 
 
