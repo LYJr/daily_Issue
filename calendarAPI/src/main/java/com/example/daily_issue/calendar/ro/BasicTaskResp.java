@@ -17,6 +17,9 @@ public class BasicTaskResp {
     /* task pk */
     private Long id;
 
+    /* task owner */
+    private Long taskOwner;
+
     /* task creator */
     private Long createdBy;
 

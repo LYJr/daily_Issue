@@ -1,6 +1,6 @@
 package com.example.daily_issue.calendar.aop;
 
-import com.example.daily_issue.calendar.dao.BasicTaskRepository;
+import com.example.daily_issue.calendar.dao.impl.basic.BasicTaskRepository;
 import com.example.daily_issue.calendar.domain.BasicTask;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
 import com.example.daily_issue.calendar.security.service.SecurityService;
@@ -45,13 +45,21 @@ public class OwnerChecker {
     public Object checkTaskOwner(ProceedingJoinPoint pjp, BasicTask basicTask) throws Throwable {
 
         // check isOwner (Task owner equals Logged User)
-        Optional<String> userId = basicTask.getCreatedBy()
+        /*Optional<String> userId = basicTask.getCreatedBy()
                 .map(Member::getUserId)
-                .filter(id -> id.equals(securityService.getMember().getUserId()));
+                .filter(id -> id.equals(securityService.getMember().getUserId()));*/
+
+        Member taskOwner = basicTask.getTaskOwner();
+        if(taskOwner != null && taskOwner.getId().equals(securityService.getMember().getUserId()))
+        {
+            return pjp.proceed();
+        }
+        return returnRequestTypeEmptyValue(pjp);
+
 
         // is owner? / then process
         // is not owner? / then return null or empty value
-        return userId.isPresent() ? pjp.proceed() : returnRequestTypeEmptyValue(pjp);
+        //return userId.isPresent() ? pjp.proceed() : returnRequestTypeEmptyValue(pjp);
     }
 
 

@@ -1,7 +1,7 @@
 package com.example.daily_issue.calendar.service;
 
 import com.example.daily_issue.calendar.aop.EnableOwnerCheck;
-import com.example.daily_issue.calendar.dao.BasicTaskRepository;
+import com.example.daily_issue.calendar.dao.impl.basic.BasicTaskRepository;
 import com.example.daily_issue.calendar.domain.BasicTask;
 import com.example.daily_issue.calendar.mapper.TaskMapper;
 import com.example.daily_issue.calendar.ro.BasicTaskReq;

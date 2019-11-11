@@ -51,18 +51,18 @@ public class TaskDisplayService {
         return calculator.getDisplayDateRange(typeChronoUnit, baseDate);
     }
 
-    public DateRange getTaskableDateRange(DisplayReq displayReq, RepeatableTask repeatableTask)
+    private DateRange getTaskableDateRange(DisplayReq displayReq, RepeatableTask repeatableTask)
     {
         return getTaskableDateRange(displayReq.getDisplayChronoUnit(), displayReq.getDisplayDate(), repeatableTask);
     }
 
-    public DateRange getTaskableDateRange(ChronoUnit typeChronoUnit, LocalDate baseDate, RepeatableTask repeatableTask)
+    private DateRange getTaskableDateRange(ChronoUnit typeChronoUnit, LocalDate baseDate, RepeatableTask repeatableTask)
     {
         DateRange displayDateRange = getDisplayDateRange(typeChronoUnit, baseDate);
         return getTaskableDateRange(displayDateRange, repeatableTask);
     }
 
-    public DateRange getTaskableDateRange(DateRange displayDateRange, RepeatableTask repeatableTask)
+    private DateRange getTaskableDateRange(DateRange displayDateRange, RepeatableTask repeatableTask)
     {
         return calculator.getTaskableDateRange(displayDateRange, repeatableTask);
     }
@@ -82,13 +82,15 @@ public class TaskDisplayService {
      * List repeated task by day of weeks set.
      * 설정된 요일마다 반복
      *
-     * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
+     * @param displayDateRange  {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
      * @param repeatableTask    {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
      *
      * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<LocalDate> listRepeatedTaskByDayOfWeeks(DateRange taskableDateRange, RepeatableTask repeatableTask)
+    public Set<LocalDate> listRepeatedTaskByDayOfWeeks(DateRange displayDateRange, RepeatableTask repeatableTask)
     {
+        DateRange taskableDateRange = getTaskableDateRange(displayDateRange, repeatableTask);
+
         Set<LocalDate> dates = new HashSet<>();
         //Period taskPeriod = Period.between(repeatableTask.getBasicTask().getTaskStartDate(), repeatableTask.getBasicTask().getTaskEndDate());
 
@@ -123,13 +125,15 @@ public class TaskDisplayService {
      * List repeated task by specified days set.
      * 설정된 특정일 마다 반복
      *
-     * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
+     * @param displayDateRange  {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
      * @param repeatableTask    {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
      *
      * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<LocalDate> listRepeatedTaskBySpecifiedDays(DateRange taskableDateRange, RepeatableTask repeatableTask)
+    public Set<LocalDate> listRepeatedTaskBySpecifiedDays(DateRange displayDateRange, RepeatableTask repeatableTask)
     {
+        DateRange taskableDateRange = getTaskableDateRange(displayDateRange, repeatableTask);
+
         Set<LocalDate> dates = new HashSet<>();
 
         repeatableTask.getRepeatDays().forEach(day -> {
@@ -147,13 +151,15 @@ public class TaskDisplayService {
      * List repeated task by distance set.
      * 설정된 기간 범위만큼 반복
      *
-     * @param taskableDateRange {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
+     * @param displayDateRange  {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
      * @param repeatableTask    {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
      *
      * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<LocalDate> listRepeatedTaskByDistance(DateRange taskableDateRange, RepeatableTask repeatableTask)
+    public Set<LocalDate> listRepeatedTaskByDistance(DateRange displayDateRange, RepeatableTask repeatableTask)
     {
+        DateRange taskableDateRange = getTaskableDateRange(displayDateRange, repeatableTask);
+
         Set<LocalDate> dates = new HashSet<>();
 
         // temporary index date ( 반복 시작일 )

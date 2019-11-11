@@ -95,6 +95,7 @@ public class TaskMapper {
             }).to(target::setRepeatableTaskResps);
         }
         propertyMapper.from(source::getId).to(target::setId);
+        propertyMapper.from(source::getTaskOwner).as(a -> a.getId()).to(target::setTaskOwner);
         propertyMapper.from(source::getCreatedBy).as(a -> a.orElseGet(null).getId()).to(target::setCreatedBy);
         propertyMapper.from(source::getCreatedDate).as(a -> a.orElseGet(null)).to(target::setCreatedDate);
         propertyMapper.from(source::getLastModifiedBy).as(a -> a.orElseGet(null).getId()).to(target::setLastModifiedBy);

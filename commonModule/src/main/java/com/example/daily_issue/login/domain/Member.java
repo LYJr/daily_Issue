@@ -32,17 +32,4 @@ public class Member extends BasicMember {
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + getId() + '\'' +
-                "userId='" + getUserId() + '\'' +
-                "password= " + getPassword() + '\'' +
-                "name='" + name + '\'' +
-                "status='" + status + '\'' +
-                ", birthday='" + birthday + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
-    }
 }

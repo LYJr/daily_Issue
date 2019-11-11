@@ -1,5 +1,6 @@
 package com.example.daily_issue.calendar.domain;
 
+import com.example.daily_issue.login.domain.Member;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -13,11 +14,13 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Period;
 import java.util.Optional;
 
-@EntityListeners(value = { AuditingEntityListener.class })
+@EntityListeners(value = { AuditingEntityListener.class, AuditableRootListener.class })
 @MappedSuperclass
 @Getter @Setter
 public class AuditableRootTask<U, PK extends Serializable> extends AbstractPersistable<PK>
@@ -29,9 +32,8 @@ public class AuditableRootTask<U, PK extends Serializable> extends AbstractPersi
     @JsonIdentityReference(alwaysAsId = true)
     private @NonNull U createdBy;
 
-    @Temporal(TemporalType.TIMESTAMP) //
     @Column(updatable = false)
-    private @Nullable Date createdDate;
+    private @Nullable LocalDateTime createdDate;
 
     @ManyToOne (fetch = FetchType.LAZY) //
     @JoinColumn(nullable = false)
@@ -39,86 +41,60 @@ public class AuditableRootTask<U, PK extends Serializable> extends AbstractPersi
     @JsonIdentityReference(alwaysAsId = true)
     private @NonNull U lastModifiedBy;
 
-    @Temporal(TemporalType.TIMESTAMP) //
-    private @Nullable Date lastModifiedDate;
+    private @Nullable LocalDateTime lastModifiedDate;
 
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.data.domain.Auditable#getCreatedBy()
-     */
     @Override
-    public Optional<U> getCreatedBy() {
+    public Optional<U> getCreatedBy()
+    {
         return Optional.ofNullable(createdBy);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.data.domain.Auditable#setCreatedBy(java.lang.Object)
-     */
     @Override
-    public void setCreatedBy(U createdBy) {
+    public void setCreatedBy(U createdBy)
+    {
         this.createdBy = createdBy;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.data.domain.Auditable#getCreatedDate()
-     */
     @Override
     public Optional<LocalDateTime> getCreatedDate() {
-        return null == createdDate ? Optional.empty()
-                : Optional.of(LocalDateTime.ofInstant(createdDate.toInstant(), ZoneId.systemDefault()));
+        return Optional.ofNullable(this.createdDate);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.data.domain.Auditable#setCreatedDate(java.time.temporal.TemporalAccessor)
-     */
     @Override
     public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = Date.from(createdDate.atZone(ZoneId.systemDefault()).toInstant());
+        this.createdDate = createdDate;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.data.domain.Auditable#getLastModifiedBy()
-     */
     @Override
-    public Optional<U> getLastModifiedBy() {
-        return Optional.ofNullable(lastModifiedBy);
+    public Optional<U> getLastModifiedBy()
+    {
+        return Optional.ofNullable(this.lastModifiedBy);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.data.domain.Auditable#setLastModifiedBy(java.lang.Object)
-     */
     @Override
-    public void setLastModifiedBy(U lastModifiedBy) {
+    public void setLastModifiedBy(U lastModifiedBy)
+    {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.data.domain.Auditable#getLastModifiedDate()
-     */
     @Override
     public Optional<LocalDateTime> getLastModifiedDate() {
-        return null == lastModifiedDate ? Optional.empty()
-                : Optional.of(LocalDateTime.ofInstant(lastModifiedDate.toInstant(), ZoneId.systemDefault()));
+        return Optional.ofNullable(this.lastModifiedDate);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.data.domain.Auditable#setLastModifiedDate(java.time.temporal.TemporalAccessor)
-     */
     @Override
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = Date.from(lastModifiedDate.atZone(ZoneId.systemDefault()).toInstant());
+        this.lastModifiedDate = lastModifiedDate;
     }
 
 
-
+    /* task 생성 사용자 */
+    @ManyToOne (fetch = FetchType.LAZY) //
+    @JoinColumn(updatable = true, nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    private Member taskOwner;
 
 
 

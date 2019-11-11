@@ -1,11 +1,15 @@
-package com.example.daily_issue.calendar.dao;
+package com.example.daily_issue.calendar.dao.impl.basic;
 
 import com.example.daily_issue.calendar.attr.ServiceURLAttributes;
+import com.example.daily_issue.calendar.dao.impl.member.MemberRepository;
 import com.example.daily_issue.calendar.domain.BasicTask;
+import com.example.daily_issue.calendar.domain.RepeatableTask;
 import com.example.daily_issue.calendar.ro.BasicTaskReq;
 import com.example.daily_issue.calendar.ro.BasicTaskResp;
 import com.example.daily_issue.calendar.ro.RepeatableTaskReq;
+import com.example.daily_issue.calendar.security.service.SecurityService;
 import com.example.daily_issue.calendar.service.CalendarService;
+import com.example.daily_issue.calendar.service.TaskDisplayService;
 import com.example.daily_issue.calendar.service.util.CalendarCalculator;
 import com.example.daily_issue.calendar.vo.DateRange;
 import com.example.daily_issue.login.domain.Member;
@@ -50,6 +54,7 @@ class BasicTaskRepositoryTest {
 
 //    @Autowired
 //    RepeatableTaskRepository repeatableTaskRepository;
+
     @Autowired
     BasicTaskRepository basicTaskRepository;
 
@@ -60,6 +65,12 @@ class BasicTaskRepositoryTest {
     CalendarService calendarService;
 
     @Autowired
+    TaskDisplayService taskDisplayService;
+
+    @Autowired
+    SecurityService securityService;
+
+    @Autowired
     CalendarCalculator calculator;
 
     @Autowired
@@ -67,7 +78,6 @@ class BasicTaskRepositoryTest {
 
     @Autowired
     MockMvc mockMvc;
-
 
 
     private Member member;
@@ -89,10 +99,11 @@ class BasicTaskRepositoryTest {
         List<BasicTaskResp> tasks = new ArrayList<>();
 
         int count = 2;
-        while (count-- > 0)
+        while (count > 0)
         {
             // given
-            String req = objectMapper.writeValueAsString(getTaskReq(count));
+            //String req = objectMapper.writeValueAsString(getTaskReq(count));
+            String req = objectMapper.writeValueAsString(getTaskReqIncludeRepeatableTask(getTaskReq(count)));
 
             // then
             MvcResult mvcResult = mockMvc.perform(
@@ -107,11 +118,12 @@ class BasicTaskRepositoryTest {
 
             BasicTaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BasicTaskResp.class);
             tasks.add(taskResp);
+
+            count--;
         }
 
 
         System.out.println(tasks.size());
-        tasks.forEach(System.out::println);
     }
 
     @Test
@@ -120,9 +132,8 @@ class BasicTaskRepositoryTest {
     @Order(2)
     public void getBasicTasksByMember()
     {
-        List<BasicTask> tasks = basicTaskRepository.findByCreatedBy(member);
-
-        tasks.forEach(System.out::println);
+        List<BasicTask> tasks = basicTaskRepository.findByTaskOwner(member);
+        System.out.println(tasks.size());
     }
 
     @Test
@@ -131,11 +142,36 @@ class BasicTaskRepositoryTest {
     @Order(3)
     public void getBasicTasksByMemberAndDisplayDateRange()
     {
+        securityService.setMember(member.getUserId());
+
         DateRange displayDateRange = calculator.getDisplayDateRange(ChronoUnit.MONTHS, LocalDate.of(2019, 11, 01));
 
-        List<BasicTask> tasks = basicTaskRepository.findByCreatedByAndTaskStartDateBetween(member, displayDateRange.getStartDate(), displayDateRange.getEndDate());
+        //List<BasicTask> tasks = basicTaskRepository.findByCreatedByAndTaskStartDateBetween(member, displayDateRange.getStartDate(), displayDateRange.getEndDate());
+        List<BasicTask> tasks = basicTaskRepository.findByDisplayableBasicTasks(displayDateRange);
+        List<RepeatableTask> repeatableTasks = basicTaskRepository.findByDisplayableRepeatableTasks(displayDateRange);
 
-        tasks.forEach(System.out::println);
+        System.out.println(tasks.size());
+        System.out.println(repeatableTasks.size());
+
+        /*repeatableTasks.forEach(task -> {
+            System.out.println("############# weeks ##########");
+            Set<LocalDate> repeatDates = taskDisplayService.listRepeatedTaskByDayOfWeeks(displayDateRange, task);
+            System.out.println(repeatDates);
+        });
+
+        repeatableTasks.forEach(task -> {
+            System.out.println("############# days ##########");
+            Set<LocalDate> repeatDates = taskDisplayService.listRepeatedTaskBySpecifiedDays(displayDateRange, task);
+            System.out.println(repeatDates);
+        });*/
+
+        repeatableTasks.forEach(task -> {
+            System.out.println("############# distance ##########");
+            Set<LocalDate> repeatDates = taskDisplayService.listRepeatedTaskByDistance(displayDateRange, task);
+            System.out.println(repeatDates);
+        });
+
+
     }
 
 
@@ -198,7 +234,7 @@ class BasicTaskRepositoryTest {
         rreq2.setRepeatAmount(3);
         rreq2.setIncludeBaseDate(false);
         rreq2.setRepeatStartDate(LocalDate.of(2019, 11, 10));
-        rreq2.setRepeatEndDate(LocalDate.of(2019, 11, 20));
+        //rreq2.setRepeatEndDate(LocalDate.of(2019, 11, 20));
         Set<DayOfWeek> dws2 = new HashSet<>();
         dws2.add(DayOfWeek.WEDNESDAY);
         dws2.add(DayOfWeek.FRIDAY);
@@ -214,6 +250,7 @@ class BasicTaskRepositoryTest {
         repeatableTaskReqs.add(rreq1);
         repeatableTaskReqs.add(rreq2);
 
+        req.setRepeatable(true);
         req.setRepeatableTaskReqs(repeatableTaskReqs);
 
         return req;
