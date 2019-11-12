@@ -1,0 +1,5 @@
+portfolio:
+  calendar:
+    start-day-of-week: MONDAY
+    end-day-of-week: SUNDAY
+    week-count-with-month: 6

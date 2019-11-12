@@ -1,8 +1,9 @@
 package com.example.daily_issue.calendar.controller;
 
 import com.example.daily_issue.calendar.attr.ServiceURLAttributes;
-import com.example.daily_issue.calendar.ro.TaskReq;
-import com.example.daily_issue.calendar.ro.TaskResp;
+import com.example.daily_issue.calendar.ro.BasicTaskReq;
+import com.example.daily_issue.calendar.ro.BasicTaskResp;
+import com.example.daily_issue.calendar.ro.RepeatableTaskReq;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -14,9 +15,11 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -35,7 +38,7 @@ class CalendarControllerTest {
     MockMvc mockMvc;
 
 
-    private static List<TaskResp> tasks = new ArrayList<>();
+    private static List<BasicTaskResp> tasks = new ArrayList<>();
 
 
 
@@ -47,7 +50,7 @@ class CalendarControllerTest {
     @WithAnonymousUser
     public void task_create_anonymous() throws Exception {
         // given
-        String req = getTaskReq(20);
+        String req = objectMapper.writeValueAsString(getTaskReq(20));
 
         // then
         mockMvc.perform(
@@ -63,7 +66,7 @@ class CalendarControllerTest {
     @DisplayName("일정생성 / 없는 사용자")
     public void task_create_wrongUser() throws Exception {
         // given
-        String req = getTaskReq(20);
+        String req = objectMapper.writeValueAsString(getTaskReq(20));
 
         // then
         MvcResult mvcResult = mockMvc.perform(
@@ -81,7 +84,7 @@ class CalendarControllerTest {
     @DisplayName("일정생성 / 잘못된 비밀번호")
     public void task_create_wrongPassword() throws Exception {
         // given
-        String req = getTaskReq(20);
+        String req = objectMapper.writeValueAsString(getTaskReq(20));
 
         // then
         MvcResult mvcResult = mockMvc.perform(
@@ -99,7 +102,7 @@ class CalendarControllerTest {
     @DisplayName("일정생성 / 올바른 사용자")
     public void task_create_correctUser() throws Exception {
         // given
-        String req = getTaskReq(20);
+        String req = objectMapper.writeValueAsString(getTaskReq(20));
 
         // then
         MvcResult mvcResult = mockMvc.perform(
@@ -112,7 +115,7 @@ class CalendarControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        TaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResp.class);
+        BasicTaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BasicTaskResp.class);
         tasks.add(taskResp);
 
         System.out.println(tasks.size());
@@ -127,7 +130,7 @@ class CalendarControllerTest {
     @WithAnonymousUser
     public void task_modify_anonymous() throws Exception {
         // given
-        String req = getTaskReq(0);
+        String req = objectMapper.writeValueAsString(modifyBasicTask(getTaskReq(20)));
 
 
         // then
@@ -144,7 +147,7 @@ class CalendarControllerTest {
     @DisplayName("일정수정 / 없는 사용자")
     public void task_modify_wrongUser() throws Exception {
         // given
-        String req = getTaskReq(0);
+        String req = objectMapper.writeValueAsString(modifyBasicTask(getTaskReq(20)));
 
         // then
         MvcResult mvcResult = mockMvc.perform(
@@ -162,7 +165,7 @@ class CalendarControllerTest {
     @DisplayName("일정수정 / 잘못된 비밀번호")
     public void task_modify_wrongPassword() throws Exception {
         // given
-        String req = getTaskReq(0);
+        String req = objectMapper.writeValueAsString(modifyBasicTask(getTaskReq(20)));
 
         // then
         MvcResult mvcResult = mockMvc.perform(
@@ -181,7 +184,7 @@ class CalendarControllerTest {
     @DisplayName("일정수정 / 없는 일정 수정 시도")
     public void task_modify_nonExistTask() throws Exception {
         // given
-        String req = getTaskReq(0);
+        String req = objectMapper.writeValueAsString(modifyBasicTask(getTaskReq(20)));
 
         // then
         MvcResult mvcResult = mockMvc.perform(
@@ -201,7 +204,7 @@ class CalendarControllerTest {
     // task 1은 user1이 생성, user2계정 로그인 후 수정시도
     public void task_modify_unauthorizedTask() throws Exception {
         // given
-        String req = getTaskReq(0);
+        String req = objectMapper.writeValueAsString(modifyBasicTask(getTaskReq(20)));
 
         // then
         MvcResult mvcResult = mockMvc.perform(
@@ -222,7 +225,7 @@ class CalendarControllerTest {
     @DisplayName("일정수정 / 올바른 사용자")
     public void task_modify_correctUser() throws Exception {
         // given
-        String req = getTaskReq(0);
+        String req = objectMapper.writeValueAsString(modifyBasicTask(getTaskReq(20)));
 
         // then
         MvcResult mvcResult = mockMvc.perform(
@@ -235,7 +238,7 @@ class CalendarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        TaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResp.class);
+        BasicTaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BasicTaskResp.class);
         assertThat(taskResp.getLastModifiedDate()).isNotEqualTo(taskResp.getCreatedDate());
         assertThat(tasks.get(0).getLastModifiedDate()).isNotEqualTo(taskResp.getLastModifiedDate());
     }
@@ -326,9 +329,7 @@ class CalendarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        TaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TaskResp.class);
-        assertThat(taskResp.getLastModifiedDate()).isNotEqualTo(taskResp.getCreatedDate());
-        assertThat(tasks.get(0).getLastModifiedDate()).isNotEqualTo(taskResp.getLastModifiedDate());
+        BasicTaskResp taskResp = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BasicTaskResp.class);
     }
 
 
@@ -340,33 +341,79 @@ class CalendarControllerTest {
 
 
 
-
-
-    private String getTaskReq(int seq) throws JsonProcessingException {
-        
+    public BasicTaskReq getTaskReq(int seq) throws JsonProcessingException {
 
         if(seq == 0)
         {
             Random random = new Random();
             random.setSeed(System.currentTimeMillis());
-            
+
             seq = random.nextInt(10-1)+1;
         }
 
-        TaskReq req = new TaskReq();
+        BasicTaskReq req = new BasicTaskReq();
         req.setIsAllDay(seq/2 == 0);
         req.setPlace("test place - " + seq);
         req.setComment("test comment - " + seq);
 
-        // for form data
-        String result = 
-                "isAllDay="+req.getIsAllDay()+"&" +
-                "place="+req.getPlace()+"&" +
-                "comment="+req.getComment();
+        req.setTaskStartDate(LocalDate.of(2019, 11, 1));
+        req.setTaskEndDate(LocalDate.of(2019, 11, 30));
+        req.setTaskStartTime(LocalTime.of(10, 0, 0));
+        req.setTaskEndTime(LocalTime.of(22, 30, 30));
+        req.setTitle("title");
+        req.setColor("color");
 
-        // for json
-        result = objectMapper.writeValueAsString(req);
+        return req;
+    }
 
-        return result;
+
+    public BasicTaskReq getTaskReqIncludeRepeatableTask(BasicTaskReq req)
+    {
+        RepeatableTaskReq rreq1 = new RepeatableTaskReq();
+        rreq1.setRepeatChronoUnit(ChronoUnit.MONTHS);
+        rreq1.setRepeatAmount(2);
+        rreq1.setIncludeBaseDate(true);
+        rreq1.setRepeatStartDate(LocalDate.of(2019, 11, 10));
+        rreq1.setRepeatEndDate(LocalDate.of(2019, 11, 20));
+        Set<DayOfWeek> dws1 = new HashSet<>();
+        dws1.add(DayOfWeek.TUESDAY);
+        dws1.add(DayOfWeek.THURSDAY);
+        rreq1.setRepeatDayOfWeeks(dws1);
+        Set<Integer> days1 = new HashSet<>();
+        days1.add(10);
+        days1.add(18);
+        days1.add(28);
+        rreq1.setRepeatDays(days1);
+
+        RepeatableTaskReq rreq2 = new RepeatableTaskReq();
+        rreq2.setRepeatChronoUnit(ChronoUnit.WEEKS);
+        rreq2.setRepeatAmount(3);
+        rreq2.setIncludeBaseDate(false);
+        rreq2.setRepeatStartDate(LocalDate.of(2019, 11, 10));
+        rreq2.setRepeatEndDate(LocalDate.of(2019, 11, 20));
+        Set<DayOfWeek> dws2 = new HashSet<>();
+        dws2.add(DayOfWeek.WEDNESDAY);
+        dws2.add(DayOfWeek.FRIDAY);
+        rreq2.setRepeatDayOfWeeks(dws2);
+        Set<Integer> days2 = new HashSet<>();
+        days2.add(11);
+        days2.add(19);
+        days2.add(29);
+        rreq2.setRepeatDays(days2);
+
+
+        Set<RepeatableTaskReq> repeatableTaskReqs = new HashSet<>();
+        repeatableTaskReqs.add(rreq1);
+        repeatableTaskReqs.add(rreq2);
+
+        req.setRepeatableTaskReqs(repeatableTaskReqs);
+
+        return req;
+    }
+
+    private BasicTaskReq modifyBasicTask(BasicTaskReq req)
+    {
+        req.setTitle(req.getTitle()+" : modified");
+        return req;
     }
 }

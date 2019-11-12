@@ -18,7 +18,7 @@ public class AuthenticationListener {
     {
         String userid = ((UserDetails) event.getAuthentication().getPrincipal()).getUsername();
 
-        securityService.setAccount(userid);
+        securityService.setMember(userid);
     }
 
 }
