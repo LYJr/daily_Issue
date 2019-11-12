@@ -1,9 +1,9 @@
 package com.example.daily_issue.calendar.test;
 
-import com.example.daily_issue.calendar.domain.RepeatableTask;
+import com.example.daily_issue.calendar.domain.entity.RepeatableTaskEntity;
+import com.example.daily_issue.calendar.domain.vo.DateRange;
 import com.example.daily_issue.calendar.service.TaskDisplayService;
 import com.example.daily_issue.calendar.service.util.CalendarCalculator;
-import com.example.daily_issue.calendar.vo.DateRange;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +25,7 @@ public class PeriodTest {
     @Test
     public void repeatWeekTest()
     {
-        RepeatableTask task = new RepeatableTask();
+        RepeatableTaskEntity task = new RepeatableTaskEntity();
         task.setRepeatStartDate(LocalDate.of(2019, 11, 5));
         task.setRepeatEndDate(LocalDate.of(2019, 11, 28));
 

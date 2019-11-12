@@ -1,2 +1,2 @@
-com.example.daily_issue.calendar.autoconfigure.AutoConfigureCalendar=\
-  com.example.daily_issue.calendar.autoconfigure.CalendarAutoConfiguration
+com.example.daily_issue.calendar.config.autoconfigure.AutoConfigureCalendar=\
+  com.example.daily_issue.calendar.config.autoconfigure.CalendarAutoConfiguration

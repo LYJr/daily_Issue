@@ -1,7 +1,7 @@
 package com.example.daily_issue.calendar.security.service;
 
-import com.example.daily_issue.calendar.config.ApplicationConsts;
-import com.example.daily_issue.calendar.dao.impl.member.MemberRepository;
+import com.example.daily_issue.calendar.config.application.ApplicationConsts;
+import com.example.daily_issue.calendar.dao.repository.member.MemberRepository;
 import com.example.daily_issue.login.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

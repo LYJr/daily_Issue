@@ -1,8 +1,8 @@
 package com.example.daily_issue.calendar.service.util;
 
-import com.example.daily_issue.calendar.autoconfigure.CalendarProperties;
-import com.example.daily_issue.calendar.domain.RepeatableTask;
-import com.example.daily_issue.calendar.vo.DateRange;
+import com.example.daily_issue.calendar.config.autoconfigure.CalendarProperties;
+import com.example.daily_issue.calendar.domain.entity.RepeatableTaskEntity;
+import com.example.daily_issue.calendar.domain.vo.DateRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +43,7 @@ public class CalendarCalculator {
      *
      * @return DateRange 일정 표시가 가능한 기간
      */
-    public DateRange getTaskableDateRange(DateRange displayedDateRange, RepeatableTask repeatableTask)
+    public DateRange getTaskableDateRange(DateRange displayedDateRange, RepeatableTaskEntity repeatableTask)
     {
         /*
         displayStartDate가 repeatStartDate보다 이전이면,
