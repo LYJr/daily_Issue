@@ -3,8 +3,6 @@ package com.example.daily_issue.calendar.attr;
 import lombok.Getter;
 import org.springframework.http.HttpMethod;
 
-import javax.naming.Context;
-
 @Getter
 public enum ServiceURLAttributes {
 

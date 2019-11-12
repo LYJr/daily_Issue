@@ -20,9 +20,13 @@ public class AuditableRootListener {
         if(obj instanceof BasicTask)
         {
             BasicTask entity = (BasicTask) obj;
-            if(entity.getCreatedBy().isPresent())
+            /*if(entity.getCreatedBy().isPresent())
             {
                 entity.setTaskOwner(entity.getCreatedBy().get());
+            }*/
+            if(entity.getCreatedBy() != null)
+            {
+                entity.setTaskOwner(entity.getCreatedBy());
             }
         }
     }

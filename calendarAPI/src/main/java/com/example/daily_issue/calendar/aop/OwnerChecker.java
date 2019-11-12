@@ -50,7 +50,7 @@ public class OwnerChecker {
                 .filter(id -> id.equals(securityService.getMember().getUserId()));*/
 
         Member taskOwner = basicTask.getTaskOwner();
-        if(taskOwner != null && taskOwner.getId().equals(securityService.getMember().getUserId()))
+        if(taskOwner != null && taskOwner.getUserId().equals(securityService.getMember().getUserId()))
         {
             return pjp.proceed();
         }

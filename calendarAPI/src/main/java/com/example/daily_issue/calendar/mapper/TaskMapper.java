@@ -96,10 +96,10 @@ public class TaskMapper {
         }
         propertyMapper.from(source::getId).to(target::setId);
         propertyMapper.from(source::getTaskOwner).as(a -> a.getId()).to(target::setTaskOwner);
-        propertyMapper.from(source::getCreatedBy).as(a -> a.orElseGet(null).getId()).to(target::setCreatedBy);
-        propertyMapper.from(source::getCreatedDate).as(a -> a.orElseGet(null)).to(target::setCreatedDate);
-        propertyMapper.from(source::getLastModifiedBy).as(a -> a.orElseGet(null).getId()).to(target::setLastModifiedBy);
-        propertyMapper.from(source::getLastModifiedDate).as(a -> a.orElseGet(null)).to(target::setLastModifiedDate);
+        propertyMapper.from(source::getCreatedBy).as(a -> a.getId()).to(target::setCreatedBy);
+        propertyMapper.from(source::getCreatedDate).to(target::setCreatedDate);
+        propertyMapper.from(source::getLastModifiedBy).as(a -> a.getId()).to(target::setLastModifiedBy);
+        propertyMapper.from(source::getLastModifiedDate).to(target::setLastModifiedDate);
         propertyMapper.from(source::getIsAllDay).to(target::setIsAllDay);
         propertyMapper.from(source::getColor).to(target::setColor);
         propertyMapper.from(source::getComment).to(target::setComment);
