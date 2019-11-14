@@ -18,8 +18,9 @@ public class Record {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
-    private  Long recordType;
+    @ManyToOne
+    @JoinColumn(name = "fk_recordType")
+    private  RecordType recordType;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column
