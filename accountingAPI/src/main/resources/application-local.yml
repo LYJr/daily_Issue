@@ -2,13 +2,10 @@ spring:
   profiles: local
   #datasource-configuration
   datasource:
-    url: jdbc:h2:tcp://localhost:9092/mem:testdb;MVCC=true
     hikari:
       jdbc-url: jdbc:h2:tcp://localhost:9092/mem:testdb;MVCC=true
-    initial
-    driver-class-name: org.h2.Driver
-    username: root
-    password: 1367
+      username: root
+      password: 1234
   #hibernate-configuration
   jpa:
     hibernate:
