@@ -14,9 +14,18 @@ import java.time.LocalDate;
 @Getter @Setter
 public class Record {
 
+    public Record() { }
+
+    public Record(RecordType recordType, LocalDate recordDate, String memberName, Integer price) {
+        this.recordType = recordType;
+        this.recordDate = recordDate;
+        this.memberName = memberName;
+        this.price = price;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "fk_recordType")
@@ -31,4 +40,12 @@ public class Record {
 
     @Column
     private Integer price;
+
+    public void update(Record newRecord){
+        this.id = newRecord.id;
+        this.recordType = newRecord.recordType;
+        this.recordDate = newRecord.recordDate;
+        this.memberName = newRecord.memberName;
+        this.price = newRecord.price;
+    }
 }

@@ -3,13 +3,15 @@ package com.example.daily_issue.accounting.service;
 import com.example.daily_issue.accounting.domain.Record;
 import com.example.daily_issue.accounting.repository.RecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class RecordImpl implements RecordService {
+public class RecordServiceImpl implements RecordService {
 
     @Autowired
     private RecordRepository recordRepository;
@@ -42,5 +44,24 @@ public class RecordImpl implements RecordService {
         if(hasEquals)
             return recordRepository.findAllByPriceIsLessThanEqual(price);
         return recordRepository.findAllByPriceIsLessThan(price);
+    }
+
+    @Override
+    public void save(Record record) {
+        recordRepository.save(record);
+    }
+
+    @Override
+    public void update(Record updateRecord) {
+        if(updateRecord == null || updateRecord.getId() == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"record not found");
+        Record record = recordRepository.findById(updateRecord.getId()).orElse(null);
+        record.update(updateRecord);
+        recordRepository.save(record);
+    }
+
+    @Override
+    public void delete(Long id) {
+        recordRepository.deleteById(id);
     }
 }
