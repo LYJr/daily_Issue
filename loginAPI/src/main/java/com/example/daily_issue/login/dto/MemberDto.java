@@ -1,6 +1,6 @@
 package com.example.daily_issue.login.dto;
 
-import com.example.daily_issue.login.domain.User;
+import com.example.daily_issue.login.domain.Member;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UserDto {
+public class MemberDto {
 
     private String userId;
     private String password;
@@ -17,7 +17,7 @@ public class UserDto {
     private String birthday;
     private String phoneNumber;
 
-    public UserDto(String userId, String password, String name, String status, String birthday, String phoneNumber) {
+    public MemberDto(String userId, String password, String name, String status, String birthday, String phoneNumber) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -26,8 +26,8 @@ public class UserDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public User toUser(){
-        return new User(this.userId, this.password, this.name, this.status, this.birthday, this.phoneNumber);
+    public Member toMember(){
+        return new Member(this.userId, this.password, this.name, this.status, this.birthday, this.phoneNumber);
     }
 
 }

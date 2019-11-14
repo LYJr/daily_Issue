@@ -7,7 +7,7 @@ import javax.persistence.*;
 @MappedSuperclass
 @Getter
 @Setter
-public class BaseUser {
+public class BaseMember {
 
     @Id
     @GeneratedValue
@@ -16,11 +16,10 @@ public class BaseUser {
     @Column
     private String userId;
 
-    @Column
-    private String password;
+    //password 임시 위치 변경
 
-    public BaseUser(String userId, String password) {
+    public BaseMember(String userId) {
         this.userId = userId;
-        this.password = password;
+
     }
 }

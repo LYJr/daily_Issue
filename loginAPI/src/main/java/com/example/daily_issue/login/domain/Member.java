@@ -1,7 +1,6 @@
 package com.example.daily_issue.login.domain;
 
-import com.example.daily_issue.login.dto.UserDto;
-import com.example.daily_issue.login.security.Encryption;
+import com.example.daily_issue.login.dto.MemberDto;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -12,7 +11,10 @@ import javax.persistence.Table;
 @Entity
 @Table
 @Getter
-public class User extends BaseUser {
+public class Member extends BaseMember {
+
+    @Column
+    private String password;
 
     @Column
     private String name;
@@ -26,9 +28,10 @@ public class User extends BaseUser {
     @Column
     private String phoneNumber;
 
-    public User(String id, String pw, String s, String status, String birthday, String phoneNumber) {
-        super(id, pw);
-        this.name = s;
+    public Member(String id, String password, String name, String status, String birthday, String phoneNumber) {
+        super(id);
+        this.password = password;
+        this.name = name;
         this.status = status;
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
@@ -39,16 +42,17 @@ public class User extends BaseUser {
     }
 
     public boolean passwordConfirm (String password) {
-        return super.getPassword().equals(password);
+        return this.password.equals(password);
     }
 
-    public boolean overlapConfirm (UserDto userDto) {
-        return super.getUserId().equals(userDto.getUserId()) && this.phoneNumber.equals(userDto.getPhoneNumber());
+    public boolean overlapConfirm (MemberDto memberDto) {
+        return super.getUserId().equals(memberDto.getUserId()) && this.phoneNumber.equals(memberDto.getPhoneNumber());
     }
 
     @Override
     public String toString() {
         return "User{" +
+                "password=" + this.password + '\'' +
                 "id='" + getId() + '\'' +
                 "userId='" + getUserId() + '\'' +
                 "password= " + getPassword() + '\'' +
@@ -57,5 +61,9 @@ public class User extends BaseUser {
                 ", birthday='" + birthday + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
     }
 }
