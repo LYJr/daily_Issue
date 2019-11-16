@@ -1,17 +1,15 @@
 package com.example.daily_issue.checklist.group.web;
 
-import com.example.daily_issue.checklist.group.check.service.CheckDetail;
 import com.example.daily_issue.checklist.group.service.TodoGroup;
 import com.example.daily_issue.checklist.group.service.TodoGroupService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/group")
@@ -27,20 +25,40 @@ public class TodoGroupRestController {
     }
 
     @GetMapping(value = {"/{id}"})
-    public TodoGroup list(TodoGroup.Request request, @PathVariable Integer id) {
-        return todoGroupService.findById(id).get();
+    public ResponseEntity<Object> view(TodoGroup.Request request) {
+        Optional<TodoGroup> todoGroupOptional = todoGroupService.findById(request.getId());
+        if(!todoGroupOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(todoGroupOptional.get());
     }
 
-    @PostMapping(value = "/save", consumes = "application/json")
+    @PostMapping(value = "/", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public TodoGroup.Response save(@RequestBody TodoGroup.Request body) throws JsonProcessingException {
-        System.out.println(body);
-//        TodoGroup.Request request = objectMapper.readValue(body, TodoGroup.Request.class);
-
-
-        TodoGroup todoGroup = modelMapper.map(body, TodoGroup.class);
-        todoGroupService.save(todoGroup);
+        TodoGroup todoGroup = todoGroupService.save(body);
 
         return modelMapper.map(todoGroup, TodoGroup.Response.class);
+    }
+
+    @PostMapping(value="/{id}")
+    public ResponseEntity<Object> update(@RequestBody TodoGroup.Request todoRequest) {
+        TodoGroup todoGroup = todoGroupService.update(todoRequest);
+        return ResponseEntity.ok().body(todoGroup);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity delete(@PathVariable Integer id) {
+        Optional<TodoGroup> todoGroupOptional = todoGroupService.findById(id);
+        if(!todoGroupOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        todoGroupService.deleteById(id);
+
+        TodoGroup todoGroup = todoGroupOptional.get();
+
+        return ResponseEntity.ok().body(todoGroup);
     }
 }

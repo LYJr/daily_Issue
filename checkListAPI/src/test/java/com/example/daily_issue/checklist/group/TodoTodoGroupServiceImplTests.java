@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -43,46 +44,6 @@ public class TodoTodoGroupServiceImplTests {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Test
-    @Transactional
-    @Commit
-    public void crudTests() {
-        /** 계정 추가 **/
-        Account addAccount = new Account();
-        addAccount.setUserId("kyoing");
-
-        accountRepository.save(addAccount);
-
-        CheckListApplication.account = addAccount;
-
-        /** 그룹 추가 **/
-        TodoGroup addGroup = TodoGroup.builder()
-                .title("Title")
-                .contents("Contents")
-                .build();
-        addGroup.setCheckDetails(new ArrayList<>());
-        addGroup.getCheckDetails().add(new CheckDetail().builder().title("hello").build());
-
-        addGroup = groupService.save(addGroup);
-
-
-
-        TodoGroup resultGroup = groupService.findById(addGroup.getId()).get();
-
-        assertTrue(addGroup.getId() > 0);                // 그룹 체크
-        assertEquals(resultGroup, addGroup);                      // 조회한 결과와 같은지 확인
-        assertTrue(resultGroup.getCreatedDate().isPresent());     // 생성일이 있는지 확인
-        assertTrue(resultGroup.getCreatedBy().isPresent());       // 만든이가 있는지 파
-
-
-
-        resultGroup = groupService.findById(resultGroup.getId()).get();
-
-        assertTrue(resultGroup.getCheckDetails().size() > 0);
-        assertTrue(resultGroup.getCheckDetails().get(0).getTitle().equals("hello"));
-        assertFalse(resultGroup.getCheckDetails().get(0).isComplete());
-    }
 
     @Test @Transactional @Commit
     public void crudUsingWeb() throws Exception {
@@ -107,34 +68,83 @@ public class TodoTodoGroupServiceImplTests {
                 .contents("Contents")
                 .checkDetails(checkDetails)
                 .build();
-        System.out.println(objectMapper.writeValueAsString(addGroup));
-        mockMvc.perform(
-                post("/group/save")
+
+        String responseBody = mockMvc.perform(
+                post("/group/")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(objectMapper.writeValueAsString(addGroup))
 
         )
+                .andDo(print())
                 .andExpect(item ->
                         {
                             String body = item.getResponse().getContentAsString();
                             TodoGroup.Response response = objectMapper.readValue(body, TodoGroup.Response.class);
 
-                            List<CheckDetail> responseCheckDetails = response.getCheckDetails();
+                            List<CheckDetail.Response> responseCheckDetails = response.getCheckDetails();
 
                             assertTrue(response.getId() > 0);
                             assertTrue(response.getContents().equals(addGroup.getContents()));
                             assertTrue(response.getTitle().equals(addGroup.getTitle()));
 
-                            for(CheckDetail checkDetail : responseCheckDetails) {
-                                assertTrue(findDetailInList(checkDetail, checkDetails));
+                            if(responseCheckDetails != null) {
+                                for (CheckDetail.Response checkDetail : responseCheckDetails) {
+                                    assertTrue(findDetailInList(checkDetail, checkDetails));
+                                }
                             }
                         }
                 )
-                .andDo(print());
+                .andReturn().getResponse().getContentAsString();
+
+        TodoGroup.Response saveResponse = objectMapper.readValue(responseBody, TodoGroup.Response.class);
+
+        mockMvc.perform(get("/group/" + Integer.MAX_VALUE))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(
+                get("/group/" + saveResponse.getId())
+        )
+                .andExpect(status().isOk())
+                .andExpect(item -> {
+                    String body = item.getResponse().getContentAsString();
+                    TodoGroup.Response response = objectMapper.readValue(body, TodoGroup.Response.class);
+
+                    List<CheckDetail.Response> responseCheckDetails = saveResponse.getCheckDetails();
+
+                    assertTrue(response.getId() > 0);
+                    assertTrue(response.getContents().equals(saveResponse.getContents()));
+                    assertTrue(response.getTitle().equals(saveResponse.getTitle()));
+                    if(responseCheckDetails != null) {
+                        for (CheckDetail.Response checkDetail : responseCheckDetails) {
+                            assertTrue(findDetailInList(checkDetail, checkDetails));
+                        }
+                    }
+                });
+
+        saveResponse.setTitle("updateString");
+
+        mockMvc.perform(
+                post("/group/" + saveResponse.getId())
+                .content(objectMapper.writeValueAsString(saveResponse))
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk());
+
+        mockMvc.perform(
+                get("/group/" + saveResponse.getId())
+        )
+                .andExpect(status().isOk())
+                .andExpect(item -> {
+                    String body = item.getResponse().getContentAsString();
+                    TodoGroup.Response response = objectMapper.readValue(body, TodoGroup.Response.class);
+
+                    assertEquals(response.getTitle(), saveResponse.getTitle());
+                });
+
     }
 
 
-    private boolean findDetailInList(CheckDetail source, List<CheckDetail.Request> dest) {
+    private boolean findDetailInList(CheckDetail.Response source, List<CheckDetail.Request> dest) {
         for(CheckDetail.Request checkDetail : dest) {
             if(
                     checkDetail.getContents().equals(source.getContents()) &&

@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface CheckDetailService {
     List<CheckDetail> findAll();
-
-    CheckDetail save(CheckDetail checkDetail);
+    List<CheckDetail> findAllByTodoGroupId(Integer todoGroupId);
+    CheckDetail save(CheckDetail.Request request);
 }
