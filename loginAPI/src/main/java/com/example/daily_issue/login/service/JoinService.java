@@ -1,10 +1,11 @@
 package com.example.daily_issue.login.service;
 
-import com.example.daily_issue.login.domain.User;
-import com.example.daily_issue.login.domain.repository.UserRepository;
-import com.example.daily_issue.login.dto.UserDto;
+import com.example.daily_issue.login.domain.Member;
+import com.example.daily_issue.login.repository.MemberRepository;
+import com.example.daily_issue.login.dto.MemberDto;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Getter
@@ -12,26 +13,36 @@ import org.springframework.stereotype.Service;
 public class JoinService {
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository userRepository;
 
-    public User add(User user){
-        return userRepository.save(user);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public Member add(Member member){
+        return userRepository.save(member);
     }
 
     /**
      * 아이디, 핸드폰 번호 확인 메서드
-     * @param userDto
+     * @param memberDto
      * @return
      * @throws IllegalArgumentException
      */
-    public User userConfirm (UserDto userDto) {
-        return userDto.toUser();
+    public Member userConfirm (MemberDto memberDto) {
+        return memberDto.toMember();
     }
 
     private String conversion (String input) {
         return (input);
     }
 
+   public Member createNew (Member member) {
+        member.encodePassword(passwordEncoder);
+        return add(member);
+   }
 
-
+   public String TestPassword(Member member) {
+        member.encodePassword(passwordEncoder);
+        return member.getPassword();
+   }
 }

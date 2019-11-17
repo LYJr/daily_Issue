@@ -1,0 +1,29 @@
+spring:
+  ### Database ###
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/checklist?serverTimezone=UTC
+    username: root
+    password: qwer1234
+    validation-query: SELECT 1
+  ### JPA ###
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+### logging - hibernate ###
+logging:
+  level:
+    org:
+      hibernate:
+        sql: trace
+        type:
+          descriptor:
+            sql: trace
