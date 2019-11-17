@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public interface TodoGroupService {
     Optional<TodoGroup> findById(Integer id);
-    TodoGroup save(TodoGroup.Request todoGroup);
+    TodoGroup save(TodoGroup todoGroup);
     void deleteById(Integer id);
-    TodoGroup update(TodoGroup.Request todoRequest);
+    TodoGroup update(TodoGroup todoGroup);
 }

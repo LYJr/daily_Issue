@@ -30,21 +30,8 @@ public class TodoGroupServiceImpl implements TodoGroupService {
     }
 
     @Override
-    public TodoGroup save(TodoGroup.Request todoGroupRequest) {
-        TodoGroup todoGroup = modelMapper.map(todoGroupRequest, TodoGroup.class);
-        todoGroup.setCheckDetails(new ArrayList<>());
-
+    public TodoGroup save(TodoGroup todoGroup) {
         todoGroupRepository.save(todoGroup);
-
-        List<CheckDetail.Request> checkDetails = todoGroupRequest.getCheckDetails();
-        if(checkDetails != null) {
-            for(CheckDetail.Request checkDetailRequest : checkDetails) {
-                CheckDetail checkDetail = modelMapper.map(checkDetailRequest, CheckDetail.class);
-                todoGroup.addCheckDetail(checkDetail);
-
-                checkDetailService.save(checkDetailRequest);
-            }
-        }
 
         return todoGroup;
     }
@@ -55,16 +42,16 @@ public class TodoGroupServiceImpl implements TodoGroupService {
     }
 
     @Override
-    public TodoGroup update(TodoGroup.Request todoRequest) {
-        Optional<TodoGroup> todoGroupOptional = findById(todoRequest.getId());
+    public TodoGroup update(TodoGroup todoGroup) {
+        Optional<TodoGroup> todoGroupOptional = findById(todoGroup.getId());
         // TODO 못찾았을시
         if(todoGroupOptional.isPresent()) {
 
         }
-        TodoGroup todoGroup = todoGroupOptional.get();
-        todoGroup.setTitle(todoRequest.getTitle());
-        todoGroup.setContents(todoRequest.getContents());
+        TodoGroup result = todoGroupOptional.get();
+        result.setTitle(todoGroup.getTitle());
+        result.setContents(todoGroup.getContents());
 
-        return todoGroup;
+        return result;
     }
 }

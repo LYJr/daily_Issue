@@ -1,9 +1,9 @@
 package com.example.daily_issue.checklist.group.check.web;
 
 import com.example.daily_issue.CheckListApplication;
-import com.example.daily_issue.checklist.account.service.impl.AccountRepository;
+import com.example.daily_issue.checklist.account.service.impl.MemberRepository;
 import com.example.daily_issue.checklist.group.check.service.CheckDetail;
-import com.example.daily_issue.login.domain.Account;
+import com.example.daily_issue.login.domain.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Check;
@@ -28,11 +28,11 @@ class CheckDetailRestControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private AccountRepository accountRepository;
+    private MemberRepository accountRepository;
     @Test
     void crudTestUsingWeb() throws Exception {
         /** 계정 추가 **/
-        Account addAccount = new Account();
+        Member addAccount = new Member();
         addAccount.setUserId("kyoing");
 
         accountRepository.save(addAccount);

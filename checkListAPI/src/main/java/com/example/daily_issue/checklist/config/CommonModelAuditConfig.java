@@ -1,7 +1,7 @@
 package com.example.daily_issue.checklist.config;
 
 import com.example.daily_issue.checklist.config.aduit.CommonModelAuditAware;
-import com.example.daily_issue.login.domain.Account;
+import com.example.daily_issue.login.domain.Member;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public class CommonModelAuditConfig {
 
     @Bean
-    AuditorAware<Account> auditorProvider() {
+    AuditorAware<Member> auditorProvider() {
         return new CommonModelAuditAware();
     }
 }

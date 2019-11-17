@@ -15,8 +15,8 @@ import javax.persistence.*;
 @ToString(of="id", callSuper = true) @EqualsAndHashCode(of = "id", callSuper = true)
 @EntityListeners({AuditingEntityListener.class})
 public class CheckDetail extends CommonModel {
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false, insertable = true, updatable = true)
     private TodoGroup todoGroup;
     private String title;
     private String contents;
