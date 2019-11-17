@@ -1,4 +1,4 @@
-package com.example.daily_issue.calendar.domain.mapper;
+package com.example.daily_issue.calendar.domain.converter;
 
 import com.example.daily_issue.calendar.domain.entity.BasicTaskEntity;
 import com.example.daily_issue.calendar.domain.entity.RepeatableTaskEntity;
@@ -16,22 +16,22 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component
-public class TaskMapper {
+public class TaskDomainConverter {
 
     @Autowired
     SecurityService securityService;
 
 
     // Task Request RO --> Task Domain
-    public BasicTaskEntity convertTaskReqToTask(BasicTaskReq source)
+    public BasicTaskEntity ReqToEntity(BasicTaskReq source)
     {
-        return source != null ? convertTaskReqToTask(source, new BasicTaskEntity()) : null;
+        return source != null ? ReqToEntity(source, new BasicTaskEntity()) : null;
     }
-    public BasicTaskEntity convertTaskReqToTask(BasicTaskReq source, Optional<BasicTaskEntity> target)
+    public BasicTaskEntity ReqToEntity(BasicTaskReq source, Optional<BasicTaskEntity> target)
     {
-        return source != null && target.isPresent() ? convertTaskReqToTask(source, target.get()) : null;
+        return source != null && target.isPresent() ? ReqToEntity(source, target.get()) : null;
     }
-    public BasicTaskEntity convertTaskReqToTask(BasicTaskReq source, BasicTaskEntity target)
+    public BasicTaskEntity ReqToEntity(BasicTaskReq source, BasicTaskEntity target)
     {
         PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
         propertyMapper.from(source::isRepeatable).to(target::setRepeatable);
@@ -64,19 +64,19 @@ public class TaskMapper {
 
 
     // Task Domain --> Task Response RO
-    public BasicTaskResp convertTaskToTaskResp(Optional<BasicTaskEntity> source)
+    public BasicTaskResp EntityToResp(Optional<BasicTaskEntity> source)
     {
-        return source.isPresent() ? convertTaskToTaskResp(source.get()) : null;
+        return source.isPresent() ? EntityToResp(source.get()) : null;
     }
-    public BasicTaskResp convertTaskToTaskResp(BasicTaskEntity source)
+    public BasicTaskResp EntityToResp(BasicTaskEntity source)
     {
-        return source != null ? convertTaskToTaskResp(source, new BasicTaskResp()) : null;
+        return source != null ? EntityToResp(source, new BasicTaskResp()) : null;
     }
-    public BasicTaskResp convertTaskToTaskResp(Optional<BasicTaskEntity> source, BasicTaskResp target)
+    public BasicTaskResp EntityToResp(Optional<BasicTaskEntity> source, BasicTaskResp target)
     {
-        return target != null && source.isPresent() ? convertTaskToTaskResp(source.get(), target) : null;
+        return target != null && source.isPresent() ? EntityToResp(source.get(), target) : null;
     }
-    public BasicTaskResp convertTaskToTaskResp(BasicTaskEntity source, BasicTaskResp target)
+    public BasicTaskResp EntityToResp(BasicTaskEntity source, BasicTaskResp target)
     {
         PropertyMapper propertyMapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
         propertyMapper.from(source::isRepeatable).to(target::setRepeatable);

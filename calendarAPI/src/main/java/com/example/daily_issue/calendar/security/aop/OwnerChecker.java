@@ -1,8 +1,8 @@
 package com.example.daily_issue.calendar.security.aop;
 
 import com.example.daily_issue.calendar.dao.repository.basic.BasicTaskRepository;
+import com.example.daily_issue.calendar.domain.converter.TaskDomainConverter;
 import com.example.daily_issue.calendar.domain.entity.BasicTaskEntity;
-import com.example.daily_issue.calendar.domain.mapper.TaskMapper;
 import com.example.daily_issue.calendar.security.service.SecurityService;
 import com.example.daily_issue.login.domain.Member;
 import org.aspectj.lang.JoinPoint;
@@ -26,7 +26,7 @@ public class OwnerChecker {
     BasicTaskRepository basicTaskRepository;
 
     @Autowired
-    TaskMapper taskMapper;
+    TaskDomainConverter taskMapper;
 
 
 

@@ -150,6 +150,7 @@ public class TaskObjectTest {
         repeatableTaskReqs.add(rreq1);
         repeatableTaskReqs.add(rreq2);
 
+        req.setRepeatable(true);
         req.setRepeatableTaskReqs(repeatableTaskReqs);
 
 

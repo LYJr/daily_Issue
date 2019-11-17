@@ -1,8 +1,8 @@
 package com.example.daily_issue.calendar.service;
 
 import com.example.daily_issue.calendar.dao.repository.basic.BasicTaskRepository;
+import com.example.daily_issue.calendar.domain.converter.TaskDomainConverter;
 import com.example.daily_issue.calendar.domain.entity.BasicTaskEntity;
-import com.example.daily_issue.calendar.domain.mapper.TaskMapper;
 import com.example.daily_issue.calendar.domain.vo.req.BasicTaskReq;
 import com.example.daily_issue.calendar.domain.vo.resp.BasicTaskResp;
 import com.example.daily_issue.calendar.security.aop.EnableOwnerCheck;
@@ -29,10 +29,10 @@ class BasicTaskService {
 
     /**
      * The Task mapper.
-     * {@link TaskMapper} Domain과 RO객체 변환을 위한 mapper
+     * {@link TaskDomainConverter} Domain과 RO객체 변환을 위한 mapper
      */
     @Autowired
-    TaskMapper taskMapper;
+    TaskDomainConverter taskMapper;
 
     /**
      * The Security service.
@@ -59,11 +59,11 @@ class BasicTaskService {
      */
     public Optional<BasicTaskResp> save(@NonNull BasicTaskReq taskReq)
     {
-        BasicTaskEntity task = taskMapper.convertTaskReqToTask(taskReq);
+        BasicTaskEntity task = taskMapper.ReqToEntity(taskReq);
 
         // save
         BasicTaskEntity savedTask = task != null ? basicTaskRepository.save(task) : null;
-        BasicTaskResp result = taskMapper.convertTaskToTaskResp(savedTask);
+        BasicTaskResp result = taskMapper.EntityToResp(savedTask);
 
         return Optional.ofNullable(result);
     }
@@ -83,7 +83,7 @@ class BasicTaskService {
     {
         // get existing task
         Optional<BasicTaskEntity> originTask = findByTaskId(taskId);
-        BasicTaskEntity task = taskMapper.convertTaskReqToTask(taskReq, originTask);
+        BasicTaskEntity task = taskMapper.ReqToEntity(taskReq, originTask);
 
         // update
         return task != null ? update(task) : Optional.empty();
@@ -103,7 +103,7 @@ class BasicTaskService {
     {
         // update
         BasicTaskEntity updatedTask = task != null ? basicTaskRepository.save(task) : null;
-        BasicTaskResp result = taskMapper.convertTaskToTaskResp(updatedTask);
+        BasicTaskResp result = taskMapper.EntityToResp(updatedTask);
 
         return Optional.ofNullable(result);
     }
@@ -140,7 +140,7 @@ class BasicTaskService {
         Optional<BasicTaskEntity> originTask = Optional.ofNullable(task);
         originTask.ifPresent(t -> basicTaskRepository.delete(t));
 
-        BasicTaskResp result = taskMapper.convertTaskToTaskResp(originTask);
+        BasicTaskResp result = taskMapper.EntityToResp(originTask);
 
         return originTask.isPresent() ? Optional.ofNullable(result) : Optional.empty();
     }

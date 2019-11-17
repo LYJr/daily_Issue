@@ -1,7 +1,7 @@
 package com.example.daily_issue.calendar.service;
 
+import com.example.daily_issue.calendar.domain.converter.TaskDomainConverter;
 import com.example.daily_issue.calendar.domain.entity.BasicTaskEntity;
-import com.example.daily_issue.calendar.domain.mapper.TaskMapper;
 import com.example.daily_issue.calendar.domain.vo.DateRange;
 import com.example.daily_issue.calendar.domain.vo.req.BasicTaskReq;
 import com.example.daily_issue.calendar.domain.vo.req.DisplayReq;
@@ -19,7 +19,7 @@ public class CalendarService {
     @Autowired
     CalendarCalculator calculator;
     @Autowired
-    TaskMapper mapper;
+    TaskDomainConverter mapper;
 
     @Autowired
     BasicTaskService basicTaskService;
@@ -51,7 +51,7 @@ public class CalendarService {
     public Optional<BasicTaskResp> findByTaskId(Long taskId)
     {
         Optional<BasicTaskEntity> basicTask = basicTaskService.findByTaskId(taskId);
-        BasicTaskResp result = mapper.convertTaskToTaskResp(basicTask);
+        BasicTaskResp result = mapper.EntityToResp(basicTask);
 
         return Optional.ofNullable(result);
     }
