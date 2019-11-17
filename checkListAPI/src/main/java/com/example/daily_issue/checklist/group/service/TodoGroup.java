@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
+import org.modelmapper.config.Configuration;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -24,7 +27,7 @@ import java.util.Set;
 public class TodoGroup extends CommonModel {
     private String title;           // 제목
     private String contents;        // 내용
-    @OneToMany(mappedBy = "todoGroup")
+    @OneToMany(mappedBy = "todoGroup", cascade = CascadeType.ALL)
     private List<CheckDetail> checkDetails = new ArrayList<>();
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
@@ -33,6 +36,15 @@ public class TodoGroup extends CommonModel {
         private String title;
         private String contents;
         private List<CheckDetail.Request> checkDetails = new ArrayList<>();
+
+        public TodoGroup convertToOriginal() {
+            ModelMapper modelMapper = new ModelMapper();
+
+            modelMapper.getConfiguration().setFieldAccessLevel(Configuration.AccessLevel.PROTECTED);
+            modelMapper.getConfiguration().setMethodAccessLevel(Configuration.AccessLevel.PROTECTED);
+
+            return modelMapper.map(this, TodoGroup.class);
+        }
     }
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
@@ -43,8 +55,25 @@ public class TodoGroup extends CommonModel {
         private List<CheckDetail.Response> checkDetails = new ArrayList<>();
     }
 
-    public void addCheckDetail(CheckDetail checkDetail) {
-        this.checkDetails.add(checkDetail);
-        checkDetail.setTodoGroup(this);
+    public TodoGroup.Response convertToResponse() {
+        ModelMapper modelMapper = new ModelMapper();
+        TypeMap<TodoGroup, Response> responseTypeMap = modelMapper.typeMap(TodoGroup.class, Response.class)
+                .addMappings(
+                        item -> {
+                            item.skip(Response::setCheckDetails);
+                        }
+                );
+        return responseTypeMap.map(this);
+    }
+
+    public TodoGroup.Request convertToRequest() {
+        ModelMapper modelMapper = new ModelMapper();
+        TypeMap<TodoGroup, Request> responseTypeMap = modelMapper.typeMap(TodoGroup.class, Request.class)
+                .addMappings(
+                        item -> {
+                            item.skip(Request::setCheckDetails);
+                        }
+                );
+        return responseTypeMap.map(this);
     }
 }

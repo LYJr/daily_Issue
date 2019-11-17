@@ -5,6 +5,7 @@ import com.example.daily_issue.checklist.group.service.TodoGroupService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,14 +38,14 @@ public class TodoGroupRestController {
     @PostMapping(value = "/", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public TodoGroup.Response save(@RequestBody TodoGroup.Request body) throws JsonProcessingException {
-        TodoGroup todoGroup = todoGroupService.save(body);
+        TodoGroup todoGroup = todoGroupService.save(body.convertToOriginal());
 
-        return modelMapper.map(todoGroup, TodoGroup.Response.class);
+        return todoGroup.convertToResponse();
     }
 
     @PostMapping(value="/{id}")
     public ResponseEntity<Object> update(@RequestBody TodoGroup.Request todoRequest) {
-        TodoGroup todoGroup = todoGroupService.update(todoRequest);
+        TodoGroup todoGroup = todoGroupService.update(todoRequest.convertToOriginal());
         return ResponseEntity.ok().body(todoGroup);
     }
 

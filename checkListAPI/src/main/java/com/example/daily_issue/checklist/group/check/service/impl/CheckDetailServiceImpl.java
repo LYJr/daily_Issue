@@ -47,7 +47,7 @@ public class CheckDetailServiceImpl implements CheckDetailService {
         CheckDetail checkDetail = modelMapper.map(request, CheckDetail.class);
 
         TodoGroup todoGroup = todoGroupOptional.get();
-        todoGroup.addCheckDetail(checkDetail);
+//        todoGroup.addCheckDetail(checkDetail);
 
         return checkDetail;
     }

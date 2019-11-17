@@ -1,7 +1,7 @@
 package com.example.daily_issue.checklist.common.service;
 
 
-import com.example.daily_issue.login.domain.Account;
+import com.example.daily_issue.login.domain.Member;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,6 +14,6 @@ import java.util.Date;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Embeddable
 @MappedSuperclass
-public class CommonModel extends AbstractAuditable<Account, Integer> {
+public class CommonModel extends AbstractAuditable<Member, Integer> {
     private Character deleteAt = 'N';       // 삭제여부
 }
