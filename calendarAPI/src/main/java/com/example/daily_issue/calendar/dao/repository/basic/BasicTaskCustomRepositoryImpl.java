@@ -7,9 +7,9 @@ package com.example.daily_issue.calendar.dao.repository.basic;/**
  * @since : 0.0.1-SNAPSHOT (2019-11-11)
  */
 
-import com.example.daily_issue.calendar.domain.QBasicTask;
-import com.example.daily_issue.calendar.domain.QRepeatableTask;
 import com.example.daily_issue.calendar.domain.entity.BasicTaskEntity;
+import com.example.daily_issue.calendar.domain.entity.QBasicTaskEntity;
+import com.example.daily_issue.calendar.domain.entity.QRepeatableTaskEntity;
 import com.example.daily_issue.calendar.domain.entity.RepeatableTaskEntity;
 import com.example.daily_issue.calendar.domain.vo.DateRange;
 import com.example.daily_issue.calendar.security.service.SecurityService;
@@ -35,14 +35,14 @@ class BasicTaskCustomRepositoryImpl extends QuerydslRepositorySupport implements
     public List<BasicTaskEntity> findByDisplayableBasicTasks(DateRange dateRange) {
 
         // basic task
-        QBasicTask basicTask = QBasicTask.basicTask;
+        QBasicTaskEntity basicTaskEntity = QBasicTaskEntity.basicTaskEntity;
 
         List<BasicTaskEntity> basicTasks =
-            from(basicTask)
+            from(basicTaskEntity)
             .where(
-                basicTask.taskOwner.eq(securityService.getMember())
+                basicTaskEntity.taskOwner.eq(securityService.getMember())
                 .and(
-                    basicTask.taskStartDate.between(dateRange.getStartDate(), dateRange.getEndDate())
+                    basicTaskEntity.taskStartDate.between(dateRange.getStartDate(), dateRange.getEndDate())
                 )
             )
             .fetch();
@@ -54,23 +54,23 @@ class BasicTaskCustomRepositoryImpl extends QuerydslRepositorySupport implements
     public List<RepeatableTaskEntity> findByDisplayableRepeatableTasks(DateRange dateRange) {
 
         // repeatable task
-        QRepeatableTask repeatableTask = QRepeatableTask.repeatableTask;
-        QBasicTask basicTask = QBasicTask.basicTask;
+        QRepeatableTaskEntity repeatableTaskEntity = QRepeatableTaskEntity.repeatableTaskEntity;
+        QBasicTaskEntity basicTaskEntity = QBasicTaskEntity.basicTaskEntity;
 
         List<RepeatableTaskEntity> repeatableTasks =
-            from(repeatableTask)
-            .innerJoin(repeatableTask.basicTask, basicTask)
+            from(repeatableTaskEntity)
+            .innerJoin(repeatableTaskEntity.basicTask, basicTaskEntity)
             .fetchJoin()
             .where(
-                repeatableTask.basicTask.taskOwner.eq(securityService.getMember())
+                repeatableTaskEntity.basicTask.taskOwner.eq(securityService.getMember())
                 .and(
                     //repeatableTask.repeatStartDate.before(dateRange.getEndDate())
-                    repeatableTask.repeatStartDate.loe(dateRange.getEndDate())
+                    repeatableTaskEntity.repeatStartDate.loe(dateRange.getEndDate())
                 )
                 .and(
-                    repeatableTask.repeatEndDate.isNull()
+                    repeatableTaskEntity.repeatEndDate.isNull()
                     //.or(repeatableTask.repeatEndDate.after(dateRange.getStartDate()))
-                    .or(repeatableTask.repeatEndDate.goe(dateRange.getStartDate()))
+                    .or(repeatableTaskEntity.repeatEndDate.goe(dateRange.getStartDate()))
                     )
                 )
             .fetch();
