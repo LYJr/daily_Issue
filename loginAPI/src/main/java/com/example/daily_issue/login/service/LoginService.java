@@ -1,8 +1,8 @@
 package com.example.daily_issue.login.service;
 
-import com.example.daily_issue.login.domain.User;
-import com.example.daily_issue.login.domain.repository.UserRepository;
-import com.example.daily_issue.login.dto.UserDto;
+import com.example.daily_issue.login.domain.Member;
+import com.example.daily_issue.login.repository.MemberRepository;
+import com.example.daily_issue.login.dto.MemberDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +12,18 @@ import java.util.Optional;
 public class LoginService {
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository userRepository;
 
-    public Optional<User> findByUserId(String userId) {
+    public Optional<Member> findByUserId(String userId) {
         return userRepository.findByUserId(userId);
     }
 
-    public boolean login(UserDto userDto) {
-        Optional<User> originUser = findByUserId(userDto.getUserId());
+    public boolean login(MemberDto memberDto) {
+        Optional<Member> originUser = findByUserId(memberDto.getUserId());
 
         if (originUser.isPresent()) {
-            User user = originUser.get();
-            if(user.passwordConfirm(userDto.getPassword())){
+            Member user = originUser.get();
+            if(user.passwordConfirm(memberDto.getPassword())){
                 return true;
             }
         }
