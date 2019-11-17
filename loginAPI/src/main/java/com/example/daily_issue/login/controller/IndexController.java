@@ -1,8 +1,6 @@
 package com.example.daily_issue.login.controller;
 
-import com.example.daily_issue.login.domain.Member;
 import com.example.daily_issue.login.util.HttpSessionUtil;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
