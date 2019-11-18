@@ -1,17 +1,18 @@
 package com.example.daily_issue.checklist.group.check.web;
 
 import com.example.daily_issue.CheckListApplication;
-import com.example.daily_issue.checklist.account.service.impl.MemberRepository;
 import com.example.daily_issue.checklist.group.check.service.CheckDetail;
+import com.example.daily_issue.checklist.member.service.impl.MemberRepository;
 import com.example.daily_issue.login.domain.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.Check;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.annotation.Resource;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -28,14 +29,14 @@ class CheckDetailRestControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private MemberRepository accountRepository;
+    private MemberRepository memberRepository;
     @Test
     void crudTestUsingWeb() throws Exception {
         /** 계정 추가 **/
         Member addAccount = new Member();
         addAccount.setUserId("kyoing");
 
-        accountRepository.save(addAccount);
+        memberRepository.save(addAccount);
 
         CheckListApplication.account = addAccount;
 

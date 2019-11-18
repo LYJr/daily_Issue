@@ -27,33 +27,10 @@ import java.util.Set;
 public class TodoGroup extends CommonModel {
     private String title;           // 제목
     private String contents;        // 내용
-    @OneToMany(mappedBy = "todoGroup", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "todoGroup", cascade = CascadeType.PERSIST)
     private List<CheckDetail> checkDetails = new ArrayList<>();
 
-    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-    public static class Request {
-        private Integer id;
-        private String title;
-        private String contents;
-        private List<CheckDetail.Request> checkDetails = new ArrayList<>();
-
-        public TodoGroup convertToOriginal() {
-            ModelMapper modelMapper = new ModelMapper();
-
-            modelMapper.getConfiguration().setFieldAccessLevel(Configuration.AccessLevel.PROTECTED);
-            modelMapper.getConfiguration().setMethodAccessLevel(Configuration.AccessLevel.PROTECTED);
-
-            return modelMapper.map(this, TodoGroup.class);
-        }
-    }
-
-    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-    public static class Response {
-        private Integer id;
-        private String title;
-        private String contents;
-        private List<CheckDetail.Response> checkDetails = new ArrayList<>();
-    }
 
     public TodoGroup.Response convertToResponse() {
         ModelMapper modelMapper = new ModelMapper();
@@ -75,5 +52,49 @@ public class TodoGroup extends CommonModel {
                         }
                 );
         return responseTypeMap.map(this);
+    }
+
+    public void addCheckDetail(CheckDetail checkDetail) {
+        checkDetails.add(checkDetail);
+        checkDetail.setTodoGroup(this);
+    }
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+    public static class Request {
+        private Integer id;
+        private String title;
+        private String contents;
+        private List<CheckDetail.Request> checkDetails = new ArrayList<>();
+
+        public TodoGroup convertToOriginal() {
+            ModelMapper modelMapper = new ModelMapper();
+
+            modelMapper.getConfiguration().setFieldAccessLevel(Configuration.AccessLevel.PROTECTED);
+            modelMapper.getConfiguration().setMethodAccessLevel(Configuration.AccessLevel.PROTECTED);
+
+            TypeMap<Request, TodoGroup> requestTodoGroupTypeMap = modelMapper.typeMap(Request.class, TodoGroup.class).
+                    addMappings(item -> item.skip(TodoGroup::setCheckDetails));
+
+            TodoGroup todoGroup = requestTodoGroupTypeMap.map(this);
+            todoGroup = addCheckDetails(todoGroup);
+
+            return todoGroup;
+        }
+        public TodoGroup addCheckDetails(TodoGroup todoGroup) {
+            if(checkDetails != null) {
+                for(CheckDetail.Request checkDetail : checkDetails) {
+                    todoGroup.addCheckDetail(checkDetail.converToOriginal());
+                }
+            }
+
+            return todoGroup;
+        }
+    }
+
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+    public static class Response {
+        private Integer id;
+        private String title;
+        private String contents;
+        private List<CheckDetail.Response> checkDetails = new ArrayList<>();
     }
 }

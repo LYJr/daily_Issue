@@ -1,29 +1,23 @@
 package com.example.daily_issue.checklist.group;
 
 import com.example.daily_issue.CheckListApplication;
-import com.example.daily_issue.checklist.account.service.impl.MemberRepository;
 import com.example.daily_issue.checklist.group.check.service.CheckDetail;
 import com.example.daily_issue.checklist.group.service.TodoGroup;
 import com.example.daily_issue.checklist.group.service.TodoGroupService;
-import com.example.daily_issue.checklist.group.web.TodoGroupRestController;
+import com.example.daily_issue.checklist.member.service.impl.MemberRepository;
 import com.example.daily_issue.login.domain.Member;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.Check;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,7 +34,7 @@ public class TodoTodoGroupServiceImplTests {
     @Autowired
     private TodoGroupService groupService;
     @Autowired
-    private MemberRepository accountRepository;
+    private MemberRepository memberRepository;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -67,7 +61,7 @@ public class TodoTodoGroupServiceImplTests {
     @Order(0)
     public void addAccount() throws Exception {
         /** 계정 추가 **/
-        accountRepository.save(CheckListApplication.account);
+        memberRepository.save(CheckListApplication.account);
     }
 
     @Test @Transactional @Commit

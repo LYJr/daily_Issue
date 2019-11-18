@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public class CommonModelAuditConfig {
 
     @Bean
-    AuditorAware<Member> auditorProvider() {
+    AuditorAware<Member> commonModelAuditAware() {
         return new CommonModelAuditAware();
     }
 }

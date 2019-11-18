@@ -32,7 +32,7 @@ public class TodoGroupRestController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok().body(todoGroupOptional.get());
+        return ResponseEntity.ok().body(todoGroupOptional.get().convertToResponse());
     }
 
     @PostMapping(value = "/", consumes = "application/json")
@@ -46,7 +46,7 @@ public class TodoGroupRestController {
     @PostMapping(value="/{id}")
     public ResponseEntity<Object> update(@RequestBody TodoGroup.Request todoRequest) {
         TodoGroup todoGroup = todoGroupService.update(todoRequest.convertToOriginal());
-        return ResponseEntity.ok().body(todoGroup);
+        return ResponseEntity.ok().body(todoGroup.convertToResponse());
     }
 
     @DeleteMapping(value = "/{id}")
@@ -60,6 +60,6 @@ public class TodoGroupRestController {
 
         TodoGroup todoGroup = todoGroupOptional.get();
 
-        return ResponseEntity.ok().body(todoGroup);
+        return ResponseEntity.ok().body(todoGroup.convertToResponse());
     }
 }
