@@ -7,6 +7,8 @@ import com.example.daily_issue.checklist.group.service.TodoGroupService;
 import com.example.daily_issue.checklist.member.service.impl.MemberRepository;
 import com.example.daily_issue.login.domain.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) @TestMethodOrder(MethodOrderer.Alphanumeric.class)
+@NoArgsConstructor
 public class TodoTodoGroupServiceImplTests {
     @Autowired
     private TodoGroupService groupService;
@@ -42,7 +45,7 @@ public class TodoTodoGroupServiceImplTests {
     private MockMvc mockMvc;
 
     List<CheckDetail.Request> checkDetails = new LinkedList<>();
-    String responseBody = null;
+    public String responseBody = null;
     @BeforeAll
     public void beforeAll() {
         Member addAccount = new Member();
@@ -177,5 +180,14 @@ public class TodoTodoGroupServiceImplTests {
             }
         }
         return false;
+    }
+
+
+
+    public TodoTodoGroupServiceImplTests(TodoGroupService groupService, MemberRepository memberRepository, ObjectMapper objectMapper, MockMvc mockMvc) {
+        this.groupService = groupService;
+        this.memberRepository = memberRepository;
+        this.objectMapper = objectMapper;
+        this.mockMvc = mockMvc;
     }
 }

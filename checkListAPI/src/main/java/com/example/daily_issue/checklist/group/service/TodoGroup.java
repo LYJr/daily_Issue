@@ -95,6 +95,7 @@ public class TodoGroup extends CommonModel {
         private Integer id;
         private String title;
         private String contents;
+        @JsonManagedReference
         private List<CheckDetail.Response> checkDetails = new ArrayList<>();
     }
 }

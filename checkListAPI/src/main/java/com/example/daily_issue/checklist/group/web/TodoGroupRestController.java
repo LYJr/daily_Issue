@@ -16,13 +16,9 @@ import java.util.Optional;
 @RequestMapping("/group")
 public class TodoGroupRestController {
     private TodoGroupService todoGroupService;
-    private ModelMapper modelMapper;
-    private ObjectMapper objectMapper;
 
-    public TodoGroupRestController(TodoGroupService todoGroupService, ModelMapper modelMapper, ObjectMapper objectMapper) {
+    public TodoGroupRestController(TodoGroupService todoGroupService) {
         this.todoGroupService = todoGroupService;
-        this.modelMapper = modelMapper;
-        this.objectMapper = objectMapper;
     }
 
     @GetMapping(value = {"/{id}"})

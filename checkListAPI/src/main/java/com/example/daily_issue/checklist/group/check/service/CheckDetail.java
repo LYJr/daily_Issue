@@ -7,7 +7,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Check;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
+import org.modelmapper.config.Configuration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.ui.ModelMap;
 
 import javax.persistence.*;
 
@@ -24,16 +27,19 @@ public class CheckDetail extends CommonModel {
     private String contents;
     private boolean complete;
 
-    @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
     public static class Response {
+        private Integer id;
         private String title;
         private String contents;
         private boolean complete;
-        private TodoGroup todoGroup;
+        @JsonBackReference
+        private TodoGroup.Response todoGroup;
     }
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
     public static class Request {
+        private Integer id;
         private Integer todoGroupId;
         private String title;
         private String contents;
@@ -43,5 +49,13 @@ public class CheckDetail extends CommonModel {
             ModelMapper modelMapper = new ModelMapper();
             return modelMapper.map(this, CheckDetail.class);
         }
+    }
+
+    public Response convertToResponse() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setFieldAccessLevel(Configuration.AccessLevel.PROTECTED);
+        modelMapper.getConfiguration().setMethodAccessLevel(Configuration.AccessLevel.PROTECTED);
+        for(int i = 0; i<100; i++) System.out.println(this.getId());
+        return modelMapper.map(this, Response.class);
     }
 }
