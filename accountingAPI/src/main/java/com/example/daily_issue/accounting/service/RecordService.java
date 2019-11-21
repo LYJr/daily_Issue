@@ -19,7 +19,7 @@ public interface RecordService {
     List<Record.Response> getLessPriceRecords(int price, boolean hasEquals);
 
 
-    void save(Record.Request request, Long typeId);
+    void create(Record record);
 
     void update(Record record);
 

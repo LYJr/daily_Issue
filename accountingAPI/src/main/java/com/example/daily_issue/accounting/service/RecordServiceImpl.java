@@ -50,7 +50,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<Record.Response> getOverPriceRecords(int price, boolean hasEquals) {
-        List<Record> recordList = null;
+        List<Record> recordList;
         if(hasEquals)
             recordList = recordRepository.findAllByPriceGreaterThanEqual(price);
         else
@@ -60,7 +60,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<Record.Response> getLessPriceRecords(int price, boolean hasEquals) {
-        List<Record> recordList = null;
+        List<Record> recordList;
         if(hasEquals)
             recordList = recordRepository.findAllByPriceIsLessThanEqual(price);
         else
@@ -69,9 +69,8 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public void save(Record.Request request, Long typeId) {
-        RecordType type = recordTypeService.getRecordTypeById(typeId);
-        Record record = request.convertToRecord();
+    public void create(Record record) {
+        RecordType type = recordTypeService.getRecordTypeById(record.getId());
         record.setRecordType(type);
         recordRepository.save(record);
     }
@@ -90,7 +89,7 @@ public class RecordServiceImpl implements RecordService {
         recordRepository.deleteById(id);
     }
 
-    public List<Record.Response> convertRecordToResponse(List<Record> list){
+    private List<Record.Response> convertRecordToResponse(List<Record> list){
         List<Record.Response> responseList = new ArrayList<>();
 
         for(Record record : list){
