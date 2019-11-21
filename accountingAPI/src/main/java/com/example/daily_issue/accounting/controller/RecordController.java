@@ -22,18 +22,11 @@ public class RecordController {
 
     @PostMapping("/regist/{recordTypeId}")
     public ResponseEntity<?> registRecord(
-            @RequestParam("recordDateValue")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate recordDate,
-            Record record,
-            @PathVariable
-            Long recordTypeId
+            Record record
     ){
 
-        Record.Request request= record.converToRequest();
-        request.setRecordDate(recordDate);
 
-        recordService.save(request, recordTypeId);
+        recordService.create(record);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
