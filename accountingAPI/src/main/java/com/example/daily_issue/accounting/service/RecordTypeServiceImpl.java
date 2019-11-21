@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecordTypeServiceImpl implements RecordTypeService {
@@ -44,10 +45,21 @@ public class RecordTypeServiceImpl implements RecordTypeService {
 
     @Override
     public List<RecordType> getAllRecordType() {
+        return recordTypeRepository.findAll();
+    }
 
-        List<RecordType> allRecordType = recordTypeRepository.findAll();
-        if(allRecordType == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "record type is not registed");
-        return allRecordType;
+    @Override
+    public void removeRecordType(Long id) {
+        recordTypeRepository.deleteById(id);
+    }
+
+    @Override
+    public RecordType updateRecordType(RecordType recordType) {
+
+        Optional<RecordType> targetType = recordTypeRepository.findById(recordType.getId());
+        if(targetType.isPresent())
+            return recordTypeRepository.save(recordType);
+        else
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"recordType not found [id="+recordType.id+"]");
     }
 }

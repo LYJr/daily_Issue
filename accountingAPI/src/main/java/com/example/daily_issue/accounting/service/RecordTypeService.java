@@ -9,4 +9,6 @@ public interface RecordTypeService {
     RecordType getRecordTypeById(Long typeId);
     RecordType getRecordTypeByName(String name);
     List<RecordType> getAllRecordType();
+    void removeRecordType(Long id);
+    RecordType updateRecordType(RecordType recordType);
 }
