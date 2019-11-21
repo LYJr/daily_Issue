@@ -9,7 +9,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-
+/**
+ * 가계부의 기록에 해당하는 엔티티
+ * @author 진환
+ */
 @Entity
 @Table(name = "tb_record")
 @Getter @Setter
