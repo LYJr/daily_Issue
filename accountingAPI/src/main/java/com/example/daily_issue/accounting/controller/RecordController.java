@@ -20,9 +20,13 @@ public class RecordController {
         this.recordService = recordService;
     }
 
-    @PostMapping("/regist")
-    public ResponseEntity<?> registRecord(Record record){
-        recordService.save(record);
+    @PostMapping("/regist/{recordTypeId}")
+    public ResponseEntity<?> registRecord(
+            Record record
+    ){
+
+
+        recordService.create(record);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -31,7 +35,8 @@ public class RecordController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate date
     ){
-        Record record = recordService.getRecordByCurrentDate(date);
+        Record.Response record = recordService.getRecordByCurrentDate(date);
+        System.out.println("recordTypeName : "+record.getRecordTypeName());
         return ResponseEntity.ok(record);
     }
 
@@ -42,25 +47,25 @@ public class RecordController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate right
     ){
-        List<Record> recordList = recordService.getRecordListByBetweenDate(left, right);
+        List<Record.Response> recordList = recordService.getRecordListByBetweenDate(left, right);
         return ResponseEntity.ok(recordList);
     }
 
     @GetMapping(value="/read/{recordType}")
     public ResponseEntity<?> readByRecordType(@PathVariable Long recordType){
-        List<Record> recordList = recordService.getCurrentTypeRecords(recordType);
+        List<Record.Response> recordList = recordService.getCurrentTypeRecords(recordType);
         return ResponseEntity.ok(recordList);
     }
 
     @GetMapping("/read/over")
     public ResponseEntity<?> readByOverPrice(Integer price, boolean hasEquals){
-        List<Record> recordList = recordService.getOverPriceRecords(price, hasEquals);
+        List<Record.Response> recordList = recordService.getOverPriceRecords(price, hasEquals);
         return ResponseEntity.ok(recordList);
     }
 
     @GetMapping("/read/less")
     public ResponseEntity<?> readByLessPrice(Integer price, boolean hasEquals){
-        List<Record> recordList = recordService.getLessPriceRecords(price, hasEquals);
+        List<Record.Response> recordList = recordService.getLessPriceRecords(price, hasEquals);
         return ResponseEntity.ok(recordList);
     }
 
@@ -69,8 +74,9 @@ public class RecordController {
         recordService.update(record);
         return ResponseEntity.ok(record);
     }
+
     @DeleteMapping("/remove")
-    public ResponseEntity renewalRecord(Long id){
+    public ResponseEntity deleteRecord(Long id){
         recordService.delete(id);
         return ResponseEntity.ok("{}");
     }
