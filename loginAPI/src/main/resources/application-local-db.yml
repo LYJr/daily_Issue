@@ -5,6 +5,7 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create
+#      ddl-auto: validate
       show-sql: true
     # cuz auto-detecting
     #database: MYSQL
