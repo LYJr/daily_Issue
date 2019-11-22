@@ -28,7 +28,7 @@ public class StringToDateConverter implements Converter<String, LocalDate> {
         int month;
         int day;
 
-        if(source.matches("\\d{4}-\\d{2}-\\d{2}"))
+        if(!source.matches("\\d{4}-\\d{2}-\\d{2}"))
             throw new IllegalArgumentException("String not fit for format, String to LocalDate");
 
         String[] date = source.split("-");
