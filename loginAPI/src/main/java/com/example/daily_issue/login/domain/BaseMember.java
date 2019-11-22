@@ -1,6 +1,8 @@
 package com.example.daily_issue.login.domain;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -10,16 +12,21 @@ import javax.persistence.*;
 public class BaseMember {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(unique = true)
     private String userId;
 
-    //password 임시 위치 변경
+    @Column
+    private String password;
 
-    public BaseMember(String userId) {
-        this.userId = userId;
+    public BaseMember(String memberId, String password) {
+        this.userId = memberId;
+        this.password = password;
+    }
 
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
     }
 }
