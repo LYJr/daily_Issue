@@ -10,6 +10,10 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+/**
+ * 로컬 테스트용 H2 설정 파일
+ * @author 진환
+ */
 @Configuration
 public class H2Config {
 
