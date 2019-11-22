@@ -2,6 +2,7 @@ package com.example.daily_issue.accounting.converter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 
@@ -23,20 +24,17 @@ public class StringToDateConverter implements Converter<String, LocalDate> {
      */
     @Override
     public LocalDate convert(String source) {
-
-        String date[] = source.split("-");
-        if(date.length != 3)
-            throw new IllegalArgumentException("String not fit for format, String to LocalDate");
         int year;
         int month;
         int day;
-        try{
-            year = Integer.parseInt(date[0]);
-            month = Integer.parseInt(date[1]);
-            day = Integer.parseInt(date[2]);
-        } catch (NumberFormatException e){
+
+        if(source.matches("\\d{4}-\\d{2}-\\d{2}"))
             throw new IllegalArgumentException("String not fit for format, String to LocalDate");
-        }
+
+        String[] date = source.split("-");
+        year = Integer.parseInt(date[0]);
+        month = Integer.parseInt(date[1]);
+        day = Integer.parseInt(date[2]);
 
         return LocalDate.of(year,month, day);
     }
