@@ -12,6 +12,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * 테스트를 위한 스프링 시큐리티 설정
+ * 접근제한 완전 해제
+ */
 @Profile("local")
 @Configuration
 @EnableWebSecurity

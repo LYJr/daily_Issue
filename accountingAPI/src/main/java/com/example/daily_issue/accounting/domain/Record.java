@@ -53,13 +53,30 @@ public class Record {
         return new Record.Request(this);
     }
 
+    public void update(Record newRecord){
+        this.id = newRecord.id;
+        this.recordType = newRecord.recordType;
+        this.recordDate = newRecord.recordDate;
+        this.memberName = newRecord.memberName;
+        this.price = newRecord.price;
+    }
 
+
+    @Getter @Setter
     public static class Response {
         private Long id;
         private LocalDate recordDate;
         private String memberName;
         private int price;
         private String recordTypeName;
+
+        public Response(Long id, LocalDate recordDate, String memberName, int price, String recordTypeName) {
+            this.id = id;
+            this.recordDate = recordDate;
+            this.memberName = memberName;
+            this.price = price;
+            this.recordTypeName = recordTypeName;
+        }
 
         public Response(Record record) {
             this.id = record.id;
@@ -69,48 +86,9 @@ public class Record {
             this.recordTypeName = record.recordType.name;
         }
 
-        public Long getId() {
-            return id;
-        }
-
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public LocalDate getRecordDate() {
-            return recordDate;
-        }
-
-        public void setRecordDate(LocalDate recordDate) {
-            this.recordDate = recordDate;
-        }
-
-        public String getMemberName() {
-            return memberName;
-        }
-
-        public void setMemberName(String memberName) {
-            this.memberName = memberName;
-        }
-
-        public int getPrice() {
-            return price;
-        }
-
-        public void setPrice(int price) {
-            this.price = price;
-        }
-
-        public String getRecordTypeName() {
-            return recordTypeName;
-        }
-
-        public void setRecordTypeName(String recordTypeName) {
-            this.recordTypeName = recordTypeName;
-        }
-
     }
 
+    @Getter @Setter
     public static class Request{
         private LocalDate recordDate;
         private String memberName;
@@ -135,38 +113,6 @@ public class Record {
             record.setPrice(this.price);
             return record;
         }
-
-        public LocalDate getRecordDate() {
-            return recordDate;
-        }
-
-        public void setRecordDate(LocalDate recordDate) {
-            this.recordDate = recordDate;
-        }
-
-        public String getMemberName() {
-            return memberName;
-        }
-
-        public void setMemberName(String memberName) {
-            this.memberName = memberName;
-        }
-
-        public Integer getPrice() {
-            return price;
-        }
-
-        public void setPrice(Integer price) {
-            this.price = price;
-        }
-    }
-
-    public void update(Record newRecord){
-        this.id = newRecord.id;
-        this.recordType = newRecord.recordType;
-        this.recordDate = newRecord.recordDate;
-        this.memberName = newRecord.memberName;
-        this.price = newRecord.price;
     }
 
 }

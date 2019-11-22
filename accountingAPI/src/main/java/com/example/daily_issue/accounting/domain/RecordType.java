@@ -7,6 +7,10 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * 가계부의 기록 타입에 해당하는 엔티티
+ * @author 진환
+ */
 @Entity
 @Table(name = "tb_record_type")
 @Getter @Setter
