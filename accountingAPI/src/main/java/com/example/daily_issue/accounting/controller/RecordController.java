@@ -21,20 +21,13 @@ public class RecordController {
     }
 
     @PostMapping("/regist/{recordTypeId}")
-    public ResponseEntity<?> registRecord(
-            Record record
-    ){
-
-
+    public ResponseEntity<?> registRecord(Record record){
         recordService.create(record);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(value="/read")
-    public ResponseEntity<?> readByDate(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate date
-    ){
+    public ResponseEntity<?> readByDate(LocalDate date){
         Record.Response record = recordService.getRecordByCurrentDate(date);
         System.out.println("recordTypeName : "+record.getRecordTypeName());
         return ResponseEntity.ok(record);
@@ -42,9 +35,7 @@ public class RecordController {
 
     @GetMapping("/read/between")
     public ResponseEntity<?> readByBetweenDate(
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate left,
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate right
     ){
         List<Record.Response> recordList = recordService.getRecordListByBetweenDate(left, right);
