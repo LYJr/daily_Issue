@@ -16,7 +16,7 @@ public class RecordTypeController {
         this.recordTypeService = recordTypeService;
     }
 
-    @PostMapping("/regist")
+    @PostMapping("/")
     public ResponseEntity<?> createRecordType(RecordType recordType){
         recordTypeService.createRecordType(recordType);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -34,13 +34,13 @@ public class RecordTypeController {
         return ResponseEntity.ok(recordType);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public ResponseEntity<?> updateRecordType(RecordType recordType){
         recordTypeService.updateRecordType(recordType);
         return ResponseEntity.ok(recordType);
     }
 
-    @DeleteMapping("/remove")
+    @DeleteMapping("/")
     public ResponseEntity<?> removeRecordType(Long id){
         recordTypeService.removeRecordType(id);
         return ResponseEntity.ok("{}");
