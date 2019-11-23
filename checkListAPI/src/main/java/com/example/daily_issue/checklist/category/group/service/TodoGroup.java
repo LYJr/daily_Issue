@@ -1,23 +1,18 @@
-package com.example.daily_issue.checklist.group.service;
+package com.example.daily_issue.checklist.category.group.service;
 
+import com.example.daily_issue.checklist.category.group.check.service.CheckDetail;
+import com.example.daily_issue.checklist.category.service.TodoGroupCategory;
 import com.example.daily_issue.checklist.common.service.CommonModel;
-import com.example.daily_issue.checklist.group.check.service.CheckDetail;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.modelmapper.config.Configuration;
-import org.springframework.data.jpa.domain.AbstractAuditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter @Setter @Builder
@@ -25,10 +20,13 @@ import java.util.Set;
 @NoArgsConstructor @AllArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
 public class TodoGroup extends CommonModel {
+    @ManyToOne
+    private TodoGroupCategory todoGroupCategory;
     private String title;           // 제목
     private String contents;        // 내용
 
     @OneToMany(mappedBy = "todoGroup", cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private List<CheckDetail> checkDetails = new ArrayList<>();
 
 
@@ -60,6 +58,8 @@ public class TodoGroup extends CommonModel {
     }
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
     public static class Request {
+        private Integer todoGroupCategoryId;
+
         private Integer id;
         private String title;
         private String contents;

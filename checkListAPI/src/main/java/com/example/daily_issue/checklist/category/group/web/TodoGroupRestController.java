@@ -1,11 +1,8 @@
-package com.example.daily_issue.checklist.group.web;
+package com.example.daily_issue.checklist.category.group.web;
 
-import com.example.daily_issue.checklist.group.service.TodoGroup;
-import com.example.daily_issue.checklist.group.service.TodoGroupService;
+import com.example.daily_issue.checklist.category.group.service.TodoGroup;
+import com.example.daily_issue.checklist.category.group.service.TodoGroupService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

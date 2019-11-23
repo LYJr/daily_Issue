@@ -1,14 +1,14 @@
 package com.example.daily_issue.checklist.group;
 
 import com.example.daily_issue.CheckListApplication;
-import com.example.daily_issue.checklist.group.check.service.CheckDetail;
-import com.example.daily_issue.checklist.group.service.TodoGroup;
-import com.example.daily_issue.checklist.group.service.TodoGroupService;
+import com.example.daily_issue.checklist.category.group.check.service.CheckDetail;
+import com.example.daily_issue.checklist.category.group.service.TodoGroup;
+import com.example.daily_issue.checklist.category.group.service.TodoGroupService;
 import com.example.daily_issue.checklist.member.service.impl.MemberRepository;
 import com.example.daily_issue.login.domain.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) @TestMethodOrder(MethodOrderer.Alphanumeric.class)
-@NoArgsConstructor
+@Setter
 public class TodoTodoGroupServiceImplTests {
     @Autowired
     private TodoGroupService groupService;
@@ -40,7 +39,6 @@ public class TodoTodoGroupServiceImplTests {
     private MemberRepository memberRepository;
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -182,12 +180,4 @@ public class TodoTodoGroupServiceImplTests {
         return false;
     }
 
-
-
-    public TodoTodoGroupServiceImplTests(TodoGroupService groupService, MemberRepository memberRepository, ObjectMapper objectMapper, MockMvc mockMvc) {
-        this.groupService = groupService;
-        this.memberRepository = memberRepository;
-        this.objectMapper = objectMapper;
-        this.mockMvc = mockMvc;
-    }
 }

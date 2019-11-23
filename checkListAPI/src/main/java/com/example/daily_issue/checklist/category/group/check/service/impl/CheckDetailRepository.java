@@ -1,6 +1,6 @@
-package com.example.daily_issue.checklist.group.check.service.impl;
+package com.example.daily_issue.checklist.category.group.check.service.impl;
 
-import com.example.daily_issue.checklist.group.check.service.CheckDetail;
+import com.example.daily_issue.checklist.category.group.check.service.CheckDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

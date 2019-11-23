@@ -1,15 +1,11 @@
-package com.example.daily_issue.checklist.group.service.impl;
+package com.example.daily_issue.checklist.category.group.service.impl;
 
-import com.example.daily_issue.checklist.group.check.service.CheckDetail;
-import com.example.daily_issue.checklist.group.check.service.CheckDetailService;
-import com.example.daily_issue.checklist.group.service.TodoGroup;
-import com.example.daily_issue.checklist.group.service.TodoGroupService;
+import com.example.daily_issue.checklist.category.group.check.service.CheckDetailService;
+import com.example.daily_issue.checklist.category.group.service.TodoGroup;
+import com.example.daily_issue.checklist.category.group.service.TodoGroupService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service("groupService")

@@ -2,9 +2,9 @@ package com.example.daily_issue.checklist.group.check.web;
 
 import com.example.daily_issue.CheckListApplication;
 import com.example.daily_issue.checklist.group.TodoTodoGroupServiceImplTests;
-import com.example.daily_issue.checklist.group.check.service.CheckDetail;
-import com.example.daily_issue.checklist.group.service.TodoGroup;
-import com.example.daily_issue.checklist.group.service.TodoGroupService;
+import com.example.daily_issue.checklist.category.group.check.service.CheckDetail;
+import com.example.daily_issue.checklist.category.group.service.TodoGroup;
+import com.example.daily_issue.checklist.category.group.service.TodoGroupService;
 import com.example.daily_issue.checklist.member.service.impl.MemberRepository;
 import com.example.daily_issue.login.domain.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +18,10 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -49,7 +52,11 @@ class CheckDetailRestControllerTest {
 
         CheckListApplication.account = addAccount;
 
-        todoTodoGroupServiceImplTests = new TodoTodoGroupServiceImplTests(todoGroupService, memberRepository, objectMapper, mockMvc);
+        todoTodoGroupServiceImplTests = new TodoTodoGroupServiceImplTests();
+        todoTodoGroupServiceImplTests.setGroupService(todoGroupService);
+        todoTodoGroupServiceImplTests.setMemberRepository(memberRepository);
+        todoTodoGroupServiceImplTests.setObjectMapper(objectMapper);
+        todoTodoGroupServiceImplTests.setMockMvc(mockMvc);
     }
 
     @Test @Transactional
@@ -63,8 +70,9 @@ class CheckDetailRestControllerTest {
     @Test
     @Transactional @Commit @Order(1)
     void save() throws Exception {
-        todoTodoGroupServiceImplTests.addGrop();
-
+        if(todoTodoGroupServiceImplTests.responseBody == null) {
+            todoTodoGroupServiceImplTests.addGrop();
+        }
         TodoGroup.Response response = objectMapper.readValue(todoTodoGroupServiceImplTests.responseBody, TodoGroup.Response.class);
 
         CheckDetail.Request checkDetailRequest = CheckDetail.Request.builder()
@@ -84,7 +92,6 @@ class CheckDetailRestControllerTest {
                     String responseBody = item.getResponse().getContentAsString();
                     CheckDetail.Response responseResult = objectMapper.readValue(responseBody, CheckDetail.Response.class);
 
-                    assertTrue(responseResult.getId() > 0);
                     assertTrue(responseResult.getTitle().equals(checkDetailRequest.getTitle()));
                     assertTrue(responseResult.getContents().equals(checkDetailRequest.getContents()));
                 })
@@ -93,15 +100,83 @@ class CheckDetailRestControllerTest {
     }
 
     @Test
-    void list() {
+    @Transactional @Commit @Order(2)
+    void list() throws Exception {
+        int random = new Random().nextInt(10);
+        for(int i = 0; i<random; i++) {
+            save();
+        }
+
+        TodoGroup.Response response = objectMapper.readValue(todoTodoGroupServiceImplTests.responseBody, TodoGroup.Response.class);
+        mockMvc.perform(
+                get("/group/"+response.getId()+"/detail/")
+        )       .andDo(print())
+                .andExpect(item -> {
+                    CheckDetail.Response arr[] = objectMapper.readValue(item.getResponse().getContentAsString(), CheckDetail.Response[].class);
+
+                    assertTrue(arr.length == random);
+                    for(CheckDetail.Response checkResponse : arr) {
+                        assertFalse(checkResponse.isComplete());
+                        assertEquals(checkResponse.getContents(), "con");
+                        assertEquals(checkResponse.getTitle(), "tit");
+                    }
+                });
     }
 
 
     @Test
-    void update() {
+    @Transactional @Commit @Order(3)
+    void update() throws Exception {
+        TodoGroup.Response todogroupResponse = objectMapper.readValue(todoTodoGroupServiceImplTests.responseBody, TodoGroup.Response.class);
+        String contentAsString = mockMvc.perform(
+                get("/group/" + todogroupResponse.getId() + "/detail/")
+        ).andReturn().getResponse().getContentAsString();
+
+        CheckDetail.Response arr[] = objectMapper.readValue(contentAsString, CheckDetail.Response[].class);
+
+        CheckDetail.Response detailResponse = arr[0];
+
+        CheckDetail.Request request = new CheckDetail.Request();
+        request.setTitle("gigigidingo");
+        request.setContents("dingo");
+        mockMvc.perform(
+                post("/group/"+todogroupResponse.getId()+"/detail/"+detailResponse.getId())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(request))
+        )
+                .andDo(print())
+                .andExpect(item -> {
+                    CheckDetail.Response response = objectMapper.readValue(item.getResponse().getContentAsString(), CheckDetail.Response.class);
+
+                    assertEquals(response.getContents(), request.getContents());
+                    assertEquals(response.getTitle(), request.getTitle());
+                });
     }
 
     @Test
-    void updateComplete() {
+    @Transactional @Commit @Order(4)
+    void updateComplete() throws Exception {
+        TodoGroup.Response response = objectMapper.readValue(todoTodoGroupServiceImplTests.responseBody, TodoGroup.Response.class);
+
+        String contentAsString = mockMvc.perform(
+                get("/group/" + response.getId() + "/detail/")
+        ).andReturn().getResponse().getContentAsString();
+
+        CheckDetail.Response arr[] = objectMapper.readValue(contentAsString, CheckDetail.Response[].class);
+
+        TodoGroup.Response todogroupResponse = objectMapper.readValue(todoTodoGroupServiceImplTests.responseBody, TodoGroup.Response.class);
+        CheckDetail.Response detailResponse = arr[0];
+
+        mockMvc.perform(
+                post("/group/"+todogroupResponse.getId()+"/detail/"+detailResponse.getId()+"/complete")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"complete\":true}")
+        )
+                .andDo(print())
+                .andExpect(item -> {
+                    CheckDetail.Response checkResponse = objectMapper.readValue(item.getResponse().getContentAsString(), CheckDetail.Response.class);
+
+                    assertTrue(checkResponse.isComplete());
+                });
     }
 }

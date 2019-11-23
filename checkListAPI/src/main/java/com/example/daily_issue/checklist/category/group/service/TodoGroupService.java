@@ -1,4 +1,4 @@
-package com.example.daily_issue.checklist.group.service;
+package com.example.daily_issue.checklist.category.group.service;
 
 import java.util.Optional;
 
