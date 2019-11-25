@@ -10,9 +10,9 @@ import java.util.List;
 
 public class MemberPrincipal implements UserDetails {
 
-    private final Member member;
+    private final DailyMember member;
 
-    public MemberPrincipal(Member member) {
+    public MemberPrincipal(DailyMember member) {
         this.member = member;
     }
 
@@ -24,12 +24,12 @@ public class MemberPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return getUsername();
+        return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return getUsername();
+        return member.getUserId();
     }
 
     @Override

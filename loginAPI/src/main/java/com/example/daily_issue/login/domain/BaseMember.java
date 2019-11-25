@@ -1,6 +1,7 @@
 package com.example.daily_issue.login.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @MappedSuperclass
 @Getter
 @Setter
+@NoArgsConstructor
 public class BaseMember {
 
     @Id
@@ -21,8 +23,8 @@ public class BaseMember {
     @Column
     private String password;
 
-    public BaseMember(String memberId, String password) {
-        this.userId = memberId;
+    public BaseMember(String userId, String password) {
+        this.userId = userId;
         this.password = password;
     }
 
