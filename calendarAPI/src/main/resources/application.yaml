@@ -1,5 +1,0 @@
-
-spring:
-  profiles:
-    active: ${env:${env.USERPROFILE:${env.ALLUSERSPROFILE:local}}}
-    #active: ${env:${env.USERPROFILE:${env.ALLUSERSPROFILE:prod}}}

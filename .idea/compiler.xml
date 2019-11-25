@@ -2,29 +2,31 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="loginAPI" />
-        <module name="calendarAPI" />
-        <module name="commonModule" />
         <module name="checkListAPI" />
+        <module name="calendarAPI" />
         <module name="www" />
+        <module name="accounting" />
+        <module name="commonModule" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="accounting" target="1.8" />
       <module name="calendarAPI" target="11" />
-      <module name="checkListAPI" target="11" />
-      <module name="commonModule" target="11" />
-      <module name="daily_Issue" target="11" />
-      <module name="loginAPI" target="11" />
-      <module name="www" target="11" />
+      <module name="checkListAPI" target="1.8" />
+      <module name="commonModule" target="1.8" />
+      <module name="daily_Issue" target="1.8" />
+      <module name="loginAPI" target="1.8" />
+      <module name="www" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="accounting" options="-parameters" />
       <module name="calendarAPI" options="-parameters" />
       <module name="checkListAPI" options="-parameters" />
       <module name="commonModule" options="-parameters" />

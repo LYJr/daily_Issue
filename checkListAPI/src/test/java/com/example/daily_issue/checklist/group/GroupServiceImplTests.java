@@ -1,10 +1,10 @@
 package com.example.daily_issue.checklist.group;
 
-import com.example.daily_issue.checklist.CheckListApplication;
+import com.example.daily_issue.CheckListApplication;
+import com.example.daily_issue.checklist.account.service.impl.AccountRepository;
 import com.example.daily_issue.checklist.group.service.Group;
 import com.example.daily_issue.checklist.group.service.GroupService;
-import com.example.daily_issue.checklist.user.service.User;
-import com.example.daily_issue.checklist.user.service.UserService;
+import com.example.daily_issue.login.domain.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +20,15 @@ public class GroupServiceImplTests {
     @Autowired
     private GroupService groupService;
     @Autowired
-    private UserService userService;
+    private AccountRepository accountRepository;
 
     @Test
     public void crudTests() {
-        User addUser = User.builder()
-                .id("kyoing").build();
+        Account addAccount = new Account();
+        addAccount.setUserId("kyoing");
 
-        addUser = userService.save(addUser);
+        accountRepository.save(addAccount);
+
         Group addGroup = Group.builder()
                 .title("Title")
                 .contents("Contents")
@@ -44,7 +45,6 @@ public class GroupServiceImplTests {
         assertEquals(resultGroup, addGroup);
         assertTrue(resultGroup.getCreatedDate().isPresent());
         assertTrue(resultGroup.getCreatedBy().isPresent());
-        assertSame(resultGroup.getCreatedBy().get().getId(), "kyoing");
 
         log.info(resultGroup.toString());
         log.info(addGroup.toString());
