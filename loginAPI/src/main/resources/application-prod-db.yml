@@ -1,8 +1,10 @@
 spring:
   jpa:
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL55Dialect
     hibernate:
       ddl-auto: create
       show-sql: true
@@ -12,3 +14,12 @@ spring:
     username: root
     password: 1367
     validation-query: SELECT 1
+### logging - hibernate ###
+logging:
+  level:
+    org:
+      hibernate:
+        sql: trace
+        type:
+          descriptor:
+            sql: trace

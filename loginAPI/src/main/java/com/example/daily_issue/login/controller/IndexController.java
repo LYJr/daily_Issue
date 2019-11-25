@@ -9,26 +9,26 @@ import java.security.Principal;
 @Controller
 public class IndexController {
 
-//    @GetMapping("/")
-//    public String index(Model model, Principal principal) {
-//
-//        String message = "test";
-//
-//        if(principal != null){
-//            message = principal.getName();
-//        }
-//
-//        model.addAttribute("message", message);
-//        return "/index";
-//    }
+   @GetMapping("/")
+    public String index(Model model, Principal principal) {
+
+        String message = "test";
+
+        if(principal != null){
+            message = principal.getName();
+        }
+
+        model.addAttribute("message", message);
+        return "/index";
+}
 
     @GetMapping("/join")
     public String join() {
         return "/join";
     }
 
-//    @GetMapping("/login")
-//    public String login() {
-//        return "/login";
-//    }
+    @GetMapping("/login")
+    public String login() {
+        return "/login";
+    }
 }

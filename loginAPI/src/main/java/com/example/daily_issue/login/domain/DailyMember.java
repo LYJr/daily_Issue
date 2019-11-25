@@ -1,6 +1,7 @@
 package com.example.daily_issue.login.domain;
 
 import lombok.*;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -8,10 +9,11 @@ import javax.persistence.Table;
 @Entity
 @Table
 @Getter
-public class Member extends BaseMember {
+@NoArgsConstructor
+public class DailyMember extends BaseMember {
 
     @Column
-    private String name;
+    private String userName;
 
     @Column
     private String role = "OK";
@@ -22,13 +24,13 @@ public class Member extends BaseMember {
     @Column(unique = true)
     private String phoneNumber;
 
-    public Member(String memberId, String password) {
-        super(memberId, password);
+    public DailyMember(String userId, String password) {
+        super(userId, password);
     }
 
-    public Member(String memberId, String password, String name, String birthday, String phoneNumber) {
-        super(memberId, password);
-        this.name = name;
+    public DailyMember(String userId, String password, String name, String birthday, String phoneNumber) {
+        super(userId, password);
+        this.userName = name;
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
     }
@@ -40,7 +42,7 @@ public class Member extends BaseMember {
                 "id='" + getId() + '\'' +
                 "userId='" + getUserId() + '\'' +
                 "password= " + getPassword() + '\'' +
-                "name='" + name + '\'' +
+                "name='" + userName + '\'' +
                 "status='" + role + '\'' +
                 ", birthday='" + birthday + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
