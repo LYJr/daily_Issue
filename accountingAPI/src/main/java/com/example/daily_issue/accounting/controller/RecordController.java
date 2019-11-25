@@ -20,7 +20,7 @@ public class RecordController {
         this.recordService = recordService;
     }
 
-    @PostMapping("/regist/{recordTypeId}")
+    @PostMapping("/")
     public ResponseEntity<?> registRecord(Record record){
         recordService.create(record);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -60,13 +60,13 @@ public class RecordController {
         return ResponseEntity.ok(recordList);
     }
 
-    @PutMapping("/renewal")
+    @PutMapping("/")
     public ResponseEntity renewalRecord(Record record){
         recordService.update(record);
         return ResponseEntity.ok(record);
     }
 
-    @DeleteMapping("/remove")
+    @DeleteMapping("/")
     public ResponseEntity deleteRecord(Long id){
         recordService.delete(id);
         return ResponseEntity.ok("{}");
