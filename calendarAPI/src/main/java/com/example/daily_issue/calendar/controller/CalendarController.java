@@ -1,8 +1,8 @@
 package com.example.daily_issue.calendar.controller;
 
-import com.example.daily_issue.calendar.mapper.TaskMapper;
-import com.example.daily_issue.calendar.ro.BasicTaskReq;
-import com.example.daily_issue.calendar.ro.BasicTaskResp;
+import com.example.daily_issue.calendar.domain.converter.TaskDomainConverter;
+import com.example.daily_issue.calendar.domain.vo.req.BasicTaskReq;
+import com.example.daily_issue.calendar.domain.vo.resp.BasicTaskResp;
 import com.example.daily_issue.calendar.service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class CalendarController {
     CalendarService calendarService;
 
     @Autowired
-    TaskMapper taskMapper;
+    TaskDomainConverter taskMapper;
 
 
     @PostMapping("save")

@@ -1,11 +1,11 @@
 package com.example.daily_issue.calendar.service;
 
-import com.example.daily_issue.calendar.aop.EnableOwnerCheck;
-import com.example.daily_issue.calendar.dao.impl.basic.BasicTaskRepository;
-import com.example.daily_issue.calendar.domain.BasicTask;
-import com.example.daily_issue.calendar.mapper.TaskMapper;
-import com.example.daily_issue.calendar.ro.BasicTaskReq;
-import com.example.daily_issue.calendar.ro.BasicTaskResp;
+import com.example.daily_issue.calendar.dao.repository.basic.BasicTaskRepository;
+import com.example.daily_issue.calendar.domain.converter.TaskDomainConverter;
+import com.example.daily_issue.calendar.domain.entity.BasicTaskEntity;
+import com.example.daily_issue.calendar.domain.vo.req.BasicTaskReq;
+import com.example.daily_issue.calendar.domain.vo.resp.BasicTaskResp;
+import com.example.daily_issue.calendar.security.aop.EnableOwnerCheck;
 import com.example.daily_issue.calendar.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -29,10 +29,10 @@ class BasicTaskService {
 
     /**
      * The Task mapper.
-     * {@link TaskMapper} Domain과 RO객체 변환을 위한 mapper
+     * {@link TaskDomainConverter} Domain과 RO객체 변환을 위한 mapper
      */
     @Autowired
-    TaskMapper taskMapper;
+    TaskDomainConverter taskMapper;
 
     /**
      * The Security service.
@@ -59,11 +59,11 @@ class BasicTaskService {
      */
     public Optional<BasicTaskResp> save(@NonNull BasicTaskReq taskReq)
     {
-        BasicTask task = taskMapper.convertTaskReqToTask(taskReq);
+        BasicTaskEntity task = taskMapper.ReqToEntity(taskReq);
 
         // save
-        BasicTask savedTask = task != null ? basicTaskRepository.save(task) : null;
-        BasicTaskResp result = taskMapper.convertTaskToTaskResp(savedTask);
+        BasicTaskEntity savedTask = task != null ? basicTaskRepository.save(task) : null;
+        BasicTaskResp result = taskMapper.EntityToResp(savedTask);
 
         return Optional.ofNullable(result);
     }
@@ -82,8 +82,8 @@ class BasicTaskService {
     public Optional<BasicTaskResp> update(@NonNull Long taskId, BasicTaskReq taskReq)
     {
         // get existing task
-        Optional<BasicTask> originTask = findByTaskId(taskId);
-        BasicTask task = taskMapper.convertTaskReqToTask(taskReq, originTask);
+        Optional<BasicTaskEntity> originTask = findByTaskId(taskId);
+        BasicTaskEntity task = taskMapper.ReqToEntity(taskReq, originTask);
 
         // update
         return task != null ? update(task) : Optional.empty();
@@ -95,15 +95,15 @@ class BasicTaskService {
      * domain 객체를 수정/적용한다.
      * {@link EnableOwnerCheck} 는 AOP에서 수정하려는 task의 creater와 로그인한 사용자가 올바른지 확인한다.
      *
-     * @param task {@link BasicTask} 수정 대상 domain
+     * @param task {@link BasicTaskEntity} 수정 대상 domain
      *
      * @return {@link BasicTaskResp} 수정 적용된 basic task RO
      */
-    private Optional<BasicTaskResp> update(@NonNull BasicTask task)
+    private Optional<BasicTaskResp> update(@NonNull BasicTaskEntity task)
     {
         // update
-        BasicTask updatedTask = task != null ? basicTaskRepository.save(task) : null;
-        BasicTaskResp result = taskMapper.convertTaskToTaskResp(updatedTask);
+        BasicTaskEntity updatedTask = task != null ? basicTaskRepository.save(task) : null;
+        BasicTaskResp result = taskMapper.EntityToResp(updatedTask);
 
         return Optional.ofNullable(result);
     }
@@ -121,7 +121,7 @@ class BasicTaskService {
     public Optional<BasicTaskResp> delete(@NonNull Long taskId)
     {
         // get existing task
-        Optional<BasicTask> originTask = findByTaskId(taskId);
+        Optional<BasicTaskEntity> originTask = findByTaskId(taskId);
 
         return originTask.isPresent() ? delete(originTask.get()) : Optional.empty();
     }
@@ -131,16 +131,16 @@ class BasicTaskService {
      * basic task를 삭제한다.
      * {@link EnableOwnerCheck} 는 AOP에서 수정하려는 task의 creater와 로그인한 사용자가 올바른지 확인한다.
      *
-     * @param task {@link BasicTask} 삭제 대상 domain
+     * @param task {@link BasicTaskEntity} 삭제 대상 domain
      *
      * @return {@link BasicTaskResp} 삭제 적용된 basic task RO
      */
-    private Optional<BasicTaskResp> delete(@NonNull BasicTask task)
+    private Optional<BasicTaskResp> delete(@NonNull BasicTaskEntity task)
     {
-        Optional<BasicTask> originTask = Optional.ofNullable(task);
+        Optional<BasicTaskEntity> originTask = Optional.ofNullable(task);
         originTask.ifPresent(t -> basicTaskRepository.delete(t));
 
-        BasicTaskResp result = taskMapper.convertTaskToTaskResp(originTask);
+        BasicTaskResp result = taskMapper.EntityToResp(originTask);
 
         return originTask.isPresent() ? Optional.ofNullable(result) : Optional.empty();
     }
@@ -152,9 +152,9 @@ class BasicTaskService {
      *
      * @param id 검색하려는 task의 pk
      *
-     * @return {@link BasicTask} 검색된 basic task domain entity
+     * @return {@link BasicTaskEntity} 검색된 basic task domain entity
      */
-    protected Optional<BasicTask> findByTaskId(@NonNull Long id)
+    protected Optional<BasicTaskEntity> findByTaskId(@NonNull Long id)
     {
         return basicTaskRepository.findById(id);
     }

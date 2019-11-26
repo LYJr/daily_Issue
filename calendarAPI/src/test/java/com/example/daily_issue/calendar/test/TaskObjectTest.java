@@ -8,9 +8,9 @@ package com.example.daily_issue.calendar.test;/**
  */
 
 import com.example.daily_issue.calendar.attr.ServiceURLAttributes;
-import com.example.daily_issue.calendar.ro.BasicTaskReq;
-import com.example.daily_issue.calendar.ro.BasicTaskResp;
-import com.example.daily_issue.calendar.ro.RepeatableTaskReq;
+import com.example.daily_issue.calendar.domain.vo.req.BasicTaskReq;
+import com.example.daily_issue.calendar.domain.vo.req.RepeatableTaskReq;
+import com.example.daily_issue.calendar.domain.vo.resp.BasicTaskResp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -150,6 +150,7 @@ public class TaskObjectTest {
         repeatableTaskReqs.add(rreq1);
         repeatableTaskReqs.add(rreq2);
 
+        req.setRepeatable(true);
         req.setRepeatableTaskReqs(repeatableTaskReqs);
 
 

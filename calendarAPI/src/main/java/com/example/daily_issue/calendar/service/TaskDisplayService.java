@@ -1,9 +1,9 @@
 package com.example.daily_issue.calendar.service;
 
-import com.example.daily_issue.calendar.domain.RepeatableTask;
-import com.example.daily_issue.calendar.ro.DisplayReq;
+import com.example.daily_issue.calendar.domain.entity.RepeatableTaskEntity;
+import com.example.daily_issue.calendar.domain.vo.DateRange;
+import com.example.daily_issue.calendar.domain.vo.req.DisplayReq;
 import com.example.daily_issue.calendar.service.util.CalendarCalculator;
-import com.example.daily_issue.calendar.vo.DateRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,18 +51,18 @@ public class TaskDisplayService {
         return calculator.getDisplayDateRange(typeChronoUnit, baseDate);
     }
 
-    private DateRange getTaskableDateRange(DisplayReq displayReq, RepeatableTask repeatableTask)
+    private DateRange getTaskableDateRange(DisplayReq displayReq, RepeatableTaskEntity repeatableTask)
     {
         return getTaskableDateRange(displayReq.getDisplayChronoUnit(), displayReq.getDisplayDate(), repeatableTask);
     }
 
-    private DateRange getTaskableDateRange(ChronoUnit typeChronoUnit, LocalDate baseDate, RepeatableTask repeatableTask)
+    private DateRange getTaskableDateRange(ChronoUnit typeChronoUnit, LocalDate baseDate, RepeatableTaskEntity repeatableTask)
     {
         DateRange displayDateRange = getDisplayDateRange(typeChronoUnit, baseDate);
         return getTaskableDateRange(displayDateRange, repeatableTask);
     }
 
-    private DateRange getTaskableDateRange(DateRange displayDateRange, RepeatableTask repeatableTask)
+    private DateRange getTaskableDateRange(DateRange displayDateRange, RepeatableTaskEntity repeatableTask)
     {
         return calculator.getTaskableDateRange(displayDateRange, repeatableTask);
     }
@@ -83,11 +83,11 @@ public class TaskDisplayService {
      * 설정된 요일마다 반복
      *
      * @param displayDateRange  {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
-     * @param repeatableTask    {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
+     * @param repeatableTask    {@link RepeatableTaskEntity} entity에서 일정 및 반복과 관련된 정보를 획득
      *
      * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<LocalDate> listRepeatedTaskByDayOfWeeks(DateRange displayDateRange, RepeatableTask repeatableTask)
+    public Set<LocalDate> listRepeatedTaskByDayOfWeeks(DateRange displayDateRange, RepeatableTaskEntity repeatableTask)
     {
         DateRange taskableDateRange = getTaskableDateRange(displayDateRange, repeatableTask);
 
@@ -126,11 +126,11 @@ public class TaskDisplayService {
      * 설정된 특정일 마다 반복
      *
      * @param displayDateRange  {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
-     * @param repeatableTask    {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
+     * @param repeatableTask    {@link RepeatableTaskEntity} entity에서 일정 및 반복과 관련된 정보를 획득
      *
      * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<LocalDate> listRepeatedTaskBySpecifiedDays(DateRange displayDateRange, RepeatableTask repeatableTask)
+    public Set<LocalDate> listRepeatedTaskBySpecifiedDays(DateRange displayDateRange, RepeatableTaskEntity repeatableTask)
     {
         DateRange taskableDateRange = getTaskableDateRange(displayDateRange, repeatableTask);
 
@@ -152,11 +152,11 @@ public class TaskDisplayService {
      * 설정된 기간 범위만큼 반복
      *
      * @param displayDateRange  {@link DateRange} 객체에는 displayDate / repeatDate를 계산한 출력가능한 범위의 기간이 포함
-     * @param repeatableTask    {@link RepeatableTask} entity에서 일정 및 반복과 관련된 정보를 획득
+     * @param repeatableTask    {@link RepeatableTaskEntity} entity에서 일정 및 반복과 관련된 정보를 획득
      *
      * @return {@link LocalDate} 결과 일정 목록
      */
-    public Set<LocalDate> listRepeatedTaskByDistance(DateRange displayDateRange, RepeatableTask repeatableTask)
+    public Set<LocalDate> listRepeatedTaskByDistance(DateRange displayDateRange, RepeatableTaskEntity repeatableTask)
     {
         DateRange taskableDateRange = getTaskableDateRange(displayDateRange, repeatableTask);
 
