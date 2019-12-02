@@ -1,0 +1,24 @@
+spring:
+  #datasource-configuration
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:tcp://localhost:9092/mem:testdb;MVCC=true
+      username: root
+      password: 1234
+
+  #hibernate-configuration
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
+        show-sql: true
+
+#h2 configuration
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
