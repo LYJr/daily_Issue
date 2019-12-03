@@ -1,0 +1,4 @@
+spring:
+  thymeleaf:
+    enabled: true
+    mode: HTML

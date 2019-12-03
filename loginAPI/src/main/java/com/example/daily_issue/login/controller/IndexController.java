@@ -1,27 +1,26 @@
 package com.example.daily_issue.login.controller;
 
-import com.example.daily_issue.login.util.HttpSessionUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
 
 @Controller
 public class IndexController {
 
-    @GetMapping("/")
-    public String index(Model model, HttpSession session) {
+   @GetMapping("/")
+    public String index(Model model, Principal principal) {
 
-        String a = "test";
+        String message = "test";
 
-        if(HttpSessionUtil.isLoginUser(session)){
-            a = HttpSessionUtil.getSessiondUser(session).getName();
+        if(principal != null){
+            message = principal.getName();
         }
 
-        model.addAttribute("message", a);
+        model.addAttribute("message", message);
         return "/index";
-    }
+}
 
     @GetMapping("/join")
     public String join() {

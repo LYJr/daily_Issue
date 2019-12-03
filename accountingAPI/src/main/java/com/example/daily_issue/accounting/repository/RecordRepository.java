@@ -1,6 +1,7 @@
 package com.example.daily_issue.accounting.repository;
 
 import com.example.daily_issue.accounting.domain.Record;
+import com.example.daily_issue.accounting.domain.RecordType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface RecordRepository extends JpaRepository<Record, Long> {
     Record findByRecordDate(LocalDate date);
     List<Record> findAllByRecordDateBetween(LocalDate left, LocalDate right);
-    List<Record> findAllByRecordType(Long typeId);
+    List<Record> findAllByRecordType(RecordType recordType);
     List<Record> findAllByPriceGreaterThanEqual(int price);
     List<Record> findAllByPriceIsLessThanEqual(int typeId);
     List<Record> findAllByPriceIsLessThan(int typeId);

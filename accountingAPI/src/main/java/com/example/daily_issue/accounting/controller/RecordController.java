@@ -20,57 +20,54 @@ public class RecordController {
         this.recordService = recordService;
     }
 
-    @PostMapping("/regist")
+    @PostMapping("/")
     public ResponseEntity<?> registRecord(Record record){
-        recordService.save(record);
+        recordService.create(record);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(value="/read")
-    public ResponseEntity<?> readByDate(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate date
-    ){
-        Record record = recordService.getRecordByCurrentDate(date);
+    public ResponseEntity<?> readByDate(LocalDate date){
+        Record.Response record = recordService.getRecordByCurrentDate(date);
+        System.out.println("recordTypeName : "+record.getRecordTypeName());
         return ResponseEntity.ok(record);
     }
 
     @GetMapping("/read/between")
     public ResponseEntity<?> readByBetweenDate(
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate left,
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate right
     ){
-        List<Record> recordList = recordService.getRecordListByBetweenDate(left, right);
+        List<Record.Response> recordList = recordService.getRecordListByBetweenDate(left, right);
         return ResponseEntity.ok(recordList);
     }
 
     @GetMapping(value="/read/{recordType}")
     public ResponseEntity<?> readByRecordType(@PathVariable Long recordType){
-        List<Record> recordList = recordService.getCurrentTypeRecords(recordType);
+        List<Record.Response> recordList = recordService.getCurrentTypeRecords(recordType);
         return ResponseEntity.ok(recordList);
     }
 
     @GetMapping("/read/over")
     public ResponseEntity<?> readByOverPrice(Integer price, boolean hasEquals){
-        List<Record> recordList = recordService.getOverPriceRecords(price, hasEquals);
+        List<Record.Response> recordList = recordService.getOverPriceRecords(price, hasEquals);
         return ResponseEntity.ok(recordList);
     }
 
     @GetMapping("/read/less")
     public ResponseEntity<?> readByLessPrice(Integer price, boolean hasEquals){
-        List<Record> recordList = recordService.getLessPriceRecords(price, hasEquals);
+        List<Record.Response> recordList = recordService.getLessPriceRecords(price, hasEquals);
         return ResponseEntity.ok(recordList);
     }
 
-    @PutMapping("/renewal")
+    @PutMapping("/")
     public ResponseEntity renewalRecord(Record record){
         recordService.update(record);
         return ResponseEntity.ok(record);
     }
-    @DeleteMapping("/remove")
-    public ResponseEntity renewalRecord(Long id){
+
+    @DeleteMapping("/")
+    public ResponseEntity deleteRecord(Long id){
         recordService.delete(id);
         return ResponseEntity.ok("{}");
     }

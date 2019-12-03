@@ -1,14 +1,25 @@
 spring:
   jpa:
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL55Dialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
       show-sql: true
     database: MYSQL
   datasource:
-    url: jdbc:mysql://localhost:3306/dailyIssue?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/daily?serverTimezone=UTC
     username: root
     password: 1367
     validation-query: SELECT 1
+### logging - hibernate ###
+logging:
+  level:
+    org:
+      hibernate:
+        sql: trace
+        type:
+          descriptor:
+            sql: trace
