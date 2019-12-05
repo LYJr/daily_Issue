@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <developers>
+        <developer>
+            <id>sooragenius</id>
+            <name>Gill-Whan, Oh</name>
+            <email>soora_genius@naver.com</email>
+            <timezone>+9:00</timezone>
+            <roles>
+                <role>Team Member</role>
+                <role>Backend Developer</role>
+            </roles>
+        </developer>
+    </developers>
+    <dependencies>
+        <dependency>
+            <groupId>com.example.daily_issue</groupId>
+            <artifactId>commonModule</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>2.3.5</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <groupId>com.example.daily_issue</groupId>
+    <artifactId>notifyAPI</artifactId>
+    <!-- follow parent project version -->
+    <!--<version>0.0.1-SNAPSHOT</version>-->
+    <name>NotifyAPI Module</name>
+    <description>Resian Portfolio Project - NotifyAPI Module</description>
+
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>daily_Issue</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+</project>
