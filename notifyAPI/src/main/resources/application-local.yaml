@@ -1,0 +1,14 @@
+spring:
+  ### Database ###
+  redis:
+    host: localhost
+    port: 6379
+### logging - hibernate ###
+logging:
+  level:
+    org:
+      hibernate:
+        sql: trace
+        type:
+          descriptor:
+            sql: trace
