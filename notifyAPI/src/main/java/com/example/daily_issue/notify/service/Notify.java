@@ -1,19 +1,20 @@
 package com.example.daily_issue.notify.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
-@RedisHash("Notifys")
 @AllArgsConstructor @NoArgsConstructor
 public class Notify implements Serializable {
-    @Id
-    private String title;
-    private String contents;
+    public static final String redisHash = "notify";
+    private String userId;
+    private List<Message> messages = new ArrayList<>();
+
+    public String getKey() {
+        return redisHash + ":" + getUserId();
+    }
 }
