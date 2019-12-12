@@ -23,13 +23,23 @@ public class NotifyServiceImpl implements NotifyService {
     }
 
     @Override
+    public boolean deleteById(String id) {
+        return notifyRepository.deleteById(id);
+    }
+
+    @Override
     @Transactional
-    public void deleteByIdAndListIndex(String key, Long index) {
-        notifyRepository.deleteByIdAndListIndex(key, index);
+    public Long deleteByIdAndListIndex(String key, Long index) {
+        return notifyRepository.deleteByIdAndListIndex(key, index);
     }
 
     @Override
     public Notify findById(String id) {
         return notifyRepository.findById(id);
+    }
+
+    @Override
+    public Notify findByIdAndIndex(String id, Long index) {
+        return notifyRepository.findByIdAndIndex(id, index);
     }
 }

@@ -8,6 +8,7 @@ import java.io.Serializable;
 @AllArgsConstructor @NoArgsConstructor
 @ToString
 public class Message implements Serializable {
+    private Long id;
     private String title;
     private String message;
 }

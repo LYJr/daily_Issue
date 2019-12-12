@@ -5,6 +5,8 @@ import com.example.daily_issue.notify.service.Notify;
 
 public interface NotifyService {
     Notify save(Notify notify);
-    void deleteByIdAndListIndex(String key, Long index) ;
+    boolean deleteById(String id);
+    Long deleteByIdAndListIndex(String key, Long index) ;
     Notify findById(String id);
+    Notify findByIdAndIndex(String id, Long index);
 }
